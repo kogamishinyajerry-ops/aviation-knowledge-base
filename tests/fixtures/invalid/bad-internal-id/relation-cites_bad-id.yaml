@@ -1,0 +1,31 @@
+# INVALID FIXTURE — failure mode: ids.uri-format on relation.subject
+# Trigger: cites relation whose `subject` URI uses underscores in the slug
+#   ("comp:Bad_Underscore_ID" — fails the kebab-case-only pattern in $defs/uri).
+# NOTE: directory name is "bad-internal-id" by planner intent (plan 03-05 maps it
+#   to {"ids.uri-format"}); the failure is a URI subject, not a true internal-id field.
+#   DO NOT rename — the dir name is canonical.
+# Expected validators: BOTH schema (pattern fails) AND ids.uri-format fire — dual fire.
+# REQ-ID: D-23 / D-24 / D-25
+id: aviationkb://relation/cites-bad-internal-id-demo@1
+type: cites
+schema_version: "0.1.0"
+subject: "comp:Bad_Underscore_ID"
+object: aviationkb://document/fixture-source-doc@1
+valid_from: "2026-05-03T00:00:00Z"
+locator:
+  page: 1
+provenance:
+  method: human
+  actor: aviationkb://person/jane-doe@1
+  actor_role: "systems-engineer"
+  created_at: "2026-05-03T00:00:00Z"
+confidence:
+  score: 0.9
+  rationale: "Demonstration fixture intentionally using a malformed subject URI."
+source:
+  document_id: aviationkb://document/fixture-source-doc@1
+  locator:
+    page: 1
+  retrieval:
+    url: "https://example.invalid/fixtures/bad-internal-id"
+    retrieved_at: "2026-05-03T00:00:00Z"

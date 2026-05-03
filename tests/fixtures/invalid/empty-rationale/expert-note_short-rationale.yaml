@@ -1,0 +1,32 @@
+# INVALID FIXTURE — failure mode: schema (rationale minLength)
+# Trigger: confidence.rationale is "ok" (2 chars, < minLength 20).
+# Expected validator: schema.validate_record returns ≥1 error with rule="schema",
+#   referencing confidence.rationale and minLength.
+# REQ-ID: PROV-02
+id: aviationkb://expert-note/short-rationale-demo@1
+type: ExpertNote
+schema_version: "0.1.0"
+i18n:
+  label:
+    zh: "rationale 过短示例"
+    en: "ExpertNote demo with under-length rationale"
+author: aviationkb://person/jane-doe@1
+topic: short-rationale-demo
+content_md: |
+  This note has a too-short confidence.rationale ("ok"). The schema's minLength: 20
+  on $defs/confidence/rationale must reject it.
+provenance:
+  method: human
+  actor: aviationkb://person/jane-doe@1
+  actor_role: "systems-engineer"
+  created_at: "2026-05-03T00:00:00Z"
+confidence:
+  score: 0.7
+  rationale: "ok"
+source:
+  document_id: aviationkb://document/fixture-source-doc@1
+  locator:
+    page: 1
+  retrieval:
+    url: "https://example.invalid/fixtures/empty-rationale"
+    retrieved_at: "2026-05-03T00:00:00Z"
