@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.conflicts-with.schema.json",
+  "title": "conflicts_with relation (ONT-R-13)",
+  "description": "USE FOR: RegulationClause conflicts_with RegulationClause; Standard conflicts_with Standard. Establishes that two normative artifacts are mutually inconsistent. Rationale field is mandatory because a conflict claim without explanation is unauditable. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "conflicts_with",
+      "description": "Discriminator. Must equal the string 'conflicts_with'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "conflict_rationale": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Mandatory rationale explaining the nature of the conflict — why these two normative sources are inconsistent. ≥20 chars."
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["contradicts_directly", "ambiguous_overlap", "jurisdiction_conflict", "version_skew"],
+      "description": "Optional. Severity / class of the conflict."
+    }
+  },
+  "required": ["conflict_rationale"],
+  "unevaluatedProperties": false
+}

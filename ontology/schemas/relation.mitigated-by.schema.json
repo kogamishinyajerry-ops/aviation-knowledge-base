@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.mitigated-by.schema.json",
+  "title": "mitigated_by relation (ONT-R-10)",
+  "description": "USE FOR: FailureMode mitigated_by Procedure / Component / design_change. Establishes a mitigation strategy for a failure mode. Often paired with causes (FailureMode causes Effect; FailureMode mitigated_by Procedure). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "mitigated_by",
+      "description": "Discriminator. Must equal the string 'mitigated_by'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "mitigation_type": {
+      "type": "string",
+      "enum": ["design", "procedure", "training", "inspection", "monitoring", "redundancy"],
+      "description": "Optional. Class of mitigation strategy."
+    }
+  },
+  "unevaluatedProperties": false
+}

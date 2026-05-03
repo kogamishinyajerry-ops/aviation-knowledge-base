@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.requires.schema.json",
+  "title": "requires relation (ONT-R-11)",
+  "description": "Cross-tier dependency relation. USE FOR: Component(brake_disc) requires MaintenanceTask(brake_inspection_500h); SimulationCase(takeoff_performance) requires MeshRequirement(yPlus_target_30); Procedure(emergency_landing) requires Component(landing_gear). DO NOT USE FOR: peer-tier interface (e.g. AvionicsBay → ECS — that's interfaces_with, ONT-R-15). DO NOT USE FOR: parent-child within an assembly (use part_of). DO NOT USE FOR: citations (use cites). Boundary per ADR-003 / D-10: requires is cross-tier (Component requires MaintenanceTask, SimulationCase requires MeshRequirement); interfaces_with is peer-tier between two systems/subsystems at the same architectural level. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "requires",
+      "description": "Discriminator. Must equal the string 'requires'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    }
+  },
+  "unevaluatedProperties": false
+}
