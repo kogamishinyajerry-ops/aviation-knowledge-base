@@ -1,0 +1,35 @@
+---
+# Standard canonical instance (DEMO-01) — RTCA DO-178C software-DAL framework.
+# NOTE: schema's leaf `version` field is a string (e.g. 'Revision C') while the
+# inherited base `version` field is an integer per-record counter. With allOf,
+# both schemas apply to the same property — meaning a single value cannot
+# satisfy both type constraints. We therefore OMIT the `version` field
+# entirely (defaulting the base counter to 1) and put the revision letter in
+# the free-text `scope` field, which is the cleanest pass-through.
+id: aviationkb://standard/do-178c@1
+type: Standard
+schema_version: "0.1.0"
+i18n:
+  label:
+    zh: "RTCA DO-178C — 机载系统和设备认证中的软件考虑"
+    en: "RTCA DO-178C — Software Considerations in Airborne Systems and Equipment Certification"
+issuing_body: "RTCA"
+standard_id: "DO-178C"
+effective_date: "2011-12-13"
+status: active
+scope: "DO-178C Revision C — Software certification levels A–E for airborne systems; objective-based DAL framework superseding DO-178B."
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: avionics-engineer
+  created_at: "2026-05-03T15:15:00Z"
+confidence:
+  score: 0.98
+  rationale: "DO-178C revision identifier and effective date verified against RTCA store metadata."
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "FAR §25.1309 references software-DAL methodology consistent with DO-178C levels"
+  retrieval:
+    url: "https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309"
+    retrieved_at: "2026-05-03T13:30:00Z"

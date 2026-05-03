@@ -1,0 +1,37 @@
+---
+# Superseded RegulationClause canonical instance (DEMO-05) — earlier
+# amendment of FAR §25.1309 whose `superseded_by` points at the active
+# sibling. Demonstrates Pitfall #6 supersession-chain integrity. Mirrors
+# tests/fixtures/valid/entities/regulation-clause_far-25-1309-superseded.yaml.
+id: aviationkb://regulation-clause/far-25-1309-superseded@1
+type: RegulationClause
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "FAR §25.1309 (已被取代版) — 设备、系统和安装 — 修订 25-114"
+    en: "FAR §25.1309 (superseded) — Equipment, systems, and installations — Amdt 25-114"
+jurisdiction: "FAA"
+document: aviationkb://document/far-25-1309@1
+clause_id: "25.1309"
+effective_date: "2007-01-12"
+status: superseded
+superseded_by: aviationkb://regulation-clause/far-25-1309-active@1
+full_text_en: "The equipment, systems, and installations whose functioning is required by this subchapter must be designed to ensure that they perform their intended functions under any foreseeable operating condition. (Amendment 25-114 wording — superseded by Amendment 25-145.)"
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: regulation-curator
+  created_at: "2026-05-03T10:11:00Z"
+confidence:
+  score: 0.97
+  rationale: "Clause text transcribed from FAA Federal Register Amendment 25-114 archive; supersession confirmed via Amendment 25-145 NPRM disposition."
+  calibration_method: "cross-source-agreement"
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "§25.1309 (Amendment 25-114)"
+    page: 1
+  retrieval:
+    url: "https://www.federalregister.gov/documents/2007/01/12/E7-00072/airworthiness-standards-transport-category-airplanes-amendment-25-114"
+    retrieved_at: "2026-05-03T09:45:00Z"
