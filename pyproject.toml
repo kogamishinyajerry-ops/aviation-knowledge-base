@@ -1,0 +1,18 @@
+# Aviation Knowledge Base — Python tooling configuration.
+#
+# This file exists for pytest discovery + ruamel/jsonschema runtime config.
+# It is NOT a build manifest (the project ships ontology YAML + Markdown,
+# not a pip package). If a future phase needs a build backend, add the
+# [build-system] table at that point.
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-q --tb=short"
+filterwarnings = [
+  # ruamel.yaml emits a DeprecationWarning under Python 3.12 in some paths.
+  "ignore::DeprecationWarning:ruamel.*",
+]
