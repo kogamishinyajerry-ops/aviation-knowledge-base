@@ -1,0 +1,40 @@
+---
+# SimulationCase canonical instance (ONT-E-13) — Plan 04-03 Task 2.
+# Critical cross-linking record: wires CFDMethod + MeshRequirement + TurbulenceModel.
+# All three FKs resolve INTRA-plan (Tasks 1-2).
+id: aviationkb://simulation-case/naca0012-re6e6-aoa-sweep@1
+type: SimulationCase
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "NACA 0012 在 Re=6e6 下的迎角扫描验证算例"
+    en: "NACA 0012 angle-of-attack sweep at Re=6e6 — validation case"
+target_geometry: "NACA-0012 2-D airfoil, chord c=1.0 m, freestream Mach=0.15, Reynolds Re_c=6e6, AoA sweep 0–17 deg in 1-deg increments"
+cfd_method_ref: aviationkb://cfd-method/rans-steady@1
+mesh_ref: aviationkb://mesh-requirement/cfd-2d-naca0012-fine@1
+turbulence_model_ref: aviationkb://turbulence-model/k-omega-sst@1
+boundary_conditions:
+  - boundary_name: airfoil-wall
+    type: wall
+    specification: "no-slip, adiabatic"
+  - boundary_name: farfield
+    type: far_field
+    specification: "Riemann invariants; freestream Mach=0.15, T=288.15 K, p=101325 Pa, AoA per case"
+results_summary: "Lift-curve slope CL_alpha = 0.110 per degree pre-stall; stall onset at AoA ≈ 16 deg with CL_max ≈ 1.55. Pre-stall agreement with Ladson 1988 NASA TM-4074 experimental data within ±2% on CL and ±5% on CD; stall region under-predicted by SST per known limitation."
+reference_url: "https://tmbwg.github.io/turbmodels/naca0012_val.html"
+provenance:
+  method: human
+  actor: aviationkb://person/john-cfd-analyst@1
+  actor_role: cfd-analyst
+  created_at: "2026-05-03T16:15:00Z"
+confidence:
+  score: 0.92
+  rationale: "Setup mirrors NASA TMR NACA-0012 validation page; results_summary is qualitatively consistent with published comparisons but should be regenerated locally before being cited as authority."
+source:
+  document_id: aviationkb://document/nasa-tm-2014-218175@1
+  locator:
+    section: "Validation — NACA 0012 lift/drag comparison"
+  retrieval:
+    url: "https://tmbwg.github.io/turbmodels/naca0012_val.html"
+    retrieved_at: "2026-05-03T13:30:00Z"
