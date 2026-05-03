@@ -11,8 +11,13 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-q --tb=short"
+addopts = "-q --tb=short --strict-markers"
 filterwarnings = [
   # ruamel.yaml emits a DeprecationWarning under Python 3.12 in some paths.
   "ignore::DeprecationWarning:ruamel.*",
+]
+markers = [
+  "valid_corpus: tests asserting zero errors on the valid fixture tree",
+  "invalid_corpus: parametrised tests asserting each invalid fixture triggers the right rule",
+  "sanity: mutation tests demonstrating the suite catches real regressions",
 ]
