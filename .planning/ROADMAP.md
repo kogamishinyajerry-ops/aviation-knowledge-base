@@ -96,7 +96,12 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   4. One ExpertNote instance demonstrates the canonical provenance/source/confidence pattern (cited as the worked example in `AI 接力开发指南` of `docs/README.md`)
   5. One supersession demo (`RegulationClause` with `status: superseded` + `superseded_by` pointing to the active replacement clause), one AI-extracted record in `instances/_pending/` (verified NOT in canonical via grep), one bilingual entity using `i18n: { zh, en }`
   6. `docs/README.md` documents the manual + scripted import workflow, who reviews, where AI-extracted entities go, and the `confidentiality` gating rule (`restricted`/`itar_ear` flagged as not-ingested-by-default)
-**Plans**: TBD
+**Plans**: 5 plans
+  - [ ] 04-01-PLAN.md — Foundation: 3 source docs (regulation/CFD/accident) + Document/Person/Organization entities (DOC-01..04, DEMO-03)
+  - [ ] 04-02-PLAN.md — Airframe + regulatory + expert-note entities + DEMO-04/05/07 (canonical ExpertNote, supersession, bilingual)
+  - [ ] 04-03-PLAN.md — CFD entities (CFDMethod, TurbulenceModel, MeshRequirement, SimulationCase) + TestCase/TestReport (DEMO-01 CFD half)
+  - [ ] 04-04-PLAN.md — Relations (8 across 6 types) + _pending AI-extracted demo + docs/README.md import workflow (DEMO-02, DEMO-06, DOC-03)
+  - [ ] 04-05-PLAN.md — Integration validation: full validate.py green, REQ-ID coverage matrix, STATE.md/ROADMAP.md update
 **Research needed**: No (light glossary source verification handled inline)
 
 ### Phase 5: RAG Pipeline Design (document-only, no run)
@@ -137,7 +142,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Repo Skeleton + Git Baseline + PRD v0 | 5/5 | Complete    | 2026-05-03 |
 | 2. Ontology Schema v0.1.0 | 10/10 | Complete    | 2026-05-03 |
 | 3. Validators + CI Active | 6/6 | Complete    | 2026-05-03 |
-| 4. Demo Data + Document Import Spec | 0/TBD | Not started | - |
+| 4. Demo Data + Document Import Spec | 0/5 | Not started | - |
 | 5. RAG Pipeline Design (document-only) | 0/TBD | Not started | - |
 | 6. Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish | 0/TBD | Not started | - |
 
