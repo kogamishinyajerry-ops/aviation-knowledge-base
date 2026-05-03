@@ -3,7 +3,7 @@
 **Version:** v0 (directional, not contractual)
 **Status:** Phase 1 deliverable
 **Replaces:** nothing
-**Replaced by:** PRD v1 (Phase 6 — final, contractual)
+**Replaced by:** [PRD_v1.md](./PRD_v1.md) — final, contractual, signed off 2026-05-03
 **Authors:** gsd-planner-phase / Phase 1 / Plan 05 / 2026-05-03
 **Source documents:** [PROJECT.md](../PROJECT.md), [ROADMAP.md](../ROADMAP.md), [REQUIREMENTS.md](../REQUIREMENTS.md), [research/SUMMARY.md](../research/SUMMARY.md), [research/ARCHITECTURE.md](../research/ARCHITECTURE.md)
 
