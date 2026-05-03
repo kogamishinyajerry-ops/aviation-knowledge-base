@@ -1,0 +1,63 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.env
+.env.*
+!.env.example
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# === Node ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# === Secrets / credentials (NEVER commit) ===
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+*.secret
+.env.local
+.env.production
+
+# === Build / dist ===
+dist/
+build/
+out/
+.cache/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Editors ===
+.vscode/
+!.vscode/settings.json.example
+.idea/
+*.swp
+*.swo
+*~
+
+# === Logs ===
+*.log
+logs/
+
+# === pre-commit local cache ===
+.pre-commit-trash/
+
+# === RAGFlow / Wiki.js local data (if anyone runs local services in dev — not v1) ===
+deploy/data/
+deploy/volumes/

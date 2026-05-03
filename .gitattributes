@@ -1,0 +1,29 @@
+# === Git LFS for binary source documents ===
+# Per REPO-02: configured BEFORE any source document is committed.
+# Aviation source materials are typically PDF (regs, papers, accident reports),
+# DOCX (vendor manuals), XLSX (test matrices, MMEL spreadsheets),
+# PPTX (training slides, conference decks). Anything binary that is NOT
+# code or YAML/JSON/Markdown belongs in LFS.
+
+*.pdf  filter=lfs diff=lfs merge=lfs -text
+*.docx filter=lfs diff=lfs merge=lfs -text
+*.xlsx filter=lfs diff=lfs merge=lfs -text
+*.pptx filter=lfs diff=lfs merge=lfs -text
+
+# Common adjacent binaries (preempt future drift)
+*.zip  filter=lfs diff=lfs merge=lfs -text
+*.tar.gz filter=lfs diff=lfs merge=lfs -text
+*.png  filter=lfs diff=lfs merge=lfs -text
+*.jpg  filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+
+# === Line endings: enforce LF for text files (cross-platform safety) ===
+*.md   text eol=lf
+*.yaml text eol=lf
+*.yml  text eol=lf
+*.json text eol=lf
+*.py   text eol=lf
+
+# === Markers ===
+# .gitkeep files are empty placeholders; treat as text.
+.gitkeep text
