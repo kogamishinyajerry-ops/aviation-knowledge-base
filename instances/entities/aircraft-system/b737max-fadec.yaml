@@ -1,0 +1,31 @@
+---
+# AircraftSystem canonical instance (DEMO-01) — FADEC system part_of B737-MAX-8.
+# Mirrors tests/fixtures/valid/entities/aircraft-system_b737max-fadec.yaml.
+id: aviationkb://aircraft-system/b737max-fadec@1
+type: AircraftSystem
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "波音 737 MAX 全权限数字发动机控制系统 (FADEC)"
+    en: "Boeing 737 MAX Full-Authority Digital Engine Control (FADEC)"
+parent_aircraft_model: aviationkb://aircraft-model/boeing-737-max-8@1
+ata_chapter: "ATA-73"
+function: "Provides full-authority digital control of the CFM LEAP-1B turbofan, including fuel metering, thrust scheduling, surge protection, and start/relight logic, replacing earlier hydromechanical EEC architectures."
+criticality_level: catastrophic
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: systems-engineer
+  created_at: "2026-05-03T15:05:00Z"
+confidence:
+  score: 0.92
+  rationale: "Function and criticality drawn from public CFM LEAP-1B FADEC architecture briefings; level-A criticality consistent with FAR 25.1309 catastrophic-failure analysis for primary thrust control."
+  calibration_method: "expert-elicited"
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "§25.1309(b)(1) — failure conditions"
+  retrieval:
+    url: "https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309"
+    retrieved_at: "2026-05-03T09:35:00Z"

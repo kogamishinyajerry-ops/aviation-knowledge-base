@@ -1,0 +1,66 @@
+---
+# Bilingual ExpertNote (DEMO-07) — populates BOTH i18n.label.{zh,en} AND
+# i18n.full_text.{zh,en} per D-14, demonstrating the cross-language retrieval
+# anchor. content_md duplicates the English narrative for tools that read
+# content_md but not i18n.full_text (the schema's pragmatic fallback).
+id: aviationkb://expert-note/cn-en-bilingual-fadec-note@1
+type: ExpertNote
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "双语示例 — FADEC 通道仲裁机制专家笔记"
+    en: "Bilingual demo — Expert note on FADEC channel-arbitration mechanism"
+  full_text:
+    zh: |
+      在双通道 FADEC 架构中，通道仲裁机制 (cross-channel arbitration) 是确保
+      单通道失效时能够无中断切换至另一通道的关键。仲裁判据通常包括：
+      1. 心跳信号丢失 (heartbeat-loss) — 超过 50 ms 未收到对方通道心跳；
+      2. 关键传感器一致性偏差 — 例如发动机转速指示偏差超过额定值的 1%；
+      3. 自检失败标志 (BITE-fail flag)。
+      工程实践中，仲裁逻辑必须避免"翻转抖动" (toggle thrash)：一旦切换通道，
+      必须有最少 2 秒的"锁定窗口"才允许下一次切换决策。
+    en: |
+      In a dual-channel FADEC architecture, the cross-channel arbitration
+      mechanism is the key to ensuring uninterrupted handover from a failed
+      channel to its peer. Arbitration criteria typically include:
+      1. Heartbeat loss — peer channel heartbeat absent for >50 ms;
+      2. Critical-sensor consistency divergence — e.g. N1 indication deviating
+         by more than 1% of nominal between the two channels;
+      3. BITE-fail flag.
+      In engineering practice, the arbitration logic must avoid "toggle
+      thrash": once the system has switched channels, a minimum 2-second
+      "lock window" is required before another switch decision is allowed.
+author: aviationkb://person/jane-reviewer@1
+topic: "fadec-cross-channel-arbitration-bilingual"
+content_md: |
+  See i18n.full_text for the bilingual canonical content (this entity's
+  reason-to-exist is to demonstrate DEMO-07 i18n coverage). content_md
+  duplicates the English narrative for tools that read content_md but not
+  i18n.full_text.
+
+  In a dual-channel FADEC architecture, the cross-channel arbitration
+  mechanism is the key to ensuring uninterrupted handover from a failed
+  channel to its peer. Arbitration criteria include heartbeat loss
+  (>50 ms peer-heartbeat absence), critical-sensor consistency divergence
+  (e.g. N1 indication deviating by >1% nominal), and BITE-fail flag.
+  Engineering practice requires a 2-second post-switch lock window to
+  avoid toggle thrash.
+related_entities:
+  - aviationkb://aircraft-system/b737max-fadec@1
+  - aviationkb://subsystem/b737max-fadec-channel-a@1
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: airworthiness-engineer
+  created_at: "2026-05-03T15:45:00Z"
+confidence:
+  score: 0.85
+  rationale: "Bilingual content authored to demonstrate the i18n.{label, full_text} pattern; arbitration logic described aligns with public FADEC architecture descriptions but is not a verbatim transcription of any specific OEM document."
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "§25.1309 architectural-redundancy guidance"
+  retrieval:
+    url: "https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309"
+    retrieved_at: "2026-05-03T13:30:00Z"
