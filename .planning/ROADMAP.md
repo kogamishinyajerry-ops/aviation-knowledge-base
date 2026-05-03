@@ -115,8 +115,12 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   4. Guardrail spec hard-codes the `retrieved_chunks=[] or all-below-threshold → "not found" response without LLM call` short-circuit; an out-of-scope query category exists in the eval set to verify this path
   5. `evaluation/queries.yaml` contains ≥30 evaluation queries with expected source documents, ≥20% table-query questions, and an out-of-scope category — usable as input to a future eval run
   6. `scripts/exporters/to_ragflow.py` skeleton exists with a documented spec covering Git-watch → RAGFlow HTTP API push, idempotent re-upload via content hash, and the `--rebuild` recovery command
-**Plans**: TBD
-**Research needed**: YES — RAGFlow 0.25.1 table-chunk preservation, HTTP API citation granularity, embedding mini-benchmark scope (run `/gsd-research-phase 5` before `/gsd-plan-phase 5`)
+**Plans**: 4 plans
+  - [ ] 05-01-PLAN.md — RAG_PIPELINE.md (chunking + embedding + retrieval + citation + guardrail + cross-lingual) (Wave 1)
+  - [ ] 05-02-PLAN.md — evaluation/queries.yaml ≥30 queries + evaluation/README.md (Wave 1)
+  - [ ] 05-03-PLAN.md — scripts/exporters/to_ragflow.py skeleton enrichment (argparse + contracts) (Wave 1)
+  - [ ] 05-04-PLAN.md — REQ-coverage matrix (§11) + AI 接力 refresh + 05-COVERAGE.md (Wave 2)
+**Research needed**: NOT a separate phase — Phase 1 STACK.md (RAGFlow 0.25.1 + BGE-M3 + OpenDataLoader-PDF) is authoritative; per Phase 5 mode='standard', no separate /gsd-research-phase ran
 
 ### Phase 6: Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish
 **Goal**: Ship the deployment topology (docker-compose draft, no run), the final PRD synthesizing every prior decision, the v2+ trigger conditions, and a polish pass so every design doc passes the 5-minute stranger test.
@@ -143,7 +147,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Ontology Schema v0.1.0 | 10/10 | Complete    | 2026-05-03 |
 | 3. Validators + CI Active | 6/6 | Complete    | 2026-05-03 |
 | 4. Demo Data + Document Import Spec | 4/5 | Complete    | 2026-05-03 |
-| 5. RAG Pipeline Design (document-only) | 0/TBD | Not started | - |
+| 5. RAG Pipeline Design (document-only) | 0/4 | Planned     | - |
 | 6. Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish | 0/TBD | Not started | - |
 
 ## Coverage Summary
