@@ -1,0 +1,101 @@
+---
+# Aviation Knowledge Base MVP — CI baseline (Phase 1)
+#
+# Per REPO-04: this workflow ships in Phase 1 with `lint` running for real
+# (against .pre-commit-config.yaml) and `schema-validation-stub` /
+# `link-check-stub` as labeled stubs. Phase 3 replaces the schema stub with
+# `python scripts/validate.py + pytest`. A later phase replaces the link
+# stub with a real link/cross-ref checker.
+#
+# Action versions pinned per .planning/research/STACK.md and .planning/research/PITFALLS.md
+# guidance. NEVER use floating refs (e.g. the rolling "latest" tag or unstable
+# branch references) — supply chain risk + reproducibility.
+#
+# This workflow is the gate referenced in .planning/research/ARCHITECTURE.md
+# "Validation & CI Layer". Phase 3 makes it actually validate; Phase 1 wires it.
+
+name: CI
+
+on:  # yamllint disable-line rule:truthy
+  push: {branches: [main]}
+  pull_request: {branches: [main]}
+
+# Cancel duplicate in-flight runs on the same ref (saves CI budget).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint (pre-commit)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          # Note: lfs: false intentionally — Phase 1 has no LFS objects yet.
+          # Switch to lfs: true once the first PDF lands in docs/ (Phase 4).
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install pre-commit
+        run: |
+          python -m pip install --upgrade pip
+          pip install pre-commit==3.7.1
+
+      - name: Cache pre-commit hook environments
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit-${{ runner.os }}-
+
+      - name: Run pre-commit on all files
+        run: pre-commit run --all-files --show-diff-on-failure
+
+  schema-validation-stub:
+    name: Schema validation (Phase 1 STUB — real in Phase 3)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Stub notice
+        run: |
+          echo "::notice title=Phase 1 stub::This job is a no-op."
+          echo "Phase 3 will replace it with: python scripts/validate.py && pytest tests/"
+          echo "Tracking: REPO-04 (Phase 1) -> VAL-01..VAL-05 (Phase 3)."
+          echo "Stub passing intentionally."
+
+      - name: Pass
+        run: exit 0
+
+  link-check-stub:
+    name: Link check (Phase 1 STUB — real in later phase)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Stub notice
+        run: |
+          echo "::notice title=Phase 1 stub::This job is a no-op."
+          echo "Future implementation: cross-ref check across instances/, docs/, wiki/, planning/."
+          echo "Trigger: when first inter-document references appear (Phase 4)."
+          echo "Stub passing intentionally."
+
+      - name: Pass
+        run: exit 0
