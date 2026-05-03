@@ -14,7 +14,7 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Repo Skeleton + Git Baseline + PRD v0** - Locked directory layout, LFS, CI no-op stubs, pre-commit, AI handoff README, directional PRD
+- [x] **Phase 1: Repo Skeleton + Git Baseline + PRD v0** - Locked directory layout, LFS, CI no-op stubs, pre-commit, AI handoff README, directional PRD (completed 2026-05-03)
 - [ ] **Phase 2: Ontology Schema v0.1.0** - Base + 17+4 entity schemas + 13+5 relation schemas, mandatory provenance/confidence, schema versioning (RESEARCH BEFORE PLAN)
 - [ ] **Phase 3: Validators + CI Active** - `validate.py` + per-rule validators, fixture suite, pytest, GitHub Actions runs full validation
 - [ ] **Phase 4: Demo Data + Document Import Spec** - ≥1 instance per entity type, ≥3 relations, ≥3 source documents, supersession + AI-pending demo, document import workflow
@@ -39,7 +39,7 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   - [x] 01-02-PLAN.md — README.md with AI 接力开发指南 + 5-minute stranger test
   - [x] 01-03-PLAN.md — pre-commit config + .yamllint (pinned versions)
   - [x] 01-04-PLAN.md — GitHub Actions CI baseline (lint + stub jobs)
-  - [ ] 01-05-PLAN.md — PRD v0 directional + .planning/design/ scaffold
+  - [x] 01-05-PLAN.md — PRD v0 directional + .planning/design/ scaffold
 **Research needed**: No (standard patterns)
 
 ### Phase 2: Ontology Schema v0.1.0
@@ -118,7 +118,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Repo Skeleton + Git Baseline + PRD v0 | 4/5 | In Progress|  |
+| 1. Repo Skeleton + Git Baseline + PRD v0 | 5/5 | Complete    | 2026-05-03 |
 | 2. Ontology Schema v0.1.0 | 0/TBD | Not started | - |
 | 3. Validators + CI Active | 0/TBD | Not started | - |
 | 4. Demo Data + Document Import Spec | 0/TBD | Not started | - |
