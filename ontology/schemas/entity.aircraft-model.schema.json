@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.aircraft-model.schema.json",
+  "title": "AircraftModel entity (ONT-E-02)",
+  "description": "An aircraft model/type (e.g. Boeing 737-MAX-8, Airbus A320neo, Comac C919). Composes entity.base.schema.json (which composes _meta.schema.json#/$defs/baseFields). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "AircraftModel",
+      "description": "Discriminator. Must equal the string 'AircraftModel'."
+    },
+    "manufacturer": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Manufacturer name as it appears on the type certificate (e.g. 'Boeing', 'Airbus', 'Comac'). Free-text in v0.1.0; v0.2.0+ may link to Organization entity URI."
+    },
+    "model_designation": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Manufacturer model designation (e.g. '737-MAX-8', 'A320neo', 'C919'). Distinct from i18n.label which is the human-readable display name."
+    },
+    "type_certificate": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional. Type certificate identifier (e.g. 'TC-A20WE' for FAA, 'EASA.A.064' for EASA). Free-text in v0.1.0."
+    },
+    "configuration_variants": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Optional. Sub-variants of this model (e.g. 'MAX-8-200', 'MAX-8-LR'). Free-text strings for v0.1.0; v0.2.0+ may promote to its own entity type."
+    },
+    "ata_chapter_applicability": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^ATA-[0-9]{2}$"
+      },
+      "uniqueItems": true,
+      "description": "Optional. ATA iSpec 2200 chapter codes that apply to this model. Validated against ontology/vocabularies/ata-chapters.yaml at runtime by Phase 3 validator. Pattern here is structural only; enum membership is loaded dynamically."
+    },
+    "first_flight_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Optional. ISO-8601 date of first flight (e.g. '2016-01-29' for 737-MAX-8)."
+    },
+    "certification_basis": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional. Free-text reference to the regulatory basis (e.g. 'FAR Part 25 Amendment 25-145', 'CS-25 Amendment 27')."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "manufacturer", "model_designation"],
+  "unevaluatedProperties": false
+}
