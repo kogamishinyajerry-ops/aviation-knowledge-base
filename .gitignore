@@ -56,3 +56,5 @@ uv.lock
 venv/
 yarn-debug.log*
 yarn-error.log*
+scripts/rag/store.db
+scripts/rag/eval_results.json

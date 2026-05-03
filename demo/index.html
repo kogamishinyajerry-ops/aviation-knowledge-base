@@ -20,6 +20,7 @@
   <a href="./supersession.html">🔄 supersession</a>
   <a href="./h-darrieus.html">🛡️ H-Darrieus</a>
   <a href="./validation.html">✅ 验证</a>
+  <a href="./ask.html"><strong>🤖 问答</strong></a>
 </nav>
 
 <div class="stats">
@@ -43,15 +44,11 @@
   <li><a href="supersession.html"><strong>supersession 演示</strong></a> — DEMO-05 老法规 → 新法规链</li>
   <li><a href="h-darrieus.html"><strong>H-Darrieus 锁</strong></a> — AI 抽取记录如何被拒（DEMO-06）</li>
   <li><a href="validation.html"><strong>验证状态</strong></a> — 实时跑 <code>validate.py</code> 看 0 errors</li>
+  <li><a href="ask.html"><strong>🤖 Live RAG 问答</strong></a> — Phase 7：5 个真实 query→answer，每条带 citation 链接 + audit trail</li>
 </ul>
 
-<h2>下一步（Phase 7+）</h2>
-<p>把 <a href="https://github.com/kogamishinyajerry-ops/aviation-knowledge-base/blob/main/.planning/design/RAG_PIPELINE.md">RAG_PIPELINE.md</a> 设计文档变成真服务：</p>
-<ul>
-  <li>实现 <code>scripts/exporters/to_ragflow.py</code>（目前是 NotImplementedError 骨架）</li>
-  <li>启动 <code>deploy/docker-compose.yml.draft</code>（目前标记 DRAFT）</li>
-  <li>把 3 个 demo 文档摄取进 RAGFlow，跑 30 个 eval 查询</li>
-</ul>
+<h2>Phase 7 已落地</h2>
+<p>RAG 流水线（chunker + embedder + retriever + guardrail + LLM + citation 验证）已实现并跑通端到端，可直接对 3 个 demo 文档查询，详见 <a href="ask.html">问答页</a>。Phase 8 候选：把 RAGFlow 装上 / 加 Wiki.js 门户 UI / 摄取更多文档。</p>
 
 <footer>
   Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
