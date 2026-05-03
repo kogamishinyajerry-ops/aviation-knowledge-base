@@ -130,8 +130,8 @@ Requirements for initial release (the 第一阶段 deliverable). Each maps to ro
 
 ### AI Handoff & Documentation Quality (cross-cutting)
 
-- [ ] **AIH-01**: Every design document under `.planning/design/` includes "AI 接力开发指南" section listing relevant files, current schema version, glossary, open questions, last-touched-by
-- [ ] **AIH-02**: 5-minute stranger test passes on all major design docs — verified by re-reading after a context-clean break
+- [x] **AIH-01**: Every design document under `.planning/design/` includes "AI 接力开发指南" section listing relevant files, current schema version, glossary, open questions, last-touched-by
+- [x] **AIH-02**: 5-minute stranger test passes on all major design docs — verified by re-reading after a context-clean break
 - [ ] **AIH-03**: `process-log/` directory pattern set up; phase-completion entries record AI session, decisions, deviations
 - [ ] **AIH-04**: Glossary file `docs/GLOSSARY.md` with bilingual aviation terms (≥50 seed entries)
 
@@ -289,8 +289,8 @@ Each requirement maps to exactly one phase. Populated by gsd-roadmapper on 2026-
 | DEP-05 | Phase 6 | Pending |
 | DEP-06 | Phase 6 | Pending |
 | PRD-02 | Phase 6 | Pending |
-| AIH-01 | Phase 6 | Pending |
-| AIH-02 | Phase 6 | Pending |
+| AIH-01 | Phase 6 | Complete |
+| AIH-02 | Phase 6 | Complete |
 | AIH-03 | Phase 6 | Pending |
 | AIH-04 | Phase 6 | Pending |
 | ROAD-01 | Phase 6 | Pending |

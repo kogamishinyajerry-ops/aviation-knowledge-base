@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: "**Goal**: Define every entity type, relation type, vocabulary, and provenance/confidence/versioning rule as schema-enforced contracts before a single instance file is written."
 status: executing
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-05-03T13:04:21.469Z"
+stopped_at: Completed 06-05-PLAN.md (final plan of Phase 6 / final plan of v1)
+last_updated: "2026-05-03T13:38:38.457Z"
 last_activity: 2026-05-03 -- Phase 6 planning complete
 progress:
   total_phases: 6
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 35
-  completed_plans: 29
-  percent: 83
+  completed_plans: 34
+  percent: 97
 ---
 
 # Project State
@@ -56,6 +56,7 @@ Progress: [█▓░░░░░░░░] 17%  (1 of 6 plans)
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 06-deployment-plan-prd-v1-roadmap-ai-handoff-polish P05 | 25min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -74,6 +75,8 @@ Recent decisions affecting current work:
 - 03-01: schema.py uses `referencing.Registry` (jsonschema 4.18+ API) for $ref resolution — keys both bare filename and parent-relative path so leaf $refs resolve.
 - 03-01: Phase-2 schema bug auto-fixed — removed `unevaluatedProperties: false` from `entity.base.schema.json` and `relation.base.schema.json` (kept on every leaf). Per JSON Schema 2020-12, that keyword evaluates only against annotations in its own scope. CHANGELOG entry added.
 - 03-01: pyproject.toml + tests/conftest.py (`by_id` fixture) added per 03-VALIDATION.md Wave-0 deliverables (Rule 2 deviation — plan files_modified did not list them).
+- [Phase 06-deployment-plan-prd-v1-roadmap-ai-handoff-polish]: AIH-01 closed audit-only: every .planning/design/*.md (3 files) already carries the canonical 7-element AI 接力 section with GLOSSARY ref + bidirectional cross-links; zero patches needed.
+- [Phase 06-deployment-plan-prd-v1-roadmap-ai-handoff-polish]: AIH-02 closed: 3-of-3 PASS verdicts on 5-min stranger test (PRD_v1 / RAG_PIPELINE / PRD_v0); 06-COVERAGE.md ships 13/13 REQ-ID matrix with copy-pasteable audit one-liner verified ALL 13 GREEN.
 
 ### Pending Todos
 
@@ -85,9 +88,9 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-03T18:30:00Z
-Stopped at: Completed 03-01-PLAN.md
-Resume file: .planning/phases/03-validators-ci-active/03-02-PLAN.md (next: invalid fixture corpus)
+Last session: 2026-05-03T13:38:38.454Z
+Stopped at: Completed 06-05-PLAN.md (final plan of Phase 6 / final plan of v1)
+Resume file: None
 
 ## Next Action
 

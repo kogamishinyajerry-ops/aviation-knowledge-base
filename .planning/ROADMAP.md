@@ -19,7 +19,7 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
 - [x] **Phase 3: Validators + CI Active** - `validate.py` + per-rule validators, fixture suite, pytest, GitHub Actions runs full validation (completed 2026-05-03)
 - [x] **Phase 4: Demo Data + Document Import Spec** - ≥1 instance per entity type, ≥3 relations, ≥3 source documents, supersession + AI-pending demo, document import workflow (completed 2026-05-03)
 - [x] **Phase 5: RAG Pipeline Design (document-only)** - Chunking-with-tables, BGE-M3 selection, hybrid retrieval, citation injection, no-context guardrail, eval ≥30 queries (RESEARCH BEFORE PLAN) (completed 2026-05-03)
-- [ ] **Phase 6: Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish** - docker-compose draft, topology diagram, env example, future-phase triggers, final PRD, R12 polish across all docs
+- [x] **Phase 6: Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish** - docker-compose draft, topology diagram, env example, future-phase triggers, final PRD, R12 polish across all docs (completed 2026-05-03)
 
 ## Phase Details
 
@@ -134,11 +134,11 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   5. `process-log/` contains phase-completion entries for phases 1–6 recording AI session, decisions, deviations; `docs/GLOSSARY.md` ships ≥50 bilingual aviation seed entries
   6. `.planning/ROADMAP_FUTURE.md` documents v2+ trigger conditions for GraphRAG, Agent layer, Graph DB backend, OCR pipeline, multi-tenant RBAC, SSO, and decision agent — each with explicit "promote when X" criteria so they don't drift into v1
 **Plans**: 5 plans
-  - [ ] 06-01-PLAN.md — deploy/docker-compose.yml.draft + .env.example + topology + wiki-git-storage + authentik-phase2 + backup-restore (DEP-01..06)
-  - [ ] 06-02-PLAN.md — docs/GLOSSARY.md (>=50 bilingual entries) + process-log/ phases 1-5 (AIH-03, AIH-04)
-  - [ ] 06-03-PLAN.md — .planning/ROADMAP_FUTURE.md with 7 "Promote when" triggers (ROAD-01, ROAD-02)
-  - [ ] 06-04-PLAN.md — .planning/design/PRD_v1.md + ontology/CHANGELOG sign-off + phase-6-completion (PRD-02)
-  - [ ] 06-05-PLAN.md — AI 接力 polish + 5-min stranger test on >=3 docs + 06-COVERAGE.md (AIH-01, AIH-02)
+  - [x] 06-01-PLAN.md — deploy/docker-compose.yml.draft + .env.example + topology + wiki-git-storage + authentik-phase2 + backup-restore (DEP-01..06)
+  - [x] 06-02-PLAN.md — docs/GLOSSARY.md (>=50 bilingual entries) + process-log/ phases 1-5 (AIH-03, AIH-04)
+  - [x] 06-03-PLAN.md — .planning/ROADMAP_FUTURE.md with 7 "Promote when" triggers (ROAD-01, ROAD-02)
+  - [x] 06-04-PLAN.md — .planning/design/PRD_v1.md + ontology/CHANGELOG sign-off + phase-6-completion (PRD-02)
+  - [x] 06-05-PLAN.md — AI 接力 polish + 5-min stranger test on >=3 docs + 06-COVERAGE.md (AIH-01, AIH-02)
 **Research needed**: No (light OIDC bug status recheck handled inline)
 
 ## Progress
@@ -153,7 +153,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Validators + CI Active | 6/6 | Complete    | 2026-05-03 |
 | 4. Demo Data + Document Import Spec | 4/5 | Complete    | 2026-05-03 |
 | 5. RAG Pipeline Design (document-only) | 4/4 | Complete    | 2026-05-03 |
-| 6. Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish | 0/5 | Ready to execute | - |
+| 6. Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish | 5/5 | Complete   | 2026-05-03 |
 
 ## Coverage Summary
 
