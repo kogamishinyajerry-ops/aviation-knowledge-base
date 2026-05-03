@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.organization.schema.json",
+  "title": "Organization entity (ONT-E-22, D-04)",
+  "description": "An organization (regulator, manufacturer, operator, research institute, standards body, consultancy). MANDATORY in v0.1.0 alongside Person because both are URI resolution targets for provenance.actor / provenance.reviewer / source.published_by (see _meta.schema.json#/$defs/provenance + ADR-005). Composes entity.base.schema.json via allOf + $ref + unevaluatedProperties: false (Pitfall #1 lock; NEVER additionalProperties: false). Per ADR-002 / RESEARCH.md Gap Resolution #6, 6 fields minimum drawn from W3C PROV-O / schema.org / FOAF intersection. ROR live resolution and richer hierarchical org structures deferred to v0.2.0+. The jurisdiction enum aligns with RegulationClause.jurisdiction (Plan 05) and the future ontology/vocabularies/jurisdictions.yaml so Organizations and the regulations they issue can be cross-checked. URI form: aviationkb://organization/<slug>@<version>. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "./entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "Organization",
+      "description": "Discriminator. MUST equal 'Organization'."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical display name in Latin script. Bilingual variants belong in i18n.label (zh + en). Examples: 'Federal Aviation Administration', 'European Union Aviation Safety Agency', 'Civil Aviation Administration of China'."
+    },
+    "org_type": {
+      "type": "string",
+      "enum": [
+        "regulator",
+        "manufacturer",
+        "operator",
+        "research_institute",
+        "standards_body",
+        "consultancy",
+        "other"
+      ],
+      "description": "Top-level organization category. regulator = civil aviation authority (FAA / EASA / CAAC / etc). manufacturer = airframe / engine / component OEM. operator = airline / military operator. research_institute = NASA / DLR / universities. standards_body = SAE / RTCA / ASTM / ISO. consultancy = engineering services firm."
+    },
+    "jurisdiction": {
+      "type": "string",
+      "enum": [
+        "FAA",
+        "EASA",
+        "CAAC",
+        "ICAO",
+        "Transport-Canada",
+        "CASA-AU",
+        "other"
+      ],
+      "description": "Optional jurisdiction tag. Aligns with RegulationClause.jurisdiction (Plan 05) and the future ontology/vocabularies/jurisdictions.yaml. Use only when the organization is itself a regulator OR is operating under a single primary jurisdiction; multi-jurisdiction operators should leave this unset."
+    },
+    "external_ids": {
+      "type": "object",
+      "properties": {
+        "ror": {
+          "type": "string",
+          "pattern": "^https?://ror\\.org/[a-z0-9]{9}$",
+          "description": "Research Organization Registry (ROR) URL. 9-character lowercase alphanumeric ID after the host. Format-checked here; live resolution against ror.org deferred to v0.2.0+."
+        },
+        "lei": {
+          "type": "string",
+          "pattern": "^[A-Z0-9]{20}$",
+          "description": "Legal Entity Identifier (ISO 17442). 20 uppercase alphanumeric characters. Format-checked here; live resolution against gleif.org deferred to v0.2.0+."
+        }
+      },
+      "unevaluatedProperties": false,
+      "description": "Optional external identifiers. Both sub-fields optional; object itself may be omitted."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "name", "org_type"],
+  "unevaluatedProperties": false
+}
