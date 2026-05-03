@@ -14,14 +14,13 @@
 
 <!-- Shipped and confirmed valuable. -->
 
-(None yet — greenfield)
+- ✓ **R1** 项目目录结构 + Git 基线 + CI 占位（lint/schema validation）— Validated in Phase 1（REPO-01..05 全交付；CI 远端 green-run 由 HUMAN-UAT 跟踪）
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] **R1** 项目目录结构 + Git 基线 + CI 占位（lint/schema validation）
-- [ ] **R2** PRD（航空知识库产品需求文档），定义用户角色、场景、范围、非目标、成功指标
+- [ ] **R2** PRD（航空知识库产品需求文档）— PRD-01 v0 directional 已交付（Phase 1）；PRD-02 v1 final 待 Phase 6 综合所有决策后落地
 - [ ] **R3** Ontology schema：17 个核心实体类型（AircraftModel / AircraftSystem / Subsystem / Component / Requirement / RegulationClause / Standard / Procedure / FailureMode / MaintenanceTask / CFDMethod / SimulationCase / MeshRequirement / TurbulenceModel / AccidentCase / Document / ExpertNote）
 - [ ] **R4** Ontology relations：13 个核心关系类型（part_of / applicable_to / constrained_by / verified_by / derived_from / supersedes / cites / causes / mitigated_by / requires / equivalent_to / conflicts_with / used_in）
 - [ ] **R5** 每个实体/关系含 `confidence` 字段、`source` 字段、`provenance.method` (human / ai_extracted / hybrid) 区分人工 vs AI 抽取知识
@@ -110,4 +109,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-03 after initialization*
+*Last updated: 2026-05-03 after Phase 1 completion (R1 validated; CI green-run pending HUMAN-UAT)*
