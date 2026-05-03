@@ -16,7 +16,7 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
 
 - [x] **Phase 1: Repo Skeleton + Git Baseline + PRD v0** - Locked directory layout, LFS, CI no-op stubs, pre-commit, AI handoff README, directional PRD (completed 2026-05-03)
 - [x] **Phase 2: Ontology Schema v0.1.0** - Base + 17+4 entity schemas + 13+5 relation schemas, mandatory provenance/confidence, schema versioning (RESEARCH BEFORE PLAN) (completed 2026-05-03)
-- [ ] **Phase 3: Validators + CI Active** - `validate.py` + per-rule validators, fixture suite, pytest, GitHub Actions runs full validation
+- [x] **Phase 3: Validators + CI Active** - `validate.py` + per-rule validators, fixture suite, pytest, GitHub Actions runs full validation (completed 2026-05-03)
 - [ ] **Phase 4: Demo Data + Document Import Spec** - ≥1 instance per entity type, ≥3 relations, ≥3 source documents, supersession + AI-pending demo, document import workflow
 - [ ] **Phase 5: RAG Pipeline Design (document-only)** - Chunking-with-tables, BGE-M3 selection, hybrid retrieval, citation injection, no-context guardrail, eval ≥30 queries (RESEARCH BEFORE PLAN)
 - [ ] **Phase 6: Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish** - docker-compose draft, topology diagram, env example, future-phase triggers, final PRD, R12 polish across all docs
@@ -78,11 +78,11 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   5. GitHub Actions CI runs `validate.py` + `pytest` on every push and PR, blocks merge on failure, and the no-op PR from Phase 1 still passes after this phase lands
 **Plans**: 6 plans
   - [x] 03-01-PLAN.md — Validator package skeleton + schema.py + valid fixture corpus (Wave 1) ✅ 2026-05-03
-  - [ ] 03-02-PLAN.md — Invalid fixture corpus (12 fixtures, one per failure mode) (Wave 1)
-  - [ ] 03-03-PLAN.md — ids.py + provenance.py (URI format, H-Darrieus REJECT, _pending gate, schema_version) (Wave 2)
-  - [ ] 03-04-PLAN.md — relations.py + links.py (subject/object resolution, supersession integrity, broken-ref) (Wave 2)
-  - [ ] 03-05-PLAN.md — pytest test suite + parametrised fixture-to-rule assertions + sanity mutation tests (Wave 3)
-  - [ ] 03-06-PLAN.md — CI wiring (replace Phase 1 stubs) + pre-commit local hook + validators README (Wave 4)
+  - [x] 03-02-PLAN.md — Invalid fixture corpus (12 fixtures, one per failure mode) (Wave 1)
+  - [x] 03-03-PLAN.md — ids.py + provenance.py (URI format, H-Darrieus REJECT, _pending gate, schema_version) (Wave 2)
+  - [x] 03-04-PLAN.md — relations.py + links.py (subject/object resolution, supersession integrity, broken-ref) (Wave 2)
+  - [x] 03-05-PLAN.md — pytest test suite + parametrised fixture-to-rule assertions + sanity mutation tests (Wave 3)
+  - [x] 03-06-PLAN.md — CI wiring (replace Phase 1 stubs) + pre-commit local hook + validators README (Wave 4)
 **Research needed**: No
 
 ### Phase 4: Demo Data + Document Import Spec
@@ -136,7 +136,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Repo Skeleton + Git Baseline + PRD v0 | 5/5 | Complete    | 2026-05-03 |
 | 2. Ontology Schema v0.1.0 | 10/10 | Complete    | 2026-05-03 |
-| 3. Validators + CI Active | 0/6 | Not started | - |
+| 3. Validators + CI Active | 6/6 | Complete    | 2026-05-03 |
 | 4. Demo Data + Document Import Spec | 0/TBD | Not started | - |
 | 5. RAG Pipeline Design (document-only) | 0/TBD | Not started | - |
 | 6. Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish | 0/TBD | Not started | - |
