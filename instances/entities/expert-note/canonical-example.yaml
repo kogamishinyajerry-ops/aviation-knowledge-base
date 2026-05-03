@@ -1,0 +1,43 @@
+---
+# Canonical ExpertNote (DEMO-04) — worked example referenced by the
+# AI 接力开发指南 in docs/README.md (created in plan 04-04). Demonstrates the
+# full provenance + confidence + source pattern. NOT in _pending/ because
+# provenance.method == 'human'. Mirrors
+# tests/fixtures/valid/entities/expert-note_canonical-example.yaml.
+id: aviationkb://expert-note/canonical-example@1
+type: ExpertNote
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "FAR 25.1309 系统失效条件等级判定 — 范例笔记"
+    en: "FAR 25.1309 system failure-condition severity assessment — canonical example"
+author: aviationkb://person/jane-reviewer@1
+topic: "far-25-1309-failure-condition-severity-assessment"
+content_md: |
+  When applying FAR 25.1309(b)(1), the failure condition severity is
+  determined by the inverse relationship between probability of occurrence
+  and consequence severity. A catastrophic failure must be extremely
+  improbable (≤1e-9 per flight hour); hazardous must be extremely remote
+  (≤1e-7); major must be remote (≤1e-5). Practitioners frequently conflate
+  "extremely improbable" with "extremely remote" — the former is two orders
+  of magnitude stricter and applies only to catastrophic conditions.
+related_entities:
+  - aviationkb://regulation-clause/far-25-1309-active@1
+  - aviationkb://aircraft-system/b737max-fadec@1
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: airworthiness-engineer
+  created_at: "2026-05-03T10:20:00Z"
+confidence:
+  score: 0.85
+  rationale: "Severity-band thresholds are quoted directly from AC 25.1309-1A; expert interpretation reflects 15+ years of certification practice and is offered as guidance, not as authority."
+  calibration_method: "expert-elicited"
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "§25.1309(b) and AC 25.1309-1A §6"
+  retrieval:
+    url: "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_25_1309-1A.pdf"
+    retrieved_at: "2026-05-03T09:50:00Z"
