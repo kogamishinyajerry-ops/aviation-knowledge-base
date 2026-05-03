@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.interfaces-with.schema.json",
+  "title": "interfaces_with relation (ONT-R-15, D-05)",
+  "description": "Peer-tier system↔system interface (data, power, mechanical, thermal). USE FOR: AvionicsBay interfaces_with ECS via ARINC 429; HydraulicSystem interfaces_with FlightControlSystem via servo actuators; Subsystem(power_distribution) interfaces_with Subsystem(generator). DO NOT USE FOR: parent-child (use part_of); cross-tier dependency (use requires); regulatory compliance (use complies_with). Boundary with 'requires' per ADR-003 / D-10: 'requires' is cross-tier (Component requires MaintenanceTask, SimulationCase requires MeshRequirement); 'interfaces_with' is peer-tier between two systems/subsystems at the same architectural level. Order of subject/object is symbolic only — interfaces_with is logically symmetric but stored asymmetrically for query simplicity. H-Darrieus relevance: an interfaces_with edge between two AI-extracted systems with confidence > 0.85 must have a reviewer per the validator rule (Phase 3). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "interfaces_with",
+      "description": "Discriminator. Must equal the string 'interfaces_with'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "interface_type": {
+      "type": "string",
+      "enum": ["data", "power", "mechanical", "thermal", "fluid", "control", "other"],
+      "description": "Nature of the interface. 'data' covers ARINC 429 / AFDX / discrete signals; 'power' covers electrical bus connections; 'mechanical' covers structural attachment / linkage; 'thermal' covers heat exchange paths; 'fluid' covers hydraulic / pneumatic plumbing; 'control' covers command/feedback loops; 'other' for anything outside the above. Required."
+    },
+    "interface_protocol": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional. Free-text or standard reference for the interface protocol (e.g. 'ARINC 429', 'AFDX', 'MIL-STD-1553', 'CAN bus', 'servo actuator'). Phase 4 demo data SHOULD set this where applicable."
+    }
+  },
+  "required": ["interface_type"],
+  "unevaluatedProperties": false
+}
