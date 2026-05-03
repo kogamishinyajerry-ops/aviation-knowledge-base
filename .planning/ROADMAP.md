@@ -15,7 +15,7 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
 - [x] **Phase 1: Repo Skeleton + Git Baseline + PRD v0** - Locked directory layout, LFS, CI no-op stubs, pre-commit, AI handoff README, directional PRD (completed 2026-05-03)
-- [ ] **Phase 2: Ontology Schema v0.1.0** - Base + 17+4 entity schemas + 13+5 relation schemas, mandatory provenance/confidence, schema versioning (RESEARCH BEFORE PLAN)
+- [x] **Phase 2: Ontology Schema v0.1.0** - Base + 17+4 entity schemas + 13+5 relation schemas, mandatory provenance/confidence, schema versioning (RESEARCH BEFORE PLAN) (completed 2026-05-03)
 - [ ] **Phase 3: Validators + CI Active** - `validate.py` + per-rule validators, fixture suite, pytest, GitHub Actions runs full validation
 - [ ] **Phase 4: Demo Data + Document Import Spec** - ≥1 instance per entity type, ≥3 relations, ≥3 source documents, supersession + AI-pending demo, document import workflow
 - [ ] **Phase 5: RAG Pipeline Design (document-only)** - Chunking-with-tables, BGE-M3 selection, hybrid retrieval, citation injection, no-context guardrail, eval ≥30 queries (RESEARCH BEFORE PLAN)
@@ -61,9 +61,9 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   - [x] 02-05-PLAN.md — 7 baseline entity schemas (Requirement/RegulationClause/Standard/Procedure/MaintenanceTask/AccidentCase/ExpertNote)
   - [x] 02-06-PLAN.md — 5 baseline entity schemas (FailureMode/CFDMethod/SimulationCase/MeshRequirement/TurbulenceModel)
   - [x] 02-07-PLAN.md — 5 ADR-002 added entity schemas (Material/TestCase/TestReport/Person/Organization; Configuration deferred)
-  - [ ] 02-08-PLAN.md — 13 baseline relation schemas with boundary-discipline descriptions
-  - [ ] 02-09-PLAN.md — 3 added relation schemas (interfaces_with/complies_with/applicable_during_phase) + ADR-006 triple export
-  - [ ] 02-10-PLAN.md — 3 vocabularies + 2 mappings + to_jsonl_triples.py docstring enrichment
+  - [x] 02-08-PLAN.md — 13 baseline relation schemas with boundary-discipline descriptions
+  - [x] 02-09-PLAN.md — 3 added relation schemas (interfaces_with/complies_with/applicable_during_phase) + ADR-006 triple export
+  - [x] 02-10-PLAN.md — 3 vocabularies + 2 mappings + to_jsonl_triples.py docstring enrichment
 **Research needed**: YES — completed via /gsd-research-phase 2 (RESEARCH.md ships 6 gap resolutions + Validation Architecture + 7 Patterns + 10 Pitfalls + 3 Code Examples)
 
 ### Phase 3: Validators + CI Active
@@ -129,7 +129,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Repo Skeleton + Git Baseline + PRD v0 | 5/5 | Complete    | 2026-05-03 |
-| 2. Ontology Schema v0.1.0 | 7/10 | In Progress|  |
+| 2. Ontology Schema v0.1.0 | 10/10 | Complete   | 2026-05-03 |
 | 3. Validators + CI Active | 0/TBD | Not started | - |
 | 4. Demo Data + Document Import Spec | 0/TBD | Not started | - |
 | 5. RAG Pipeline Design (document-only) | 0/TBD | Not started | - |
