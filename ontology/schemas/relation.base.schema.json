@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.base.schema.json",
+  "title": "Relation Base (composes _meta.schema.json#/$defs/baseFields)",
+  "description": "Relation composition base. Every type-specific relation schema (relation.part-of.schema.json etc.) MUST compose this via allOf + $ref + unevaluatedProperties: false. NEVER additionalProperties: false (Pitfall #1 — additionalProperties does not see allOf-composed siblings, so it would silently reject the very baseFields it is supposed to inherit). Adds the relation-only fields (type, schema_version, subject, object, valid_from, valid_until) on top of universal baseFields (id, provenance, confidence, source). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    {"$ref": "../_meta.schema.json#/$defs/baseFields"}
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Discriminator. Each leaf type schema overrides with const. Examples: 'part_of', 'interfaces_with', 'complies_with', 'requires', 'constrained_by'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "subject": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Subject entity URI per D-23 form aviationkb://<type>/<slug>@<version>. The 'from' peer in directional relations; either peer in symmetric ones — order is symbolic. Phase 3 validator confirms the entity exists."
+    },
+    "object": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Object entity URI per D-23 form aviationkb://<type>/<slug>@<version>. The 'to' peer in directional relations."
+    },
+    "valid_from": {
+      "$ref": "../_meta.schema.json#/$defs/isoDateTime",
+      "description": "When this relationship became valid. Required."
+    },
+    "valid_until": {
+      "anyOf": [
+        {"$ref": "../_meta.schema.json#/$defs/isoDateTime"},
+        {"type": "null"}
+      ],
+      "description": "When this relationship ceased to be valid. null = currently valid (no expiration). Optional field; absence is treated identically to null."
+    }
+  },
+  "required": ["type", "schema_version", "subject", "object", "valid_from"],
+  "unevaluatedProperties": false
+}
