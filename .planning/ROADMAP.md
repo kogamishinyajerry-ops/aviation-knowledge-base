@@ -34,7 +34,12 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   4. GitHub Actions workflow runs to green on a no-op PR (lint job, schema-validation stub, link-check stub all pass without failing the build)
   5. `pre-commit run --all-files` runs `yamllint`, `check-jsonschema`, `check-merge-conflict`, `end-of-file-fixer` on a sample commit and exits 0
   6. `.planning/design/PRD_v0.md` exists with users, scope, non-goals, success metrics, deliverable list — sufficient for downstream phases to refer back when scoping
-**Plans**: TBD
+**Plans**: 5 plans
+  - [ ] 01-01-PLAN.md — Repo skeleton + .gitignore + .gitattributes (LFS) + exporter stubs
+  - [ ] 01-02-PLAN.md — README.md with AI 接力开发指南 + 5-minute stranger test
+  - [ ] 01-03-PLAN.md — pre-commit config + .yamllint (pinned versions)
+  - [ ] 01-04-PLAN.md — GitHub Actions CI baseline (lint + stub jobs)
+  - [ ] 01-05-PLAN.md — PRD v0 directional + .planning/design/ scaffold
 **Research needed**: No (standard patterns)
 
 ### Phase 2: Ontology Schema v0.1.0
