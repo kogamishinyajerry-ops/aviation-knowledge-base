@@ -17,7 +17,7 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
 - [x] **Phase 1: Repo Skeleton + Git Baseline + PRD v0** - Locked directory layout, LFS, CI no-op stubs, pre-commit, AI handoff README, directional PRD (completed 2026-05-03)
 - [x] **Phase 2: Ontology Schema v0.1.0** - Base + 17+4 entity schemas + 13+5 relation schemas, mandatory provenance/confidence, schema versioning (RESEARCH BEFORE PLAN) (completed 2026-05-03)
 - [x] **Phase 3: Validators + CI Active** - `validate.py` + per-rule validators, fixture suite, pytest, GitHub Actions runs full validation (completed 2026-05-03)
-- [ ] **Phase 4: Demo Data + Document Import Spec** - ≥1 instance per entity type, ≥3 relations, ≥3 source documents, supersession + AI-pending demo, document import workflow
+- [x] **Phase 4: Demo Data + Document Import Spec** - ≥1 instance per entity type, ≥3 relations, ≥3 source documents, supersession + AI-pending demo, document import workflow (completed 2026-05-03)
 - [ ] **Phase 5: RAG Pipeline Design (document-only)** - Chunking-with-tables, BGE-M3 selection, hybrid retrieval, citation injection, no-context guardrail, eval ≥30 queries (RESEARCH BEFORE PLAN)
 - [ ] **Phase 6: Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish** - docker-compose draft, topology diagram, env example, future-phase triggers, final PRD, R12 polish across all docs
 
@@ -97,10 +97,10 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   5. One supersession demo (`RegulationClause` with `status: superseded` + `superseded_by` pointing to the active replacement clause), one AI-extracted record in `instances/_pending/` (verified NOT in canonical via grep), one bilingual entity using `i18n: { zh, en }`
   6. `docs/README.md` documents the manual + scripted import workflow, who reviews, where AI-extracted entities go, and the `confidentiality` gating rule (`restricted`/`itar_ear` flagged as not-ingested-by-default)
 **Plans**: 5 plans
-  - [ ] 04-01-PLAN.md — Foundation: 3 source docs (regulation/CFD/accident) + Document/Person/Organization entities (DOC-01..04, DEMO-03)
-  - [ ] 04-02-PLAN.md — Airframe + regulatory + expert-note entities + DEMO-04/05/07 (canonical ExpertNote, supersession, bilingual)
-  - [ ] 04-03-PLAN.md — CFD entities (CFDMethod, TurbulenceModel, MeshRequirement, SimulationCase) + TestCase/TestReport (DEMO-01 CFD half)
-  - [ ] 04-04-PLAN.md — Relations (8 across 6 types) + _pending AI-extracted demo + docs/README.md import workflow (DEMO-02, DEMO-06, DOC-03)
+  - [x] 04-01-PLAN.md — Foundation: 3 source docs (regulation/CFD/accident) + Document/Person/Organization entities (DOC-01..04, DEMO-03)
+  - [x] 04-02-PLAN.md — Airframe + regulatory + expert-note entities + DEMO-04/05/07 (canonical ExpertNote, supersession, bilingual)
+  - [x] 04-03-PLAN.md — CFD entities (CFDMethod, TurbulenceModel, MeshRequirement, SimulationCase) + TestCase/TestReport (DEMO-01 CFD half)
+  - [x] 04-04-PLAN.md — Relations (8 across 6 types) + _pending AI-extracted demo + docs/README.md import workflow (DEMO-02, DEMO-06, DOC-03)
   - [ ] 04-05-PLAN.md — Integration validation: full validate.py green, REQ-ID coverage matrix, STATE.md/ROADMAP.md update
 **Research needed**: No (light glossary source verification handled inline)
 
@@ -142,7 +142,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Repo Skeleton + Git Baseline + PRD v0 | 5/5 | Complete    | 2026-05-03 |
 | 2. Ontology Schema v0.1.0 | 10/10 | Complete    | 2026-05-03 |
 | 3. Validators + CI Active | 6/6 | Complete    | 2026-05-03 |
-| 4. Demo Data + Document Import Spec | 0/5 | Not started | - |
+| 4. Demo Data + Document Import Spec | 4/5 | Complete    | 2026-05-03 |
 | 5. RAG Pipeline Design (document-only) | 0/TBD | Not started | - |
 | 6. Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish | 0/TBD | Not started | - |
 
