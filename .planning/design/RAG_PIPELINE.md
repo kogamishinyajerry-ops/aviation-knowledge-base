@@ -879,4 +879,3 @@ mapped to the REQ-IDs that deliver each one.
 
 The Phase-5 verifier (`/gsd-execute-phase` next step) executes each Verifier
 command above and asserts exit code 0; any failing row blocks Phase 5 closure.
-
