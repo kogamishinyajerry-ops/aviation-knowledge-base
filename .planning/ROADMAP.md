@@ -18,7 +18,7 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
 - [x] **Phase 2: Ontology Schema v0.1.0** - Base + 17+4 entity schemas + 13+5 relation schemas, mandatory provenance/confidence, schema versioning (RESEARCH BEFORE PLAN) (completed 2026-05-03)
 - [x] **Phase 3: Validators + CI Active** - `validate.py` + per-rule validators, fixture suite, pytest, GitHub Actions runs full validation (completed 2026-05-03)
 - [x] **Phase 4: Demo Data + Document Import Spec** - ≥1 instance per entity type, ≥3 relations, ≥3 source documents, supersession + AI-pending demo, document import workflow (completed 2026-05-03)
-- [ ] **Phase 5: RAG Pipeline Design (document-only)** - Chunking-with-tables, BGE-M3 selection, hybrid retrieval, citation injection, no-context guardrail, eval ≥30 queries (RESEARCH BEFORE PLAN)
+- [x] **Phase 5: RAG Pipeline Design (document-only)** - Chunking-with-tables, BGE-M3 selection, hybrid retrieval, citation injection, no-context guardrail, eval ≥30 queries (RESEARCH BEFORE PLAN) (completed 2026-05-03)
 - [ ] **Phase 6: Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish** - docker-compose draft, topology diagram, env example, future-phase triggers, final PRD, R12 polish across all docs
 
 ## Phase Details
@@ -116,10 +116,10 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   5. `evaluation/queries.yaml` contains ≥30 evaluation queries with expected source documents, ≥20% table-query questions, and an out-of-scope category — usable as input to a future eval run
   6. `scripts/exporters/to_ragflow.py` skeleton exists with a documented spec covering Git-watch → RAGFlow HTTP API push, idempotent re-upload via content hash, and the `--rebuild` recovery command
 **Plans**: 4 plans
-  - [ ] 05-01-PLAN.md — RAG_PIPELINE.md (chunking + embedding + retrieval + citation + guardrail + cross-lingual) (Wave 1)
-  - [ ] 05-02-PLAN.md — evaluation/queries.yaml ≥30 queries + evaluation/README.md (Wave 1)
-  - [ ] 05-03-PLAN.md — scripts/exporters/to_ragflow.py skeleton enrichment (argparse + contracts) (Wave 1)
-  - [ ] 05-04-PLAN.md — REQ-coverage matrix (§11) + AI 接力 refresh + 05-COVERAGE.md (Wave 2)
+  - [x] 05-01-PLAN.md — RAG_PIPELINE.md (chunking + embedding + retrieval + citation + guardrail + cross-lingual) (Wave 1)
+  - [x] 05-02-PLAN.md — evaluation/queries.yaml ≥30 queries + evaluation/README.md (Wave 1)
+  - [x] 05-03-PLAN.md — scripts/exporters/to_ragflow.py skeleton enrichment (argparse + contracts) (Wave 1)
+  - [x] 05-04-PLAN.md — REQ-coverage matrix (§11) + AI 接力 refresh + 05-COVERAGE.md (Wave 2)
 **Research needed**: NOT a separate phase — Phase 1 STACK.md (RAGFlow 0.25.1 + BGE-M3 + OpenDataLoader-PDF) is authoritative; per Phase 5 mode='standard', no separate /gsd-research-phase ran
 
 ### Phase 6: Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish
@@ -147,7 +147,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Ontology Schema v0.1.0 | 10/10 | Complete    | 2026-05-03 |
 | 3. Validators + CI Active | 6/6 | Complete    | 2026-05-03 |
 | 4. Demo Data + Document Import Spec | 4/5 | Complete    | 2026-05-03 |
-| 5. RAG Pipeline Design (document-only) | 0/4 | Planned     | - |
+| 5. RAG Pipeline Design (document-only) | 4/4 | Complete    | 2026-05-03 |
 | 6. Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish | 0/TBD | Not started | - |
 
 ## Coverage Summary
