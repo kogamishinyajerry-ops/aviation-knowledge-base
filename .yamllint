@@ -1,0 +1,50 @@
+--- # YAML document start
+# yamllint config for Aviation Knowledge Base MVP
+# Goal: catch real YAML errors (duplicate keys, bad indentation, unparseable
+# syntax) without blocking on stylistic preferences. Aviation domain content
+# routinely has long lines (regulation text, bilingual ZH/EN labels) and
+# multi-document files (vocabularies/*.yaml may use ---).
+#
+# Rule rationales:
+# - line-length: warning not error — aviation regulation text and full-text
+#   bilingual labels frequently exceed 80 chars; we don't want to fight this.
+#   Combined with the hook NOT using --strict (see .pre-commit-config.yaml),
+#   this means long lines emit informational warnings but DO NOT fail the hook.
+# - document-start: required (level: error) — every YAML file should open with ---
+# - truthy: only block 'yes/no/on/off'; allow 'true/false' (the YAML 1.2 forms)
+# - comments: allow 1-space-after-hash (more permissive than default 2)
+# - indentation: 2 spaces, consistent
+# - trailing-spaces: error — these MUST be fixed
+# - empty-lines: at most 2 consecutive (ergonomics)
+# - new-line-at-end-of-file: error — must be present (matches end-of-file-fixer hook)
+
+extends: default
+
+rules:
+  line-length:
+    max: 200
+    level: warning
+  document-start:
+    present: true
+    level: error
+  truthy:
+    allowed-values: ["true", "false"]
+    check-keys: false
+  comments:
+    min-spaces-from-content: 1
+  indentation:
+    spaces: 2
+    indent-sequences: true
+    check-multi-line-strings: false
+  trailing-spaces: enable
+  empty-lines:
+    max: 2
+    max-start: 1
+    max-end: 1
+  new-line-at-end-of-file: enable
+  # Relax some defaults that don't fit aviation YAML
+  comments-indentation: disable
+  braces:
+    forbid: false
+    min-spaces-inside: 0
+    max-spaces-inside: 1

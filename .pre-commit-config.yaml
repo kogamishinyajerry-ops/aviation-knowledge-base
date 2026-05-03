@@ -1,0 +1,83 @@
+--- # YAML document start
+# Aviation Knowledge Base MVP — pre-commit configuration
+# Per REPO-05: minimum hooks include yamllint, check-jsonschema,
+# check-merge-conflict, end-of-file-fixer.
+#
+# Tool versions pinned per .planning/research/STACK.md:
+#   - pre-commit framework: 3.7+
+#   - yamllint: 1.38+
+#   - check-jsonschema: 0.37.1
+#
+# Hook revisions below are pinned to specific upstream tags; bump only
+# via deliberate PR with CHANGELOG entry.
+#
+# Initial setup (one-time, on each developer machine):
+#   pip install pre-commit==3.7.1
+#   pre-commit install
+#
+# Run on demand:
+#   pre-commit run --all-files
+
+minimum_pre_commit_version: "3.7.0"
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-yaml
+        args: ["--allow-multiple-documents"]
+      - id: check-json
+      - id: check-added-large-files
+        args: ["--maxkb=1024"]  # 1 MB; binaries should be in LFS, see .gitattributes
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: ["--markdown-linebreak-ext=md"]  # respect Markdown 2-space line breaks
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.38.0
+    hooks:
+      - id: yamllint
+        # NOTE: deliberately NO strict-mode flag here. We rely on level-based
+        # gating defined in .yamllint:
+        #   - level error   blocks commit (trailing-spaces, missing-newline-at-EOF,
+        #                   document-start, key-duplicates default, indentation)
+        #   - level warning is informational only (line-length up to 200 chars)
+        # Why this matters: Phase 2+ entity records will have long bilingual
+        # `full_text` / regulation-quote fields. Promoting warnings to failures
+        # would block legitimate aviation content. The relaxed-but-meaningful
+        # gate is exactly what makes pre-commit usable on this corpus.
+        # Re-evaluate strictness in Phase 2 once the first schemas land and
+        # we have empirical data on how often warnings fire.
+        # See .planning/phases/01-repo-skeleton-git-baseline-prd-v0/01-03-PLAN.md
+        # acceptance criteria: yamllint hook intentionally has no strict flag.
+        args: ["-c", ".yamllint"]
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.37.1
+    hooks:
+      # Phase 1 stub: no schemas exist yet under ontology/schemas/.
+      # We pre-wire the hook so that when Phase 2 adds schemas, this is
+      # already configured. Until then, the hook runs against the (empty)
+      # `files: ` pattern and trivially passes.
+      #
+      # Phase 2 will replace `files:` with patterns matching:
+      #   - ontology/schemas/**/*.json   (validate against JSON Schema metaschema)
+      #   - instances/entities/**/*.yaml (validate against per-type schema)
+      #   - instances/relations/**/*.yaml
+      #
+      # For Phase 1, we configure metaschema validation only — it self-validates
+      # any future JSON Schema file we drop into ontology/schemas/.
+      - id: check-jsonschema
+        name: "check-jsonschema (metaschema, Phase 1 stub)"
+        files: '^ontology/schemas/.*\.json$'
+        args: ["--check-metaschema"]
+        # If no files match, the hook is skipped (pre-commit default).
+        # This is intentional for Phase 1 — Phase 2 lands the first schemas.
+
+# CI integration note (.github/workflows/ci.yml — Plan 04 owns):
+# The CI workflow runs `pre-commit run --all-files` against every PR.
+# Local developer machines run only the hooks for staged files via the
+# pre-commit Git hook (`pre-commit install`).
