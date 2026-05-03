@@ -1,0 +1,24 @@
+# Phase 1: Repo Skeleton + Git Baseline + PRD v0 — Completion Log
+
+- **AI session:** Claude Opus 4.7 (1M context) — primary executor.
+- **Date:** 2026-05-03 (per `.planning/ROADMAP.md` Phase 1 close).
+- **Plans:** 5 plans landed.
+  - `01-01-repo-skeleton-and-git-baseline-PLAN.md` — Repo skeleton + `.gitignore` + `.gitattributes` (LFS) + exporter stubs.
+  - `01-02-readme-with-ai-handoff-PLAN.md` — `README.md` with AI 接力开发指南 + 5-minute stranger test.
+  - `01-03-precommit-config-and-hooks-PLAN.md` — `.pre-commit-config.yaml` + `.yamllint` (pinned versions: yamllint 1.38, check-jsonschema 0.37.1, pre-commit 3.7).
+  - `01-04-github-actions-ci-baseline-PLAN.md` — GitHub Actions CI baseline (lint + stub schema-validation + stub link-check jobs).
+  - `01-05-prd-v0-directional-PLAN.md` — PRD v0 directional + `.planning/design/` scaffold.
+- **Decisions:**
+  - Locked stack: **Wiki.js 2.5.314 + RAGFlow 0.25.1 + Postgres 16 + YAML/JSON Schema + Git** (per `.planning/research/STACK.md`; user-pinned, not negotiable).
+  - PRD split: **v0 directional in Phase 1, v1 final in Phase 6** (after demo data + RAG pipeline design exist to ground the v1 commitments).
+  - Granularity = `standard`, model_profile = `quality` (Opus 4.7 1M as primary executor across all phases).
+  - 6-phase build order from `.planning/research/SUMMARY.md` adopted (schema-first dependency chain: skeleton → ontology → validators → demo → RAG design → deployment+PRD-v1).
+  - **LFS configured before any PDF commit** (REPO-02) — guards against accidentally committing large binaries to the main pack.
+  - AIH-01..04 mapped to Phase 6 for traceability but applied as continuous discipline across all phases (every phase produces its own AI 接力 section in its README/SUMMARY).
+- **Deviations:** none.
+- **Verification:**
+  - GitHub Actions no-op PR (lint + stub schema-validation + stub link-check) all green at Phase 1 close.
+  - `pre-commit run --all-files` exits 0 on a sample commit.
+  - Commit search key: `feat(01-` and `chore(01-` in `git log` between Phase 0 init and Phase 2 first plan.
+- **REQ-IDs covered:** REPO-01, REPO-02, REPO-03, REPO-04, REPO-05, PRD-01.
+- **Next phase:** Phase 2 — Ontology Schema v0.1.0 (RESEARCH BEFORE PLAN; see `.planning/phases/02-ontology-schema-v0-1-0/02-RESEARCH.md`).

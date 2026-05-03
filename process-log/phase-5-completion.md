@@ -1,0 +1,25 @@
+# Phase 5: RAG Pipeline Design (document-only, no run) — Completion Log
+
+- **AI session:** Claude Opus 4.7 (1M context) — primary executor.
+- **Date:** 2026-05-03.
+- **Plans:** 4 plans landed across 2 execution waves.
+  - `05-01-PLAN.md` (Wave 1) — `.planning/design/RAG_PIPELINE.md` (chunking + embedding + retrieval + citation + guardrail + cross-lingual; the document-only design spec consumed by Phase 7 wiring).
+  - `05-02-PLAN.md` (Wave 1) — `evaluation/queries.yaml` (≥30 queries; cross-lingual ≥6; out-of-scope ≥3) + `evaluation/README.md` (how to run the eval harness once Phase 7 wires actual retrieval).
+  - `05-03-PLAN.md` (Wave 1) — `scripts/exporters/to_ragflow.py` skeleton enrichment (argparse surface frozen: `--rebuild` / `--dry-run` / `--since=` / `--paths`; contracts documented).
+  - `05-04-PLAN.md` (Wave 2) — REQ-coverage matrix at `RAG_PIPELINE.md` §11 + AI 接力 section refresh + reverse-traceability matrix at `05-COVERAGE.md`.
+- **Decisions:** (locked in `.planning/design/RAG_PIPELINE.md` Locked-vs-Directional table)
+  - **Chunking**: 512 default / 1024 max / 64 overlap; **atomic blocks** (tables, equations, regulation §-clauses, figure captions) override the size cap (Pitfall 6 prevention from `.planning/research/PITFALLS.md` — never split a regulatory clause across chunks).
+  - **Embedding**: BGE-M3 default (multilingual, 8192 ctx, dense+sparse+ColBERT in one model) + bge-reranker-v2-m3. Mini-benchmark in Phase 7 may swap if measurement reveals a clear winner; v1 default is BGE-M3.
+  - **Hybrid retrieval**: vector + BM25 + RRF (k=60). Synonym expansion weight = 0.3 (validated on AeroPower-RAG: ZH→EN 100% / EN→ZH 80% recall@3 on golden set).
+  - **Citation**: system-side `[CITE:c_<8hex>]` token injection. The LLM **cannot** self-author citations — Pitfall 8 lock. Citations are injected by the retrieval layer with a deterministic 8-hex chunk ID; the LLM only references existing tokens.
+  - **Guardrail**: `min_chunk_score = 0.5`, `min_chunks_required = 2`. On trip: canned bilingual no-context response; `llm_called = False` flag set so the audit log distinguishes guardrail-trip from low-quality LLM answer.
+  - **Cross-lingual**: BGE-M3 native multilingual + bilingual glossary (≥50 seed terms — see `docs/GLOSSARY.md`, AIH-04, 73 entries) + entity `i18n: { zh, en }` indexed at index time (entities indexed in both languages).
+  - **`to_ragflow.py` CLI surface** locked: `--rebuild` / `--dry-run` / `--since=<date>` / `--paths <glob>`. Phase 7 wiring extends but does not break this surface.
+- **Deviations:** research-phase research (`/gsd-research-phase 5`) was **not** run as a separate step — Phase 1 `.planning/research/STACK.md` was authoritative for the stack choices (RAGFlow 0.25.1 + BGE-M3 + OpenDataLoader-PDF), and the RAG pipeline design is a synthesis layer over that stack rather than a fresh tech-selection exercise. Phase 5 ran in `mode='standard'` (no research budget) per ROADMAP. Logged here as a process note, not a Rule-1/2/3 deviation.
+- **Verification:**
+  - `evaluation/queries.yaml` has ≥30 queries with cross-lingual ≥6 + out-of-scope ≥3 (verified by `05-COVERAGE.md` reverse-traceability matrix).
+  - `to_ragflow.py --dry-run` argparse smoke test green (CLI surface parses without raising).
+  - Design doc `Locked-vs-Directional` table refreshed in 05-04 to reflect final-locked decisions vs deferred-to-Phase-7 measurements.
+  - Commit search keys: `feat(05-`, `docs(05-`, `merge(05-`, `chore(phase-05)` between Phase 4 close and Phase 6 planning. The phase close commit is `75c19b4 chore(phase-05): close phase — 8/8 RAG REQ-IDs + 6 ROADMAP SCs verified`.
+- **REQ-IDs covered:** RAG-01, RAG-02, RAG-03, RAG-04, RAG-05, RAG-06, RAG-07, RAG-08.
+- **Next phase:** Phase 6 — Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish (current phase; this entry's sibling `phase-6-completion.md` will be added by plan 06-04 after PRD_v1 sign-off).

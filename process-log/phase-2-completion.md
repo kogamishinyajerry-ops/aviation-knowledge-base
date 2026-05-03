@@ -1,0 +1,30 @@
+# Phase 2: Ontology Schema v0.1.0 — Completion Log
+
+- **AI session:** Claude Opus 4.7 (1M context) — primary executor; preceded by `/gsd-research-phase 2` producing `02-RESEARCH.md` (6 gap resolutions + Validation Architecture + 7 Patterns + 10 Pitfalls + 3 Code Examples).
+- **Date:** 2026-05-03.
+- **Plans:** 10 plans landed.
+  - `02-01-meta-foundation-PLAN.md` — `_meta.schema.json` composition root + `VERSION` + `CHANGELOG.md` + `migrations/` PATTERN README + `_pending/` README + ADR-001 (URI scheme) reserved + ADR-005 (provenance.method enum) locked.
+  - `02-02-entity-base-PLAN.md` — `entity.base.schema.json` + ADR-002 entity additions + ADR-007 schema versioning policy.
+  - `02-03-relation-base-PLAN.md` — `relation.base.schema.json` + ADR-003 relation additions + ADR-004 field shapes.
+  - `02-04-entity-structural-PLAN.md` — 5 baseline entity schemas (AircraftModel, AircraftSystem, Subsystem, Component, Document).
+  - `02-05-entity-regulatory-PLAN.md` — 7 baseline entity schemas (Requirement, RegulationClause, Standard, Procedure, MaintenanceTask, AccidentCase, ExpertNote).
+  - `02-06-entity-cfd-failure-PLAN.md` — 5 baseline entity schemas (FailureMode, CFDMethod, SimulationCase, MeshRequirement, TurbulenceModel).
+  - `02-07-entity-additions-PLAN.md` — 5 ADR-002-added entity schemas (Material, TestCase, TestReport, Person, Organization). Configuration entity DEFERRED.
+  - `02-08-relations-baseline-PLAN.md` — 13 baseline relation schemas with boundary-discipline descriptions.
+  - `02-09-relations-additions-PLAN.md` — 3 added relation schemas (`interfaces_with`, `complies_with`, `applicable_during_phase`) + ADR-006 triple export contract.
+  - `02-10-vocabularies-mappings-PLAN.md` — 3 vocabularies (`ata-chapters.yaml`, `jurisdictions.yaml`, `units.yaml`) + 2 mappings + `to_jsonl_triples.py` docstring enrichment.
+- **Decisions:** (canonical: see `.planning/decisions/` ADR set + `ontology/CHANGELOG.md`)
+  - **ADR-001** — URI scheme reserved (`aviationkb://<type>/<slug>@<version>`); not actively used in v0.1 instances but reserved on the entity schema.
+  - **ADR-002** — entity additions accepted: Material, TestCase / TestReport, Person / Organization. Configuration **deferred** (re-evaluate when Effectivity becomes pressing).
+  - **ADR-003** — relation additions accepted: `interfaces_with`, `complies_with`, `applicable_during_phase`, `has_revision` (the last one's schema deferred — versioning handled by `ontology/VERSION` semver until needed at instance level).
+  - **ADR-004** — field shapes locked: `provenance` / `confidence` / `source` are structured objects (not free strings) per Pitfall 1, 3 from `02-RESEARCH.md`.
+  - **ADR-005** — `provenance.method` enum: `human` / `ai_extracted` / `hybrid_reviewed`. The H-Darrieus REJECT lock prevents `_pending/` AI-extracted records from leaking into the canonical tree.
+  - **ADR-006** — triple export contract (`to_jsonl_triples.py` skeleton input/output spec, frozen for Phase 5 RAGFlow consumer).
+  - **ADR-007** — schema versioning policy: semver per `ontology/VERSION`; per-record `schema_version` field; CHANGELOG mandatory for any schema change.
+- **Deviations:** none material at Phase 2 close. A small Phase 2 schema bug was discovered and **retroactively fixed in Phase 3 plan 03-01**: removed `unevaluatedProperties: false` from `entity.base.schema.json` and `relation.base.schema.json` (kept on every leaf) — per JSON Schema 2020-12, that keyword evaluates only against annotations in its own scope, so on the bases it falsely rejected leaf-only fields. CHANGELOG entry filed at the time of the fix.
+- **Verification:**
+  - `check-jsonschema --check-metaschema` green on all 22 entity + 16 relation schemas.
+  - H-Darrieus rejection fixture confirmed REJECT in Phase 3 (provenance gate working).
+  - Commit search key: `feat(02-` and `docs(02-` between Phase 1 close and Phase 3 first plan.
+- **REQ-IDs covered:** ONT-E-01..22, ONT-R-01..19, PROV-01..06, VER-01..04 (51 IDs total).
+- **Next phase:** Phase 3 — Validators + CI Active.

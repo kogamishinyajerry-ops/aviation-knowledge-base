@@ -1,0 +1,24 @@
+# Phase 4: Demo Data + Document Import Spec — Completion Log
+
+- **AI session:** Claude Opus 4.7 (1M context) — primary executor.
+- **Date:** 2026-05-03.
+- **Plans:** 4 of 5 plans landed with full SUMMARY files; the 5th (`04-05-PLAN.md`, integration validation) ran during phase close. ROADMAP marks Phase 4 Complete.
+  - `04-01-PLAN.md` — Foundation: 3 source documents (one regulation, one CFD paper, one accident report) + Document / Person / Organization entities (DOC-01..04, DEMO-03 source-doc-curation pattern).
+  - `04-02-PLAN.md` — Airframe + regulatory entities + the canonical ExpertNote (DEMO-04: full provenance/source/confidence pattern); DEMO-05 supersession demo (RegulationClause `status: superseded` + `superseded_by` pointing at active replacement); DEMO-07 bilingual `i18n: { zh, en }` pattern (`cn-en-bilingual-fadec-note.yaml`).
+  - `04-03-PLAN.md` — CFD entities (CFDMethod, TurbulenceModel, MeshRequirement, SimulationCase) + TestCase / TestReport (DEMO-01 CFD half).
+  - `04-04-PLAN.md` — 8 relation instances across 6 relation types + `_pending/` AI-extracted demo (DEMO-06 — verified NOT in canonical via grep) + `docs/README.md` import workflow with confidentiality gating (DOC-03 / DOC-04).
+  - `04-05-PLAN.md` — Integration validation: full `python scripts/validate.py` exits 0 on the demo tree, REQ-ID coverage matrix, `STATE.md` / `ROADMAP.md` update.
+- **Decisions:**
+  - **One canonical ExpertNote** demonstrates the full provenance / source / confidence pattern; cited in `docs/README.md` as the worked example a future contributor copies.
+  - **Supersession demo** uses `RegulationClause.status: superseded` + `superseded_by` pointing at the active replacement (DEMO-05). Both records remain in the canonical tree (audit trail for "what was repealed" matters).
+  - **One AI-extracted record** lives under `instances/_pending/` (DEMO-06) — verified absent from canonical via grep at validation time. The `_pending/` gate (Phase 3 `provenance.py`) enforces this at CI level.
+  - **Bilingual entity** demonstrates `i18n: { zh, en }` pattern (DEMO-07), establishing the convention used by `docs/GLOSSARY.md` (Phase 6 AIH-04).
+  - **Confidentiality gating** documented in `docs/README.md` import workflow (DOC-04): each Document records `confidentiality` (public / internal / restricted) and the importer is responsible for not committing `restricted` originals to the public Git tree (LFS-restricted bucket reserved instead).
+- **Deviations:** none.
+- **Verification:**
+  - `python scripts/validate.py` exits 0 on all demo instances at Phase 4 close.
+  - Broken-ref check passes on the 8 relation instances (every `subject_uri` / `object_uri` resolves to an existing entity).
+  - AI-extracted record present in `instances/_pending/` and absent from canonical (grep + `provenance.py` gate both confirm).
+  - Commit search key: `feat(04-`, `docs(04-`, `chore(04-` between Phase 3 close and Phase 5 first plan.
+- **REQ-IDs covered:** DOC-01, DOC-02, DOC-03, DOC-04, DEMO-01, DEMO-02, DEMO-03, DEMO-04, DEMO-05, DEMO-06, DEMO-07.
+- **Next phase:** Phase 5 — RAG Pipeline Design (document-only, no run).
