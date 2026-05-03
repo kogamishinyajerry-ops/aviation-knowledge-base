@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.procedure.schema.json",
+  "title": "Procedure entity (ONT-E-09)",
+  "description": "A documented procedure (operational / emergency / maintenance / inspection / certification / repair). Composes entity.base.schema.json via allOf + $ref. Each step item also locks unevaluatedProperties: false. Pitfall #1 lock: unevaluatedProperties: false at every nested level. Pitfall #9 lock: $schema = JSON Schema Draft 2020-12. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "Procedure",
+      "description": "Discriminator. Locked to 'Procedure' for this entity type."
+    },
+    "procedure_type": {
+      "type": "string",
+      "enum": ["operational", "emergency", "maintenance", "inspection", "certification", "repair", "other"],
+      "description": "Procedure classification. Drives audience routing (e.g. 'emergency' → flight-crew QRH; 'maintenance' → AMM; 'certification' → DER/DAR test plans)."
+    },
+    "target_system": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Optional URI of the AircraftSystem / Subsystem / Component this procedure applies to."
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered list of procedure steps. Each step item locks unevaluatedProperties: false (Pitfall #1 propagated to nested objects).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step_number": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "1-based step ordinal."
+          },
+          "instruction": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Action text for the step (≥10 chars to reject placeholder stubs)."
+          },
+          "hazards": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "description": "Optional per-step hazards (warnings / cautions)."
+          },
+          "references": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "description": "Optional per-step references (URIs to Document/Standard/RegulationClause, or free-text doc-refs)."
+          }
+        },
+        "required": ["step_number", "instruction"],
+        "unevaluatedProperties": false
+      }
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Optional list of preconditions before starting the procedure."
+    },
+    "hazards": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Optional procedure-level hazards (distinct from per-step hazards)."
+    },
+    "references": {
+      "type": "array",
+      "items": { "type": "string", "format": "uri" },
+      "description": "Optional procedure-level references — URIs that cite Document/Standard/RegulationClause entities."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "procedure_type", "steps"],
+  "unevaluatedProperties": false
+}
