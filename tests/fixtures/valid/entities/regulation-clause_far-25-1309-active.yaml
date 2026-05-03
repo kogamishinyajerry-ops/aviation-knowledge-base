@@ -1,0 +1,35 @@
+---
+# Active RegulationClause fixture — the FORWARD pointer of the
+# supersession chain. The superseded fixture below names this URI in its
+# `superseded_by` field, demonstrating Pitfall #6's status-flow integrity.
+id: aviationkb://regulation-clause/far-25-1309-active@1
+type: RegulationClause
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "FAR §25.1309 (现行版) — 设备、系统和安装"
+    en: "FAR §25.1309 (active) — Equipment, systems, and installations"
+jurisdiction: "FAA"
+document: aviationkb://document/far-25-1309@1
+clause_id: "25.1309"
+effective_date: "2026-01-15"
+status: active
+full_text_en: "The equipment, systems, and installations whose functioning is required by this subchapter must be designed to ensure that they perform their intended functions under any foreseeable operating condition."
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: regulation-curator
+  created_at: "2026-05-03T10:10:00Z"
+confidence:
+  score: 0.99
+  rationale: "Clause text transcribed verbatim from current eCFR rendering; status confirmed against FAA Amendment 25-145 effective-date filing."
+  calibration_method: "cross-source-agreement"
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "§25.1309"
+    page: 1
+  retrieval:
+    url: "https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309"
+    retrieved_at: "2026-05-03T09:40:00Z"

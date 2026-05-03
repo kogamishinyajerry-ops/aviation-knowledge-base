@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v0.1.0
 milestone_name: "**Goal**: Define every entity type, relation type, vocabulary, and provenance/confidence/versioning rule as schema-enforced contracts before a single instance file is written."
 status: executing
-stopped_at: Phase 2 context gathered (4 areas, 16 decisions; ATA enum + S1000D DMC deferred to research)
-last_updated: "2026-05-03T09:58:55.132Z"
-last_activity: 2026-05-03 -- Phase 3 planning complete
+stopped_at: Completed 03-01-PLAN.md (validators bootstrap + 11-record valid corpus)
+last_updated: "2026-05-03T18:30:00Z"
+last_activity: 2026-05-03 -- Phase 3 plan 01 complete (validator package + 11-record valid corpus + base-schema unevaluatedProperties fix)
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 21
-  completed_plans: 15
-  percent: 71
+  completed_plans: 17
+  percent: 81
 ---
 
 # Project State
@@ -21,22 +21,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-03)
 
 **Core value:** 每一条知识都可追溯来源，每一个 AI 回答都有 citation；schema 可演化、版本化、对人类和 AI 都可读。
-**Current focus:** Phase 2 — Ontology Schema v0.1.0
+**Current focus:** Phase 3 — Validators ACTIVE + CI-Enforced
 
 ## Current Position
 
 Phase: 3
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-05-03 -- Phase 3 planning complete
+Plan: 01 complete; 02 next (invalid fixture corpus)
+Status: Wave 1 in progress
+Last activity: 2026-05-03 -- Phase 3 plan 01 complete
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█▓░░░░░░░░] 17%  (1 of 6 plans)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 15
+- Total plans completed: 17
 - Average duration: —
 - Total execution time: —
 
@@ -46,6 +46,7 @@ Progress: [░░░░░░░░░░] 0%
 |-------|-------|-------|----------|
 | 1 | 5 | - | - |
 | 2 | 10 | - | - |
+| 3 | 1 | ~25min | ~25min |
 
 **Recent Trend:**
 
@@ -67,6 +68,10 @@ Recent decisions affecting current work:
 - Init: PRD split — v0 directional in Phase 1, v1 final in Phase 6
 - Init: AIH-01..04 mapped to Phase 6 for traceability but applied as continuous discipline across all phases
 - Init: Phases 2 and 5 carry research budget (`/gsd-research-phase` before `/gsd-plan-phase`)
+- 03-01: Validator public API frozen — `validate_record(path, record, **ctx) -> list[ValidationError]`. Wave-2 plans (03-03/03-04) fill stubs without touching validate.py.
+- 03-01: schema.py uses `referencing.Registry` (jsonschema 4.18+ API) for $ref resolution — keys both bare filename and parent-relative path so leaf $refs resolve.
+- 03-01: Phase-2 schema bug auto-fixed — removed `unevaluatedProperties: false` from `entity.base.schema.json` and `relation.base.schema.json` (kept on every leaf). Per JSON Schema 2020-12, that keyword evaluates only against annotations in its own scope. CHANGELOG entry added.
+- 03-01: pyproject.toml + tests/conftest.py (`by_id` fixture) added per 03-VALIDATION.md Wave-0 deliverables (Rule 2 deviation — plan files_modified did not list them).
 
 ### Pending Todos
 
@@ -78,16 +83,14 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-03T05:24:03.640Z
-Stopped at: Phase 2 context gathered (4 areas, 16 decisions; ATA enum + S1000D DMC deferred to research)
-Resume file: .planning/phases/02-ontology-schema-v0-1-0/02-CONTEXT.md
+Last session: 2026-05-03T18:30:00Z
+Stopped at: Completed 03-01-PLAN.md
+Resume file: .planning/phases/03-validators-ci-active/03-02-PLAN.md (next: invalid fixture corpus)
 
 ## Next Action
 
-Phase 1 has no research budget. Proceed directly to:
+Phase 3 Wave 1 continues with plan 03-02 (invalid fixture corpus — 12 red-path YAMLs covering each failure mode). After 03-02, Wave 2 plans 03-03 (ids+provenance) and 03-04 (relations+links) can run in parallel.
 
 ```
-/gsd-plan-phase 1
+/gsd-execute-phase 3
 ```
-
-For phases 2 and 5 when their turn comes, run `/gsd-research-phase {N}` first.
