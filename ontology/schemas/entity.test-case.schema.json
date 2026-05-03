@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.test-case.schema.json",
+  "title": "TestCase entity (ONT-E-20, D-02)",
+  "description": "A test plan: qualification / verification / validation / acceptance / development. Composes entity.base.schema.json via allOf + $ref + unevaluatedProperties: false (Pitfall #1 lock; NEVER additionalProperties: false). Distinct from TestReport (which captures execution outcome); the two are linked via TestReport.test_case_ref foreign key (NOT a relation per RESEARCH.md Open Question #2 and ADR-002). Per ADR-002, DO-178C / DO-254 specific criticality fields (test category, criticality level, evidence type) are deferred to v0.2.0+. Examples: 'DO-160G Section 21 power-input qualification for FCC unit', 'CFD validation case for NACA 0012 at Re=6e6'. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "./entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "TestCase",
+      "description": "Discriminator. MUST equal 'TestCase'."
+    },
+    "test_objective": {
+      "type": "string",
+      "minLength": 20,
+      "description": "What the test is designed to demonstrate. ≥20 characters to discourage placeholder content. Example: 'Demonstrate that the FCC unit operates within specification across the full DO-160G Section 21 power-input envelope including dropout and surge conditions.'"
+    },
+    "target": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "URI to the entity being tested — typically a Component, AircraftSystem, or Subsystem. Phase 3 validator confirms the URI resolves to an existing entity of an allowed type."
+    },
+    "test_type": {
+      "type": "string",
+      "enum": [
+        "qualification",
+        "verification",
+        "validation",
+        "acceptance",
+        "development",
+        "other"
+      ],
+      "description": "Test purpose. qualification = formal compliance to a standard/regulation (e.g. DO-160). verification = does the implementation match the requirement. validation = does the requirement match the user need. acceptance = customer sign-off test. development = engineering exploration during design."
+    },
+    "environmental_conditions": {
+      "type": "string",
+      "description": "Free-text environmental envelope in v0.1.0. Examples: 'Operating temperature -55°C to +70°C, humidity 0-95% RH non-condensing, altitude up to 55,000 ft', 'Sea-level standard atmosphere'. v0.2.0+ may introduce a DO-160-shaped structured object."
+    },
+    "acceptance_criteria": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Pass/fail criteria for the test. ≥20 characters. Example: 'No loss of function during voltage transients per DO-160G Section 21 Category B; recovery within 100 ms; no permanent damage observed in post-test inspection.'"
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Conditions or prior tests that must hold before this test runs. Examples: ['BIT pass', 'temperature soak ≥ 1 hour at -55°C', 'TestCase TC-PWR-001 completed with PASS outcome']."
+    }
+  },
+  "required": [
+    "type",
+    "schema_version",
+    "i18n",
+    "test_objective",
+    "target",
+    "test_type",
+    "acceptance_criteria"
+  ],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.material.schema.json",
+  "title": "Material entity (ONT-E-19, D-01)",
+  "description": "An aerospace material (alloy / composite / polymer / ceramic / coating). Composes entity.base.schema.json via allOf + $ref + unevaluatedProperties: false (Pitfall #1 lock; NEVER additionalProperties: false). Per ADR-002, design_allowables_reference is free-text in v0.1.0; structured `cites` relation lands in v0.2.0+ (RESEARCH.md Open Question #1). nominal_composition is also free-text in v0.1.0; structured composition lists deferred to v0.2.0. Examples: Ti-6Al-4V (titanium alloy), AS4/3501-6 (carbon-fiber/epoxy composite), Inconel 718 (nickel superalloy). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "./entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "Material",
+      "description": "Discriminator. MUST equal 'Material'."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Common identifier for the material. Examples: 'Ti-6Al-4V', 'AS4/3501-6', 'Inconel 718'."
+    },
+    "family": {
+      "type": "string",
+      "enum": [
+        "metal_alloy",
+        "composite",
+        "polymer",
+        "ceramic",
+        "coating",
+        "other"
+      ],
+      "description": "Top-level material family. metal_alloy = wrought/cast metallic alloys. composite = fiber-reinforced polymer/metal/ceramic matrix. polymer = neat polymers (unfilled). ceramic = monolithic ceramics (CMC goes under composite). coating = surface treatments (anodize, chromate, thermal-spray)."
+    },
+    "nominal_composition": {
+      "type": "string",
+      "description": "Free-text nominal composition in v0.1.0 (per ADR-002 / RESEARCH.md Open Question #1). Examples: '90% Ti, 6% Al, 4% V', 'Carbon fiber AS4 in epoxy 3501-6 matrix, [0/45/90/-45]_2s layup'. Structured composition lists deferred to v0.2.0+."
+    },
+    "design_allowables_reference": {
+      "type": "string",
+      "description": "Free-text reference to design allowables source in v0.1.0 (per ADR-002 / RESEARCH.md Open Question #1). Examples: 'MIL-HDBK-5J Table 5.4.1.0(a)', 'MMPDS-2024 Section 5.4', 'CMH-17 Volume 2 Chapter 4'. v0.2.0+ may upgrade to a `cites` relation pointing at a Standard entity."
+    },
+    "heat_treatment_or_layup": {
+      "type": "string",
+      "description": "Heat treatment condition (metals) or layup specification (composites). Examples: 'Mill annealed', 'Solution treated and aged (STA)', '[0/45/90/-45]_2s symmetric layup'."
+    },
+    "typical_applications": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Free-form list of typical aerospace applications. Examples: ['airframe primary structure', 'engine fan blades', 'landing gear forgings']."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "name", "family"],
+  "unevaluatedProperties": false
+}
