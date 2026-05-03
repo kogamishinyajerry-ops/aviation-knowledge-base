@@ -85,8 +85,8 @@ Requirements for initial release (the 第一阶段 deliverable). Each maps to ro
 
 ### Validators & CI
 
-- [ ] **VAL-01**: `scripts/validate.py` master entrypoint runs: schema validation, ID format, broken refs, provenance fields, link check
-- [ ] **VAL-02**: Per-rule validators under `scripts/validators/` (one file per concern, importable as Python modules)
+- [x] **VAL-01**: `scripts/validate.py` master entrypoint runs: schema validation, ID format, broken refs, provenance fields, link check (03-01: master CLI + dispatch loop shipped; ids/provenance/relations/links logic filled by Wave-2 plans 03-03/03-04 against the frozen public API)
+- [x] **VAL-02**: Per-rule validators under `scripts/validators/` (one file per concern, importable as Python modules) (03-01: all 5 modules importable; schema.py is the only real validator in Wave 1; the other four ship as `return []` stubs filled by 03-03/03-04)
 - [ ] **VAL-03**: Test fixtures under `tests/fixtures/{valid,invalid}/` cover: every entity type, every relation type, _pending promotion, supersession chain, ai_extracted-without-reviewer rejection
 - [ ] **VAL-04**: `pytest` test suite for validators (`tests/test_validators.py`) — all green required for CI pass
 - [ ] **VAL-05**: GitHub Actions CI runs full validate.py + pytest on every push/PR
@@ -258,9 +258,9 @@ Each requirement maps to exactly one phase. Populated by gsd-roadmapper on 2026-
 | VER-02 | Phase 2 | Pending |
 | VER-03 | Phase 2 | Pending |
 | VER-04 | Phase 2 | Pending |
-| VAL-01 | Phase 3 | Pending |
-| VAL-02 | Phase 3 | Pending |
-| VAL-03 | Phase 3 | Pending |
+| VAL-01 | Phase 3 — plan 03-01 | Complete |
+| VAL-02 | Phase 3 — plan 03-01 (skeleton + schema.py) / 03-03+04 (stubs filled) | Complete (Wave 1 portion) |
+| VAL-03 | Phase 3 — plan 03-01 (valid corpus) / 03-02 (invalid corpus) | Partial (valid only) |
 | VAL-04 | Phase 3 | Pending |
 | VAL-05 | Phase 3 | Pending |
 | DOC-01 | Phase 4 | Pending |
