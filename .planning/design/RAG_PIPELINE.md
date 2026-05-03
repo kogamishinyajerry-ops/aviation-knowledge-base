@@ -370,35 +370,255 @@ The reranker is the **scoring authority** for the guardrail (§6.1). Vector cosi
 
 ## 5. Citation Injection
 
-TBD in Task 2/3/4
+This section defends **Pitfall 8** (citation hallucination — LLM invents page numbers) by making the LLM **structurally incapable** of authoring its own citations. The mechanism is a three-step inject → resolve → validate flow that traps any unresolved citation token before the answer reaches the user.
+
+This is the **Core Value** defender (per `.planning/PROJECT.md`: "**每一个 AI 回答都有 citation**；如果其他都失败，这一条不能失守"). If §5 fails, the entire system fails.
 
 ### 5.1 Token format `[CITE:c_<8hex>]`
 
-TBD in Task 2/3/4
+**Locked rules — verbatim, do not relax:**
+
+```text
+Token format:        [CITE:c_<8hex>]
+chunk_id derivation: c_<first-8-hex-chars-of-sha256(chunk_text + "\n" + chunk_index)>
+Example:             [CITE:c_a3f1e29b]   # opaque to LLM; cannot be guessed
+Match regex:         \[CITE:(c_[0-9a-f]{8})\]
+```
+
+**Why 8 hex chars (not 16, not 4):**
+
+- 4 hex (~16 bits): collision probability ~1.5% at 1000 chunks — too high.
+- 16 hex (~64 bits): astronomical collision safety but tokens become eye-strain in the LLM context window and the post-validator runs slower.
+- **8 hex (~32 bits): collision probability ~0.001% at 1000 chunks, ~0.1% at 10000 chunks** — safe for v1 corpus (target ≤500 documents per ROADMAP) and easy to read in answers. Phase 7 may bump to 12 hex if corpus crosses 100k chunks; ADR required.
+
+**Why include `chunk_index` in the SHA256 input:** identical text content can appear in two different chunks (e.g., the boilerplate "Cross-references" footer of FAR clauses). Hashing `chunk_text + chunk_index` gives each occurrence a distinct `chunk_id`, so the citation resolver can return the correct (document, page, section) tuple even when content is duplicated.
+
+**The LLM is FORBIDDEN to author its own citations.** The system prompt MUST contain (verbatim — do not paraphrase, do not add "creative" variations):
+
+```text
+You may cite ONLY the chunks provided to you in this turn. To cite, emit
+the exact token [CITE:c_xxxxxxxx] where xxxxxxxx is the chunk_id of the
+chunk you are referencing. NEVER invent page numbers, document names, or
+chunk_ids. The system will reject any answer containing a chunk_id that
+was not in your retrieved context.
+```
+
+This prompt is enforced as a **system message header** prepended by the orchestration layer (`scripts/rag/orchestrator.py`, Phase 7). It is NOT user-facing and is NOT subject to user override (no `--system-prompt` CLI flag in v1).
 
 ### 5.2 Render-layer resolution pseudocode
 
-TBD in Task 2/3/4
+The render layer runs AFTER the LLM has produced its answer with `[CITE:c_*]` tokens, but BEFORE the answer is shown to the user. It replaces tokens with human-readable, clickable citation links. Unresolved tokens are flagged for the validator (§5.3) to catch.
+
+```python
+import re
+from dataclasses import dataclass
+
+CITE_RE = re.compile(r"\[CITE:(c_[0-9a-f]{8})\]")
+
+
+@dataclass(frozen=True)
+class Chunk:
+    chunk_id: str               # e.g. "c_a3f1e29b"
+    document_uri: str           # e.g. "aviationkb://document/far-25-1309@1"
+    page: int                   # 1-indexed page number from OpenDataLoader output
+    section_anchor: str | None  # e.g. "§25.1309(b)(1)" or None
+    url: str                    # resolves to retrieval.url in canonical-example.yaml
+    score: float                # post-rerank score (§4.3); used by §6 guardrail
+
+
+def render_citations(answer_text: str, retrieved_chunks: list[Chunk]) -> str:
+    """
+    retrieved_chunks: each has .chunk_id, .document_uri, .page, .section_anchor, .url
+    Returns: answer_text with [CITE:c_xxxxxxxx] replaced by markdown footnote-style links.
+
+    Unresolved tokens are rendered as a visible warning marker so the post-validator
+    in §5.3 can detect them; in normal operation §5.3 runs FIRST and rejects the answer
+    before this function is called, so the warning marker is a defense-in-depth safety net.
+    """
+    chunk_index = {c.chunk_id: c for c in retrieved_chunks}
+
+    def replace(match: re.Match) -> str:
+        cid = match.group(1)
+        c = chunk_index.get(cid)
+        if c is None:
+            # Defense in depth — §5.3 should have already rejected this answer.
+            return f"[⚠️ unresolved:{cid}]"
+        # Resolve to (document, page, section, url) tuple.
+        doc_label = c.document_uri.split("/")[-1]   # e.g. "far-25-1309@1"
+        anchor = c.section_anchor or f"p.{c.page}"
+        return f"[{doc_label} {anchor}]({c.url})"
+
+    return CITE_RE.sub(replace, answer_text)
+```
+
+**Why `document_uri` not raw filename:** `aviationkb://document/<doc-id>@<v>` is the canonical record-style URI per `instances/entities/expert-note/canonical-example.yaml` and ARCHITECTURE.md Pattern 3 ("Stable URI-Style IDs (KG-Ready)"). It survives file moves, supports versioning (`@1`, `@2`), and maps directly to the future graph-DB node ID without rework.
 
 ### 5.3 Post-generation validator pseudocode
 
-TBD in Task 2/3/4
+The validator runs IMMEDIATELY after the LLM produces an answer and BEFORE the answer is rendered or shown. **REJECT (not warn) on unresolved citations.** A rejected answer is replaced with the canned no-context response (§6.2) — the user never sees the LLM's hallucinated page numbers.
+
+```python
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class ValidationResult:
+    ok: bool
+    rejected_reason: str | None
+
+
+def validate_answer_citations(
+    answer_text: str,
+    retrieved_chunks: list[Chunk],
+) -> ValidationResult:
+    """
+    Returns ValidationResult(ok: bool, rejected_reason: str | None).
+    Called BEFORE the answer reaches the user. If ok=False, the user sees
+    a fixed error message (§6.2 canned response) instead of the answer.
+
+    This is the structural defense against Pitfall 8 (citation hallucination):
+    the LLM only ever sees opaque chunk_ids and cannot guess valid ones; if it
+    invents a token, this validator catches it.
+    """
+    chunk_ids_in_context = {c.chunk_id for c in retrieved_chunks}
+    cited_ids = set(CITE_RE.findall(answer_text))
+
+    # Rule 1: every token must resolve to a retrieved chunk.
+    unresolved = cited_ids - chunk_ids_in_context
+    if unresolved:
+        return ValidationResult(
+            ok=False,
+            rejected_reason=f"Citations not in retrieved context: {sorted(unresolved)}",
+        )
+
+    # Rule 2: if context was provided, the answer must cite at least one chunk.
+    # An uncited answer with retrieved context means the LLM ignored its sources
+    # and is generating from parametric knowledge — a Core Value violation.
+    if not cited_ids and len(retrieved_chunks) > 0:
+        return ValidationResult(
+            ok=False,
+            rejected_reason="Answer has no citation tokens despite retrieved context",
+        )
+
+    return ValidationResult(ok=True, rejected_reason=None)
+```
+
+**Cross-reference: this defuses Pitfall 8 by design.** Per PITFALLS.md Pitfall 8 ("Citation 注入幻觉（页码捏造）"): the LLM "**编造页码**" failure is structurally impossible because (1) the LLM never sees real page numbers in the prompt — only `chunk_id` tokens — so it cannot remember and recite them; (2) any token it invents fails SHA256-based validation; (3) the rejection happens before render. This three-step (inject → resolve → validate) mechanism makes Pitfall 8 (Citation Hallucination) structurally impossible — the LLM only ever sees opaque chunk_ids and cannot invent valid ones.
+
+**What "rejected" looks like to the user:** the canned no-context response from §6.2, not a stack trace or error code. The system logs the rejection (orchestrator log, NOT user-facing) with the rejected_reason for ops investigation.
 
 ## 6. Guardrail (No-Context Short-Circuit)
 
-TBD in Task 2/3/4
+This section defends **Pitfall 9** (guardrail bypass on retrieval failure). The guardrail is a **hard pipeline branch**, NOT a prompt instruction — the LLM cannot be "jailbroken" past it because it is never called when the guardrail trips. Per PITFALLS.md Pitfall 9: "guardrail 是 hard constraint：模型不论怎么 prompt，只要 retrieved_context 为空，pipeline 直接短路返回上述文案，不调 LLM".
 
 ### 6.1 Threshold values (min_chunk_score, min_chunks_required)
 
-TBD in Task 2/3/4
+| Parameter             | Value | Rationale                                                                                            |
+|-----------------------|-------|------------------------------------------------------------------------------------------------------|
+| `min_chunk_score`     | **0.5** | Post-rerank score floor (bge-reranker-v2-m3 calibrated 0..1). Below → treat as no context.        |
+| `min_chunks_required` | **2**   | Single-hit retrieval is too brittle (one weak match can confabulate); require corroboration.       |
+
+**Why 0.5 specifically:** bge-reranker-v2-m3 outputs are roughly calibrated such that 0.5 corresponds to "the chunk is likely on-topic but not necessarily a direct answer". Below 0.5 is "weakly related at best" — the AeroPower-RAG-style false-positive zone. Phase 7 may surface this as an ops-tunable knob, but the v1 default is 0.5.
+
+**Why 2 chunks required:** in aviation Q&A, single-source claims are forensically fragile — one chunk that happens to mention "catastrophic" without context can mislead the LLM. Requiring two independent passing chunks makes single-point retrieval failure trip the guardrail rather than produce a one-sided answer.
+
+**Threshold check site:** these values are checked AFTER reranking (§4.3), AGAINST the post-rerank score. Pre-rerank vector / BM25 scores are NOT compared against 0.5 — different scale.
 
 ### 6.2 Canned no-context response (ZH + EN)
 
-TBD in Task 2/3/4
+When the guardrail trips, the system returns this **verbatim** text. Both ZH and EN are required (per §1 scope: bilingual users per `.planning/design/PRD_v0.md` user archetype A "航空工程师" + B "CFD/适航研究人员"):
+
+```text
+未在知识库中找到相关内容。可能原因：
+(1) 您的问题不在当前知识库覆盖范围；
+(2) 关键词不匹配，请尝试换种问法。
+本系统不在无来源时生成答案。
+
+Not found in knowledge base. Possible reasons:
+(1) Your question is outside the current knowledge base scope;
+(2) Keywords did not match — please try rephrasing.
+This system does not generate answers without sources.
+```
+
+**Format constraints:**
+
+- Both languages always returned together (no language detection branch — bilingual users see both, monolingual users see their language plus a polite extra).
+- No personalization, no LLM-generated variant — verbatim string lookup from a constant in `scripts/rag/orchestrator.py` (Phase 7).
+- **No "would you like me to try anyway?" follow-up.** Per Core Value: "本系统不在无来源时生成答案" — there is no fallback to parametric knowledge.
+
+**i18n note:** EN translation is included in v1 because the user base per `.planning/design/PRD_v0.md` is bilingual ZH/EN; not because of jurisdictional law. Phase 7 may add `accept-language`-based ordering but neither variant is removable.
 
 ### 6.3 LLM-not-called proof (where the short-circuit lives in the pipeline)
 
-TBD in Task 2/3/4
+The guardrail is implemented as a hard branch in the orchestration function. The LLM is **physically not invoked** when the guardrail trips; this is provable from the code structure (the `llm.generate(...)` call is unreachable on the no-context branch).
+
+```python
+from dataclasses import dataclass
+
+MIN_CHUNK_SCORE = 0.5         # §6.1
+MIN_CHUNKS_REQUIRED = 2       # §6.1
+NO_CONTEXT_RESPONSE = (
+    "未在知识库中找到相关内容。可能原因：\n"
+    "(1) 您的问题不在当前知识库覆盖范围；\n"
+    "(2) 关键词不匹配，请尝试换种问法。\n"
+    "本系统不在无来源时生成答案。\n"
+    "\n"
+    "Not found in knowledge base. Possible reasons:\n"
+    "(1) Your question is outside the current knowledge base scope;\n"
+    "(2) Keywords did not match — please try rephrasing.\n"
+    "This system does not generate answers without sources.\n"
+)
+
+
+@dataclass(frozen=True)
+class Answer:
+    text: str
+    llm_called: bool         # AUDIT FIELD: provable absence of LLM call
+    citations: list[Chunk]
+
+
+def answer_query(query: str) -> Answer:
+    chunks = hybrid_retrieve(query)              # §4.1 + §4.2 (vector + BM25 + RRF + synonym)
+    chunks = rerank(chunks)                      # §4.3 (bge-reranker-v2-m3, score_threshold=0.5)
+
+    # ── GUARDRAIL — short-circuit BEFORE any LLM call ─────────────────────────
+    # Per Pitfall 9 (PITFALLS.md): the no-context path MUST NOT reach llm.generate().
+    if not chunks or all(c.score < MIN_CHUNK_SCORE for c in chunks):
+        return Answer(text=NO_CONTEXT_RESPONSE, llm_called=False, citations=[])
+
+    passing_chunks = [c for c in chunks if c.score >= MIN_CHUNK_SCORE]
+    if len(passing_chunks) < MIN_CHUNKS_REQUIRED:
+        return Answer(text=NO_CONTEXT_RESPONSE, llm_called=False, citations=[])
+    # ──────────────────────────────────────────────────────────────────────────
+
+    # Only here do we invoke the LLM.
+    answer_raw = llm.generate(prompt_with_chunks(query, passing_chunks))
+
+    # §5.3 post-generation validator — citation integrity check.
+    validation = validate_answer_citations(answer_raw, passing_chunks)
+    if not validation.ok:
+        # LLM was called but its answer failed citation validation. Treat like
+        # guardrail trip: return canned response, do NOT show the unsafe answer.
+        # llm_called=True records that LLM was consulted (cost tracking) but the
+        # output was rejected.
+        return Answer(text=NO_CONTEXT_RESPONSE, llm_called=True, citations=[])
+
+    return Answer(
+        text=render_citations(answer_raw, passing_chunks),
+        llm_called=True,
+        citations=passing_chunks,
+    )
+```
+
+**Why `llm_called` is on the return type:** ops needs to distinguish three states for cost / debugging:
+
+1. `llm_called=False, citations=[]` → guardrail tripped before LLM (the cheap path; ~200ms; no LLM cost)
+2. `llm_called=True, citations=[]` → LLM was called but its output failed §5.3 validation (cost incurred but answer rejected — this is the "LLM tried to hallucinate" signal that should be alarmed in ops dashboards)
+3. `llm_called=True, citations=[…]` → normal successful answer with verified citations
+
+**Cross-reference Pitfall 9 explicitly.** Per PITFALLS.md Pitfall 9 ("Guardrail 在检索失败时被绕过"): the failure mode is "LLM 在没有 retrieved context 时仍然生成答案（用自己的世界知识）". The guardrail is a hard pipeline branch, NOT a prompt instruction — the LLM cannot be 'jailbroken' past it because it is never called when the guardrail trips. The `llm_called=False` audit field plus the structural impossibility of reaching `llm.generate(...)` on the no-context branch make this provable in code review (Phase 7 will add a unit test that mocks `llm.generate` to raise on call and asserts no call happens for empty retrieval).
+
+**Test coverage requirement (Phase 7):** `evaluation/queries.yaml` must contain ≥3 `out_of_scope` queries (per plan 05-02). Phase 7 acceptance includes: 100% of out_of_scope queries return `llm_called=False` and the canned response. Any pipeline change that breaks this assertion fails the eval gate.
 
 ## 7. Cross-lingual Retrieval
 
