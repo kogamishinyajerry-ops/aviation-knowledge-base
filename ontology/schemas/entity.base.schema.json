@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.base.schema.json",
+  "title": "Entity Base (composes _meta.schema.json#/$defs/baseFields)",
+  "description": "Entity composition base. Every type-specific entity schema (entity.aircraft-model.schema.json etc.) MUST compose this via allOf + $ref + unevaluatedProperties: false. NEVER use additionalProperties: false (Pitfall #1). Adds the entity-only fields (type, schema_version, version, i18n, tags, version_history) on top of the universal baseFields (id, provenance, confidence, source) defined in _meta.schema.json. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "../_meta.schema.json#/$defs/baseFields" }
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Discriminator. Each leaf type schema overrides this with `const`. Examples: 'AircraftSystem', 'Material', 'Person'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString",
+      "description": "D-20 per-record schema version (semver). Phase 3 validator rejects records older than N-1."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Per-record version. Defaults to 1 (implicit). Bumped each time the record is meaningfully revised (D-15 internalized has_revision)."
+    },
+    "i18n": {
+      "type": "object",
+      "description": "D-14 bilingual fields. label is required on every entity; full_text is optional but if present must be complete (both zh + en strings).",
+      "properties": {
+        "label": { "$ref": "../_meta.schema.json#/$defs/i18nLabel" },
+        "full_text": {
+          "type": "object",
+          "properties": {
+            "zh": { "type": "string" },
+            "en": { "type": "string" }
+          },
+          "required": ["zh", "en"],
+          "unevaluatedProperties": false
+        }
+      },
+      "required": ["label"],
+      "unevaluatedProperties": false
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true,
+      "description": "Free-form kebab-case tags for faceting. NOT for ontological relationships — those are relation YAMLs."
+    },
+    "version_history": {
+      "type": "array",
+      "description": "D-15. Internalized has_revision (D-07). Absence implies version == 1. Mandatory once version > 1. NOTE: items.version is an integer revision counter (not a semver string); the per-record schema_version field above carries the semver. This reconciles the D-15 'semver string' wording in 02-CONTEXT.md — the integer counter matches the top-level `version` field.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Revision counter matching the top-level `version` field at the time of this revision."
+          },
+          "date": { "$ref": "../_meta.schema.json#/$defs/isoDateTime" },
+          "author": { "$ref": "../_meta.schema.json#/$defs/uri" },
+          "change_summary": {
+            "type": "string",
+            "minLength": 20,
+            "description": "≥1 sentence describing the revision (≥20 chars). Empty / placeholder summaries fail validation by design."
+          }
+        },
+        "required": ["version", "date", "author", "change_summary"],
+        "unevaluatedProperties": false
+      }
+    }
+  },
+  "required": ["type", "schema_version", "i18n"],
+  "unevaluatedProperties": false
+}
