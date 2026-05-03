@@ -1,18 +1,18 @@
 ---
-# Aviation Knowledge Base MVP — CI baseline (Phase 1)
+# Aviation Knowledge Base MVP — CI (Phase 3 active)
 #
-# Per REPO-04: this workflow ships in Phase 1 with `lint` running for real
-# (against .pre-commit-config.yaml) and `schema-validation-stub` /
-# `link-check-stub` as labeled stubs. Phase 3 replaces the schema stub with
-# `python scripts/validate.py + pytest`. A later phase replaces the link
-# stub with a real link/cross-ref checker.
+# Phase 1 shipped this workflow with stub schema-validation and link-check
+# jobs. Phase 3 replaces them with real validators (per VAL-05):
+#   - schema-validation-stub  -> validate (runs scripts/validate.py)
+#   - link-check-stub         -> test     (runs pytest)
 #
-# Action versions pinned per .planning/research/STACK.md and .planning/research/PITFALLS.md
-# guidance. NEVER use floating refs (e.g. the rolling "latest" tag or unstable
-# branch references) — supply chain risk + reproducibility.
+# Action versions pinned per .planning/research/STACK.md and
+# .planning/research/PITFALLS.md guidance. NEVER use floating refs (e.g. the
+# rolling "latest" tag or unstable branch references) — supply chain risk +
+# reproducibility.
 #
 # This workflow is the gate referenced in .planning/research/ARCHITECTURE.md
-# "Validation & CI Layer". Phase 3 makes it actually validate; Phase 1 wires it.
+# "Validation & CI Layer". Phase 3 makes it actually validate; Phase 1 wired it.
 
 name: CI
 
@@ -44,9 +44,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          # Note: no cache: pip — repo has no requirements.txt/pyproject.toml yet.
-          # pre-commit hook envs are cached below via actions/cache.
-          # Re-enable when Python tooling lands (validators in Phase 3).
+          # Note: no cache: pip on the lint job — pre-commit hook envs are
+          # cached separately below via actions/cache. The validate/test jobs
+          # do use cache: pip keyed on requirements-dev.txt.
 
       - name: Install pre-commit
         run: |
@@ -64,8 +64,8 @@ jobs:
       - name: Run pre-commit on all files
         run: pre-commit run --all-files --show-diff-on-failure
 
-  schema-validation-stub:
-    name: Schema validation (Phase 1 STUB — real in Phase 3)
+  validate:
+    name: Schema + provenance + link validation (Phase 3)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -73,18 +73,32 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Stub notice
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install dev dependencies
         run: |
-          echo "::notice title=Phase 1 stub::This job is a no-op."
-          echo "Phase 3 will replace it with: python scripts/validate.py && pytest tests/"
-          echo "Tracking: REPO-04 (Phase 1) -> VAL-01..VAL-05 (Phase 3)."
-          echo "Stub passing intentionally."
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
 
-      - name: Pass
-        run: exit 0
+      - name: Run master validator on instances/ (production tree)
+        # Phase 3 ships with instances/ empty by design — validate.py exits 0
+        # on an empty walk. Phase 4+ will populate this tree, at which point
+        # this step becomes the production-data merge gate.
+        run: python scripts/validate.py instances/
 
-  link-check-stub:
-    name: Link check (Phase 1 STUB — real in later phase)
+      - name: Run master validator on tests/fixtures/valid/ (corpus self-check)
+        # The valid fixture corpus must stay clean as schemas evolve. If a
+        # Phase-N schema change breaks a Phase-(N-1) fixture, this step fails
+        # and the PR author has to update either the schema or the fixture.
+        run: python scripts/validate.py tests/fixtures/valid/
+
+  test:
+    name: Pytest (validator regression suite)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -92,12 +106,20 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Stub notice
-        run: |
-          echo "::notice title=Phase 1 stub::This job is a no-op."
-          echo "Future implementation: cross-ref check across instances/, docs/, wiki/, planning/."
-          echo "Trigger: when first inter-document references appear (Phase 4)."
-          echo "Stub passing intentionally."
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
 
-      - name: Pass
-        run: exit 0
+      - name: Install dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Run pytest
+        # `-q --tb=short` keeps CI logs scannable. The validator + mutation
+        # suites under tests/ are the regression net for every rule shipped
+        # by Phase 3 plans 03-01..03-05.
+        run: pytest -q --tb=short
