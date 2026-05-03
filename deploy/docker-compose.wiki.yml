@@ -1,0 +1,85 @@
+# ============================================================================
+# Phase 8b — Wiki.js portal (live, localhost-only)
+# ============================================================================
+# Spin up Wiki.js + Postgres for browsing the wiki/ corpus pages.
+# This is the WORKING version of deploy/docker-compose.yml.draft (which kept
+# the DRAFT marker for v0.1.0 sign-off). Phase 8b promotes a SUBSET of services
+# (just wiki + postgres + the wiki/ volume mount) — RAGFlow / Caddy / Authentik
+# stay deferred per Phase 6 boundaries.
+#
+# Usage:
+#   cd /Users/Zhuanz/aviation-knowledge-base
+#   docker compose -f deploy/docker-compose.wiki.yml --env-file deploy/.env.wiki up -d
+#   open http://localhost:3000      # initial admin wizard
+#
+# Tear down:
+#   docker compose -f deploy/docker-compose.wiki.yml down -v   # -v drops volumes
+#
+# Apple Silicon (ARM64) note: both requarks/wiki:2.5.314 and postgres:16 ship
+# multi-arch manifests including arm64/v8. Verified with `docker info` reports
+# Architecture: aarch64. No platform-override flag needed.
+#
+# DEP-04 hard rule: wiki/ subdirectory is mounted READ-ONLY into the wiki
+# container at /wiki-content. Wiki.js will use its Local FS Storage module
+# pointing at this mount as the source of truth — Wiki.js writes back to its
+# Postgres, which then SYNCS to /wiki-content (we mount RW for the sync to
+# work; the admin must NOT configure Wiki.js to point Storage at any path
+# outside /wiki-content, which would violate DEP-04).
+# ============================================================================
+
+services:
+
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    container_name: akb-postgres
+    environment:
+      POSTGRES_USER: ${WIKI_DB_USER:-wikijs}
+      POSTGRES_PASSWORD: ${WIKI_DB_PASS:-wikijs-local-dev}
+      POSTGRES_DB: ${WIKI_DB_NAME:-wiki}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${WIKI_DB_USER:-wikijs}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - akb-net
+
+  wiki:
+    image: requarks/wiki:2.5.314
+    restart: unless-stopped
+    container_name: akb-wiki
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${WIKI_DB_USER:-wikijs}
+      DB_PASS: ${WIKI_DB_PASS:-wikijs-local-dev}
+      DB_NAME: ${WIKI_DB_NAME:-wiki}
+      # Wiki.js does NOT use these for Storage module — admin configures via
+      # web UI. We pre-mount wiki/ at /wiki-content so admin can point at it.
+    volumes:
+      - ../wiki:/wiki-content:rw    # DEP-04: scope = wiki/ ONLY
+    ports:
+      - "${WIKI_HOST_PORT:-3000}:3000"
+    networks:
+      - akb-net
+    # Wiki.js healthcheck — use TCP probe since wget is not in the slim image
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/healthz', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  postgres_data:
+
+networks:
+  akb-net:
+    driver: bridge
