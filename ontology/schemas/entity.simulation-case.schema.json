@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.simulation-case.schema.json",
+  "title": "SimulationCase entity (ONT-E-13)",
+  "description": "A specific CFD simulation case (geometry + method + mesh + turbulence + boundary conditions + results summary). References NASA Turbulence Modeling Resource (https://tmbwg.github.io/turbmodels/), ERCOFTAC Classic Database, and AIAA Drag/High-Lift/Aeroelastic Prediction Workshops as v0.1.0 reference_url targets. Composes entity.base.schema.json via allOf + $ref + unevaluatedProperties: false (NEVER additionalProperties — Pitfall #1). Ties together CFDMethod (cfd_method_ref, required), MeshRequirement (mesh_ref, optional), and TurbulenceModel (turbulence_model_ref, optional) via canonical aviationkb:// URIs. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    {"$ref": "entity.base.schema.json"}
+  ],
+  "properties": {
+    "type": {
+      "const": "SimulationCase",
+      "description": "Discriminator. MUST be the literal string 'SimulationCase'."
+    },
+    "target_geometry": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Free-text geometry identifier (e.g. 'NACA-0012 airfoil at AoA 5deg', 'CRM wing-body, M=0.85, Re=5e6', 'flat-plate boundary-layer, Re_x=1e7')."
+    },
+    "cfd_method_ref": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Required canonical URI to the CFDMethod entity used for this case (e.g. aviationkb://cfdmethod/rans-steady@1)."
+    },
+    "mesh_ref": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Optional canonical URI to the MeshRequirement entity describing the case mesh (e.g. aviationkb://mesh/cfd-2d-airfoil-fine@1)."
+    },
+    "turbulence_model_ref": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Optional canonical URI to the TurbulenceModel entity used (e.g. aviationkb://turb/k-omega-sst@1)."
+    },
+    "boundary_conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "boundary_name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Boundary patch name (e.g. 'inlet', 'outlet', 'airfoil-wall', 'farfield')."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "wall",
+              "inlet",
+              "outlet",
+              "symmetry",
+              "periodic",
+              "far_field",
+              "internal_interface",
+              "other"
+            ],
+            "description": "Boundary condition type. wall (no-slip / slip / moving); inlet (velocity / total-pressure); outlet (pressure / outflow); symmetry; periodic; far_field (Riemann / characteristic); internal_interface (sliding / mixing-plane / GGI); other = escape hatch."
+          },
+          "specification": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional free-text specification (e.g. 'velocity 50 m/s, AoA 5deg, k=0.001, omega=1.0', 'static pressure 101325 Pa')."
+          }
+        },
+        "required": ["boundary_name", "type"],
+        "unevaluatedProperties": false
+      },
+      "description": "Optional list of boundary conditions defining the case."
+    },
+    "results_summary": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Optional free-text summary of validation outcome / key results (≥20 chars). Empty / placeholder summaries fail validation by design."
+    },
+    "reference_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional external reference URL. PREFERRED targets per CLAUDE.md project stack: NASA Turbulence Modeling Resource (https://tmbwg.github.io/turbmodels/), ERCOFTAC Classic Database, or AIAA Drag/High-Lift/Aeroelastic Prediction Workshop case entry. Phase 4 demo data must populate this field for any case sourced from these databases (T-02-06-02 mitigation)."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "target_geometry", "cfd_method_ref"],
+  "unevaluatedProperties": false
+}

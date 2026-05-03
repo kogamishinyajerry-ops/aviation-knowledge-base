@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.mesh-requirement.schema.json",
+  "title": "MeshRequirement entity (ONT-E-14)",
+  "description": "A mesh requirement specification (resolution, quality, refinement zones) for a CFD case. Composes entity.base.schema.json via allOf + $ref + unevaluatedProperties: false (NEVER additionalProperties — Pitfall #1). y_plus_target supports both wall-resolved (target ~1) and wall-modeled (target ~30+) regimes via the kind enum. Referenced from SimulationCase.mesh_ref. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    {"$ref": "entity.base.schema.json"}
+  ],
+  "properties": {
+    "type": {
+      "const": "MeshRequirement",
+      "description": "Discriminator. MUST be the literal string 'MeshRequirement'."
+    },
+    "target_simulation": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Optional reverse-link URI to a SimulationCase entity. The canonical direction is SimulationCase.mesh_ref → MeshRequirement; this back-link is provided for convenience when the relationship is naturally authored from the mesh side."
+    },
+    "y_plus_target": {
+      "type": "object",
+      "description": "Wall-distance target in inner viscous units (y+). Supports wall-resolved (target_value ~1) and wall-modeled (target_value ~30 or higher) approaches.",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["wall_resolved", "wall_modeled", "hybrid"],
+          "description": "wall_resolved = first cell at y+ ~1, integrate-to-wall (low-Re); wall_modeled = first cell at y+ ~30+, wall-function approach (high-Re); hybrid = blended (e.g. SST automatic wall treatment)."
+        },
+        "target_value": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Optional target y+ value at the first off-wall cell."
+        },
+        "max_acceptable": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Optional maximum acceptable y+ value (validation tolerance band upper bound)."
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "cell_count_min": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Optional minimum acceptable total cell count for the case mesh."
+    },
+    "cell_count_max": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Optional maximum acceptable total cell count (computational budget ceiling)."
+    },
+    "refinement_zones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "zone_name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Human-readable zone identifier (e.g. 'wake', 'boundary-layer', 'leading-edge', 'shock-region')."
+          },
+          "refinement_factor": {
+            "type": "number",
+            "minimum": 1,
+            "description": "Local refinement factor relative to the background mesh (≥1; 1 = no refinement)."
+          }
+        },
+        "required": ["zone_name", "refinement_factor"],
+        "unevaluatedProperties": false
+      },
+      "description": "Optional list of named local refinement zones with refinement factors."
+    },
+    "quality_metrics": {
+      "type": "object",
+      "description": "Optional mesh-quality acceptance thresholds.",
+      "properties": {
+        "skewness_max": {
+          "type": "number",
+          "description": "Maximum acceptable cell skewness (typically ≤ 0.95 for industrial CFD)."
+        },
+        "aspect_ratio_max": {
+          "type": "number",
+          "description": "Maximum acceptable cell aspect ratio (very large in boundary-layer prisms is normal; threshold context-dependent)."
+        },
+        "orthogonality_min": {
+          "type": "number",
+          "description": "Minimum acceptable orthogonality (0 = degenerate, 1 = perfectly orthogonal)."
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "mesh_topology": {
+      "type": "string",
+      "enum": ["structured", "unstructured", "hybrid", "polyhedral", "hexa_dominant"],
+      "description": "Optional. Mesh topology family. structured = ordered i,j,k grid; unstructured = arbitrary connectivity (typically tet/prism); hybrid = mixed cell types; polyhedral = general polyhedral cells; hexa_dominant = hex-dominant unstructured."
+    }
+  },
+  "required": ["type", "schema_version", "i18n"],
+  "unevaluatedProperties": false
+}
