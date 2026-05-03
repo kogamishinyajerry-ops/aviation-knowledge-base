@@ -54,6 +54,15 @@ repos:
         # See .planning/phases/01-repo-skeleton-git-baseline-prd-v0/01-03-PLAN.md
         # acceptance criteria: yamllint hook intentionally has no strict flag.
         args: ["-c", ".yamllint"]
+        # Phase 3 plan 03-06: exclude `tests/fixtures/invalid/` from yamllint.
+        # These fixtures intentionally violate ontology rules and some also
+        # ship without `--- # YAML document start`. They are loaded directly
+        # by pytest (tests/test_validators.py, tests/test_mutations.py) and
+        # are explicitly excluded from `validate.py`'s walk by
+        # `scripts/validators/loader.py:iter_instance_files`. yamllint is a
+        # style gate for human-authored corpus YAML, not for these
+        # adversarial test artifacts.
+        exclude: '^tests/fixtures/invalid/'
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.37.1
@@ -77,7 +86,37 @@ repos:
         # If no files match, the hook is skipped (pre-commit default).
         # This is intentional for Phase 1 — Phase 2 lands the first schemas.
 
-# CI integration note (.github/workflows/ci.yml — Plan 04 owns):
-# The CI workflow runs `pre-commit run --all-files` against every PR.
-# Local developer machines run only the hooks for staged files via the
-# pre-commit Git hook (`pre-commit install`).
+  # ----------------------------------------------------------------
+  # Phase 3 (VAL-05): local hook running scripts/validate.py for
+  # fast contributor feedback. The CI workflow (.github/workflows/ci.yml)
+  # is the authoritative gate; this hook is best-effort for local dev.
+  # Contributors must one-time install: pip install -r requirements-dev.txt
+  # ----------------------------------------------------------------
+  - repo: local
+    hooks:
+      - id: aviation-validate
+        name: "aviation-validate (Phase 3 master validator)"
+        # Run the Python master validator on the canonical instance tree
+        # AND the curated valid fixture corpus. Cross-record validators
+        # (relations, links) need the full corpus index to be meaningful,
+        # so we always pass the directories — not the individual staged files.
+        entry: python scripts/validate.py instances/ tests/fixtures/valid/
+        language: system
+        # `language: system` rationale: pre-commit's managed `language: python`
+        # creates an isolated venv per hook env, but our validator imports
+        # from `scripts/validators/` (a path-relative package) which makes
+        # the import path brittle inside an isolated env. `system` runs in
+        # the contributor's existing shell where they have already done the
+        # one-time `pip install -r requirements-dev.txt`. See
+        # scripts/validators/README.md for setup instructions.
+        pass_filenames: false
+        # Trigger only when YAML records or validator code changes; passing
+        # `pass_filenames: false` because validate.py walks directories itself.
+        files: '^(instances/|tests/fixtures/valid/|scripts/validators/|scripts/validate\.py$|ontology/schemas/|ontology/_meta\.schema\.json$).*'
+
+# CI integration note (.github/workflows/ci.yml — Phase 3 plan 03-06 owns):
+# The CI workflow runs `pre-commit run --all-files` against every PR
+# (lint job) PLUS the dedicated validate + test jobs that re-run
+# scripts/validate.py and pytest in CI. Local developer machines run
+# only the hooks for staged files via the pre-commit Git hook
+# (`pre-commit install`).
