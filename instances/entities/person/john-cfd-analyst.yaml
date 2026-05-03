@@ -1,0 +1,32 @@
+---
+# Phase 4 canonical Person instance — second Person URI for CFD-side authorship
+# (Document NASA TM-2014-218175, plan 04-03 CFDMethod / SimulationCase records).
+id: aviationkb://person/john-cfd-analyst@1
+type: Person
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "约翰·CFD 分析师 (示例)"
+    en: "John CFD-Analyst (demo)"
+name: "John CFD-Analyst"
+affiliation: aviationkb://organization/nasa@1
+role: engineer
+external_ids:
+  email: "john.cfd-analyst@example.com"
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: knowledge-curator
+  created_at: "2026-05-03T14:06:00Z"
+confidence:
+  score: 0.99
+  rationale: "Person entity is a synthetic demo identity attached to the NASA TM as its representative CFD-analyst author for citation routing in plan 04-03."
+  calibration_method: self-reported
+source:
+  document_id: aviationkb://document/nasa-tm-2014-218175@1
+  locator:
+    section: "Acknowledgements section, NASA TM-2014-218175"
+  retrieval:
+    url: "https://ntrs.nasa.gov/citations/20140017079"
+    retrieved_at: "2026-05-03T13:40:00Z"

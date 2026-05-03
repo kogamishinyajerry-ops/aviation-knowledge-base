@@ -1,0 +1,30 @@
+---
+# Phase 4 canonical Organization instance — NASA. Resolution target for
+# Person.affiliation on john-cfd-analyst and for issuing-body cross-reference
+# from the NASA TM Document.
+id: aviationkb://organization/nasa@1
+type: Organization
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "美国国家航空航天局"
+    en: "National Aeronautics and Space Administration"
+name: "National Aeronautics and Space Administration"
+org_type: research_institute
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: knowledge-curator
+  created_at: "2026-05-03T14:12:00Z"
+confidence:
+  score: 0.99
+  rationale: "NASA is the well-established US civilian aerospace research agency; entity record is administrative metadata only. jurisdiction omitted because NASA operates across multiple regulatory boundaries."
+  calibration_method: cross-source-agreement
+source:
+  document_id: aviationkb://document/nasa-tm-2014-218175@1
+  locator:
+    section: "NASA TM-2014-218175 issuing-authority colophon"
+  retrieval:
+    url: "https://www.nasa.gov"
+    retrieved_at: "2026-05-03T13:40:00Z"

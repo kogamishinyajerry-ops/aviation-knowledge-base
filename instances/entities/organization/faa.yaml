@@ -1,0 +1,31 @@
+---
+# Phase 4 canonical Organization instance — FAA. Resolution target for
+# Person.affiliation on jane-reviewer and for issuing-body cross-references
+# from FAR-derived RegulationClause records in plan 04-02.
+id: aviationkb://organization/faa@1
+type: Organization
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "美国联邦航空管理局"
+    en: "Federal Aviation Administration"
+name: "Federal Aviation Administration"
+org_type: regulator
+jurisdiction: "FAA"
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: knowledge-curator
+  created_at: "2026-05-03T14:10:00Z"
+confidence:
+  score: 0.99
+  rationale: "FAA is the well-established US civil aviation authority; entity record is administrative metadata only (name, jurisdiction, type)."
+  calibration_method: cross-source-agreement
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "FAR Part 25 issuing-authority colophon"
+  retrieval:
+    url: "https://www.faa.gov/about"
+    retrieved_at: "2026-05-03T13:30:00Z"

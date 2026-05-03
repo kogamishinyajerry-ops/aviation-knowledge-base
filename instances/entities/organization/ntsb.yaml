@@ -1,0 +1,30 @@
+---
+# Phase 4 canonical Organization instance — NTSB. Resolution target for
+# issuing-body cross-reference from the AAR-09/03 Document and for the
+# AccidentCase records added by plan 04-03.
+id: aviationkb://organization/ntsb@1
+type: Organization
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "美国国家运输安全委员会"
+    en: "National Transportation Safety Board"
+name: "National Transportation Safety Board"
+org_type: regulator
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: knowledge-curator
+  created_at: "2026-05-03T14:14:00Z"
+confidence:
+  score: 0.99
+  rationale: "NTSB is the well-established US independent transportation-accident investigative body; entity record is administrative metadata only. org_type=regulator chosen as the closest enum match per entity.organization.schema.json (NTSB is investigative-regulator not classic civil-aviation authority)."
+  calibration_method: cross-source-agreement
+source:
+  document_id: aviationkb://document/ntsb-aar-09-03@1
+  locator:
+    section: "NTSB AAR-09/03 issuing-authority colophon"
+  retrieval:
+    url: "https://www.ntsb.gov"
+    retrieved_at: "2026-05-03T13:45:00Z"
