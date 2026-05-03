@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.turbulence-model.schema.json",
+  "title": "TurbulenceModel entity (ONT-E-15)",
+  "description": "A turbulence model (SA, k-omega-SST, k-epsilon, RSM, LES sub-grid, DES/DDES/IDDES blends, transition models, etc.). Composes entity.base.schema.json via allOf + $ref + unevaluatedProperties: false (NEVER additionalProperties — Pitfall #1). reference_url should point to NASA Turbulence Modeling Resource (https://tmbwg.github.io/turbmodels/) entries when available. Referenced from SimulationCase.turbulence_model_ref. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    {"$ref": "entity.base.schema.json"}
+  ],
+  "properties": {
+    "type": {
+      "const": "TurbulenceModel",
+      "description": "Discriminator. MUST be the literal string 'TurbulenceModel'."
+    },
+    "family": {
+      "type": "string",
+      "enum": [
+        "SA",
+        "k-omega-SST",
+        "k-epsilon",
+        "k-omega",
+        "RSM",
+        "LES_subgrid",
+        "DES_blend",
+        "DDES_blend",
+        "IDDES_blend",
+        "transition_model",
+        "other"
+      ],
+      "description": "Turbulence model family. SA = Spalart-Allmaras (1-eq); k-omega-SST = Menter's 2-eq SST; k-epsilon = standard / realizable / RNG variants; k-omega = Wilcox 2-eq; RSM = Reynolds-Stress Model (7-eq); LES_subgrid = LES sub-grid scale model (Smagorinsky, WALE, dynamic, etc.); DES_blend / DDES_blend / IDDES_blend = hybrid RANS-LES blending models built on a RANS base (typically SA or SST); transition_model = γ-Reθ, AFT, etc.; other = escape hatch (discouraged — please widen the enum instead)."
+    },
+    "applicability": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Optional free-text descriptions of flow regimes the model is suitable for (e.g. ['attached external aero', 'mild adverse pressure gradient', 'transitional flows up to Re_theta ~3e6'])."
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Optional free-text descriptions of known model limitations (e.g. ['poor in massively separated flows', 'over-predicts shock-induced separation', 'transition not modeled — assumes fully turbulent BL'])."
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "../_meta.schema.json#/$defs/uri"
+      },
+      "description": "Optional list of Document entity URIs (canonical paper / report references for the model)."
+    },
+    "reference_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional external reference URL. PREFERRED target: a NASA Turbulence Modeling Resource (TMR) page at https://tmbwg.github.io/turbmodels/ for the model. ERCOFTAC validation pages and AIAA Workshop entries are also acceptable."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "family"],
+  "unevaluatedProperties": false
+}
