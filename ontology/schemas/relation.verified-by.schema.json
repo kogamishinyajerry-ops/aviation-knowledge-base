@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.verified-by.schema.json",
+  "title": "verified_by relation (ONT-R-05)",
+  "description": "USE FOR: Requirement verified_by TestCase / TestReport / SimulationCase / Procedure. Establishes which artifact verifies a requirement. NOT for citation only — use cites. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "verified_by",
+      "description": "Discriminator. Must equal the string 'verified_by'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "verification_method": {
+      "type": "string",
+      "enum": ["test", "analysis", "inspection", "demonstration", "simulation", "similarity"],
+      "description": "Optional. Verification method per ARP-4761 / DO-178C taxonomy."
+    }
+  },
+  "unevaluatedProperties": false
+}

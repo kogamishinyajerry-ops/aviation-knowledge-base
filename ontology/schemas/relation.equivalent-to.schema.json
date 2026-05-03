@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.equivalent-to.schema.json",
+  "title": "equivalent_to relation (ONT-R-12)",
+  "description": "USE FOR: this entity denotes the same real-world thing as that entity, under different identifiers (e.g. an item in two different parts catalogs, or a reorganized item with new ID). DO NOT USE FOR: cross-language pairs (Chinese ExpertNote ↔ English ExpertNote on same topic) — use the entity i18n field per ADR-003 / D-12. Bilingual content is a SINGLE entity with i18n.label.{zh, en} + i18n.full_text.{zh, en}, NOT for cross-language pairs as two entities linked by equivalent_to (a two-entity model fragments retrieval — RAG retriever cannot index both languages from one record — and breaks the H-Darrieus audit story). DO NOT USE FOR: synonyms in glossary — those go in docs/GLOSSARY.md (Phase 6). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "equivalent_to",
+      "description": "Discriminator. Must equal the string 'equivalent_to'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "equivalence_basis": {
+      "type": "string",
+      "enum": ["identifier_change", "catalog_remap", "reorganization", "vendor_alias", "other"],
+      "description": "Optional. Why these two URIs denote the same real-world thing."
+    }
+  },
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.constrained-by.schema.json",
+  "title": "constrained_by relation (ONT-R-04)",
+  "description": "Generic constraint relation. USE FOR: Component(seat) constrained_by Requirement(weight_budget_15kg); AircraftSystem constrained_by Requirement(power_budget); Subsystem constrained_by Standard(operating_temperature_range). DO NOT USE FOR: explicit normative compliance with regulations / standards / certification clauses — that's complies_with (ONT-R-16). DO NOT USE FOR: hard regulatory compliance with audit trail — also complies_with. constrained_by is broader and includes budget / cost / non-normative constraints. Boundary per ADR-003 / D-11: constrained_by is generic (mass budget, cost ceiling, performance limit, soft regulation reference); complies_with is explicit normative compliance with audit-grade traceability. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "constrained_by",
+      "description": "Discriminator. Must equal the string 'constrained_by'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "constraint_kind": {
+      "type": "string",
+      "enum": ["budget", "regulatory_soft", "performance", "environmental", "interface", "other"],
+      "description": "Optional. Nature of the constraint. Use 'regulatory_soft' for soft regulation references; for normative compliance use complies_with instead."
+    }
+  },
+  "unevaluatedProperties": false
+}

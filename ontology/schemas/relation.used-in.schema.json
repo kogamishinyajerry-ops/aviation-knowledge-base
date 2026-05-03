@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.used-in.schema.json",
+  "title": "used_in relation (ONT-R-14)",
+  "description": "USE FOR: CFDMethod used_in SimulationCase; TurbulenceModel used_in SimulationCase; MeshRequirement used_in SimulationCase. Inverse of SimulationCase's URI fields (cfd_method_ref, turbulence_model_ref, mesh_ref) for query graph reuse — Phase 3 validator may compute one direction from the other to keep them consistent. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "used_in",
+      "description": "Discriminator. Must equal the string 'used_in'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    }
+  },
+  "unevaluatedProperties": false
+}

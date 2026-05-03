@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.applicable-to.schema.json",
+  "title": "applicable_to relation (ONT-R-03)",
+  "description": "USE FOR: RegulationClause applicable_to AircraftModel; Standard applicable_to AircraftSystem; Procedure applicable_to Component. Establishes scope of regulatory / standards / procedural artifacts. NOT for compliance-grade audit trail (use complies_with — ONT-R-16); applicable_to is broader and includes 'this regulation could apply' even before formal compliance is asserted. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "applicable_to",
+      "description": "Discriminator. Must equal the string 'applicable_to'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "applicability_scope": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional free-text scope qualifier; e.g. 'all configurations' or 'post-2020 deliveries'."
+    }
+  },
+  "unevaluatedProperties": false
+}

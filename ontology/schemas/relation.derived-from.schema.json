@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.derived-from.schema.json",
+  "title": "derived_from relation (ONT-R-06)",
+  "description": "USE FOR: Requirement derived_from RegulationClause; ExpertNote derived_from AccidentCase; Procedure derived_from Standard. Establishes provenance of a derived artifact (distinct from cites which is reference, distinct from complies_with which is normative compliance). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "derived_from",
+      "description": "Discriminator. Must equal the string 'derived_from'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    }
+  },
+  "unevaluatedProperties": false
+}

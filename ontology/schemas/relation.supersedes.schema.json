@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.supersedes.schema.json",
+  "title": "supersedes relation (ONT-R-07)",
+  "description": "USE FOR: RegulationClause(new) supersedes RegulationClause(old); Standard(rev_C) supersedes Standard(rev_B); ExpertNote supersedes ExpertNote. Pitfall #6 lock: when status=superseded on the OLD clause, this relation provides the FORWARD pointer to the new one. Phase 3 validator can cross-check that supersedes points to an entity whose previous version's status is indeed 'superseded' — i.e. the active→superseded RegulationClause status flow is bound to the supersedes edge so that abandoned regulation versions remain traceable. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "supersedes",
+      "description": "Discriminator. Must equal the string 'supersedes'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "supersession_reason": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Optional. ≥20 chars rationale for why the new artifact supersedes the old (e.g. 'Updated airworthiness requirement per FAA NPRM 2024-0117')."
+    }
+  },
+  "unevaluatedProperties": false
+}
