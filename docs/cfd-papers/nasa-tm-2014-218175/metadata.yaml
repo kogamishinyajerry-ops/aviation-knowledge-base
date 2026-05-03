@@ -1,0 +1,22 @@
+---
+# DOC-02 metadata for NASA TM-2014-218175 — Implementation, Verification,
+# and Validation of the Spalart-Allmaras Turbulence Model in OVERFLOW.
+# Public; CFD-paper slot of the DEMO-03 doc-type spread.
+title: "NASA TM-2014-218175 — Implementation, verification, and validation of the SA turbulence model in OVERFLOW"
+doc_type: paper
+language: en
+source_url: "https://ntrs.nasa.gov/citations/20140017079"
+publication_date: "2014-08-01"
+effective_date: "2014-08-01"
+confidentiality: public
+domain_tags:
+  - cfd
+  - turbulence-modeling
+  - rans
+  - validation
+version: "Final, Aug 2014"
+file_hash: "sha256:f26f61e6fe75a6b1dfbd904134355d68cb00d8709b369ed50dde12c53bb0e08b"
+processed_by: "manual-pandoc-3.x"
+ata_chapter_tags: []
+issuing_organization: "aviationkb://organization/nasa@1"
+linked_document_entity: "aviationkb://document/nasa-tm-2014-218175@1"
