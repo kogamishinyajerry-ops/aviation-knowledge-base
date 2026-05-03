@@ -1,0 +1,53 @@
+---
+# DEMO-06: AI-extracted-then-human-reviewed ExpertNote in the _pending/
+# quarantine. provenance.method == hybrid_reviewed (passes H-Darrieus
+# REJECT — see ADR-005 / instances/_pending/README.md); reviewer +
+# reviewed_at populated; awaiting PR-merge to be physically moved to
+# instances/entities/expert-note/. confidence.score deliberately set
+# to 0.78 (below 0.85) to demonstrate honest scoring even after review:
+# AI captured 2 of 3 thermal cases on first pass and the reviewer added
+# the third — so the score reflects partial AI agreement, not final
+# correctness.
+id: aviationkb://expert-note/pending-ai-extracted-fadec-thermal-margins@1
+type: ExpertNote
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "FADEC 热裕度评估 — 待审核 (AI 抽取后已混合审阅)"
+    en: "FADEC thermal-margins assessment — pending (AI-extracted, hybrid-reviewed)"
+author: aviationkb://person/jane-reviewer@1
+topic: "fadec-thermal-margins-assessment"
+content_md: |
+  AI-extracted draft from FAR §25.1309 + AC 25.1309-1A combined reading
+  (Claude Opus 4.7, 2026-05-02): FADEC thermal margins must accommodate the
+  full operating envelope including:
+  - hot-day takeoff at maximum gross weight (cabin / cockpit ambient up to +70°C)
+  - cold soak following polar overnight stop (operating temperature down to -55°C)
+  - in-flight engine-bay temperature transients during go-around / takeoff power
+  Reviewer note: original AI extraction missed the engine-bay transient case;
+  reviewer added it after cross-checking AC 25.1309-1A §7.b on environmental
+  qualification.
+related_entities:
+  - aviationkb://aircraft-system/b737max-fadec@1
+  - aviationkb://component/b737max-fadec-cpu-card@1
+  - aviationkb://failure-mode/fadec-channel-a-cpu-lockup@1
+provenance:
+  method: hybrid_reviewed
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: airworthiness-engineer
+  created_at: "2026-05-02T20:00:00Z"
+  reviewer: aviationkb://person/jane-reviewer@1
+  reviewed_at: "2026-05-03T17:30:00Z"
+  tool: "claude-opus-4-7"
+confidence:
+  score: 0.78
+  rationale: "AI extraction captured 2 of 3 thermal cases on first pass; reviewer added the engine-bay transient case after cross-source check. Score reflects the partial AI agreement, not final correctness."
+  calibration_method: cross-source-agreement
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "AC 25.1309-1A §7.b — environmental qualification framing"
+  retrieval:
+    url: "https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_25_1309-1A.pdf"
+    retrieved_at: "2026-05-02T19:30:00Z"

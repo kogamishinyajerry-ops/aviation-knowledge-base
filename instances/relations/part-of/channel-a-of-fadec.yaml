@@ -1,0 +1,27 @@
+---
+# part_of relation — Channel-A Subsystem part_of FADEC AircraftSystem.
+# Middle of the FADEC composition chain (Subsystem → System).
+id: aviationkb://part-of/channel-a-of-fadec@1
+type: part_of
+schema_version: "0.1.0"
+subject: aviationkb://subsystem/b737max-fadec-channel-a@1
+object: aviationkb://aircraft-system/b737max-fadec@1
+valid_from: "2026-05-03T00:00:00Z"
+valid_until: null
+cardinality_hint: exactly_one
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: systems-engineer
+  created_at: "2026-05-03T17:00:00Z"
+confidence:
+  score: 0.95
+  rationale: "Channel A is, by definition, a part of the FADEC system per FAR §25.1309 dual-channel architecture conventions."
+  calibration_method: "cross-source-agreement"
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "§25.1309 architecture-redundancy framing"
+  retrieval:
+    url: "https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309"
+    retrieved_at: "2026-05-03T13:30:00Z"
