@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.cites.schema.json",
+  "title": "cites relation (ONT-R-08)",
+  "description": "USE FOR: any entity cites Document with locator. The object MUST resolve to a Document entity URI — cites is the cite-as-reference relation whose resolution target is the Document entity referenced by provenance.source.document_id. Distinguished from derived_from: cites = 'this artifact references that document'; derived_from = 'this artifact was DERIVED from that artifact'. Phase 4 demo data uses cites heavily because Document entities are the resolution targets for provenance.source.document_id. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "cites",
+      "description": "Discriminator. Must equal the string 'cites'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "locator": {
+      "type": "object",
+      "description": "Sub-document locator within the cited Document.",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Optional. 1-indexed page number."
+        },
+        "section": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional. Section identifier (e.g. '§25.305')."
+        },
+        "paragraph": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Optional. 1-indexed paragraph offset within page/section."
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "quotation": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional. The cited text fragment if direct-quoted."
+    }
+  },
+  "unevaluatedProperties": false
+}

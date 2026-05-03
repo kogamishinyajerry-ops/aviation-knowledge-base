@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.part-of.schema.json",
+  "title": "part_of relation (ONT-R-02)",
+  "description": "Composition relation. USE FOR: Component(brake_pad) part_of Component(brake_assembly); Subsystem part_of AircraftSystem; AircraftSystem part_of AircraftModel. Transitive: if A part_of B and B part_of C, then A is implicitly part_of C (Phase 3 validator may compute closure). Cardinality is 1-to-1 (each entity has at most one direct parent in the part_of tree). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "part_of",
+      "description": "Discriminator. Must equal the string 'part_of'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "cardinality_hint": {
+      "type": "string",
+      "enum": ["exactly_one", "one_or_more", "optional"],
+      "description": "Hint about expected cardinality on the subject side; Phase 3 validator does not enforce — informational only."
+    }
+  },
+  "unevaluatedProperties": false
+}

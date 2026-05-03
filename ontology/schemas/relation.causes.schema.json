@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.causes.schema.json",
+  "title": "causes relation (ONT-R-09)",
+  "description": "USE FOR: FailureMode causes effect (free-text effect string); AccidentCase causes causal_factor. Note: causes is NOT a graph between entities only — sometimes the object is a free-text effect description. v0.1.0 keeps the object as URI for graph uniformity; free-text effects go into FailureMode.effects array (entity-side). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "causes",
+      "description": "Discriminator. Must equal the string 'causes'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "chain_position": {
+      "type": "string",
+      "enum": ["proximate", "contributing", "root"],
+      "description": "Optional. Position in the causal chain — proximate (immediate cause), contributing (factor), or root (root cause)."
+    }
+  },
+  "unevaluatedProperties": false
+}
