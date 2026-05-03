@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.cfd-method.schema.json",
+  "title": "CFDMethod entity (ONT-E-12)",
+  "description": "A CFD numerical method (RANS / URANS / LES / DES / DDES / IDDES / DNS / Hybrid). Composes entity.base.schema.json via allOf + $ref + unevaluatedProperties: false (NEVER additionalProperties — Pitfall #1). method_class is the canonical discriminator; equations and governing_assumptions document the method's physics-of-flow scope. Used by SimulationCase.cfd_method_ref. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    {"$ref": "entity.base.schema.json"}
+  ],
+  "properties": {
+    "type": {
+      "const": "CFDMethod",
+      "description": "Discriminator. MUST be the literal string 'CFDMethod'."
+    },
+    "method_class": {
+      "type": "string",
+      "enum": ["RANS", "URANS", "LES", "DES", "DDES", "IDDES", "DNS", "Hybrid", "Other"],
+      "description": "Canonical CFD method class. RANS = Reynolds-Averaged Navier-Stokes (steady); URANS = unsteady RANS; LES = Large-Eddy Simulation; DES/DDES/IDDES = Detached-Eddy Simulation variants; DNS = Direct Numerical Simulation; Hybrid = method blending two or more of the above (e.g. RANS-LES zonal); Other = anything outside this taxonomy (escape hatch — discouraged)."
+    },
+    "equations": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Optional free-text description of the governing equations (≥20 chars). Example: 'incompressible Navier-Stokes with Boussinesq buoyancy approximation; energy equation in temperature form'."
+    },
+    "governing_assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Optional list of governing assumptions (e.g. ['incompressible', 'steady-state', 'no shock waves', 'no free-surface effects'])."
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": ["validated", "partially_validated", "exploratory", "deprecated"],
+      "description": "Optional. Validation maturity per project usage. validated = compared against reference data with acceptable error; partially_validated = some validation exists but gaps remain; exploratory = research-grade, not yet validated; deprecated = no longer recommended."
+    },
+    "typical_applications": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Optional list of typical application regimes (e.g. ['external aerodynamics, low Mach', 'internal flow with heat transfer', 'high-fidelity wake-resolved rotor simulations'])."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "method_class"],
+  "unevaluatedProperties": false
+}

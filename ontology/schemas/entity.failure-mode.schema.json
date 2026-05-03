@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.failure-mode.schema.json",
+  "title": "FailureMode entity (ONT-E-10)",
+  "description": "A characterized failure mode of a component, system, or subsystem. Composes entity.base.schema.json via allOf + $ref + unevaluatedProperties: false (NEVER additionalProperties — Pitfall #1). The severity enum mirrors AircraftSystem.criticality_level (5-value FAR/CS 25.1309 set: catastrophic, hazardous, major, minor, no_safety_effect) so failure-mode severity and system criticality are directly comparable. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    {"$ref": "entity.base.schema.json"}
+  ],
+  "properties": {
+    "type": {
+      "const": "FailureMode",
+      "description": "Discriminator. MUST be the literal string 'FailureMode'."
+    },
+    "affected_component": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "URI of the Component, Subsystem, or AircraftSystem entity exhibiting this failure mode."
+    },
+    "failure_description": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Free-text description of the failure mode (≥20 chars). Empty / placeholder descriptions fail validation by design."
+    },
+    "conditions": {
+      "type": "object",
+      "description": "Operating conditions under which this failure mode is observed or hypothesized. All sub-fields optional; if present, free-text strings (e.g. altitude='above FL250', airspeed='Vmo+10kt', configuration='gear-down', environmental='icing').",
+      "properties": {
+        "altitude": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Altitude regime (e.g. 'sea level', 'cruise FL350', 'above FL250')."
+        },
+        "airspeed": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Airspeed regime or specific speed (e.g. 'low-speed approach', 'Vmo+10kt', 'transonic')."
+        },
+        "configuration": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Aircraft configuration (e.g. 'gear-down', 'flaps-extended', 'cruise-clean', 'one-engine-inoperative')."
+        },
+        "environmental": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Environmental conditions (e.g. 'icing', 'turbulence', 'crosswind', 'high-temperature day')."
+        }
+      },
+      "unevaluatedProperties": false
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["catastrophic", "hazardous", "major", "minor", "no_safety_effect"],
+      "description": "Failure severity per FAR/CS 25.1309 5-value classification. Aligned with AircraftSystem.criticality_level enum domain so failure-mode severity and system criticality are directly comparable."
+    },
+    "detection_method": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional. How the failure is detected (e.g. 'BIT', 'crew observation', 'scheduled inspection', 'flight-data anomaly')."
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "description": "Effects of the failure on system / aircraft / mission. ≥1 item required."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "affected_component", "failure_description", "severity", "effects"],
+  "unevaluatedProperties": false
+}
