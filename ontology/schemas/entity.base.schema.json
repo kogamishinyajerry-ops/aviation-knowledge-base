@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.base.schema.json",
   "title": "Entity Base (composes _meta.schema.json#/$defs/baseFields)",
-  "description": "Entity composition base. Every type-specific entity schema (entity.aircraft-model.schema.json etc.) MUST compose this via allOf + $ref + unevaluatedProperties: false. NEVER use additionalProperties: false (Pitfall #1). Adds the entity-only fields (type, schema_version, version, i18n, tags, version_history) on top of the universal baseFields (id, provenance, confidence, source) defined in _meta.schema.json. Schema version: 0.1.0.",
+  "description": "Entity composition base. Every type-specific entity schema (entity.aircraft-model.schema.json etc.) MUST compose this via allOf + $ref AND set unevaluatedProperties: false ON THE LEAF (NOT here). Per JSON Schema 2020-12 spec, unevaluatedProperties evaluates against annotations in its own scope only; placing it on this base schema would reject leaf-defined properties when the base is referenced as an allOf branch (fixed in Phase 3 plan 03-01 Wave 1 — see SUMMARY.md deviations). NEVER use additionalProperties: false (Pitfall #1) anywhere. Adds the entity-only fields (type, schema_version, version, i18n, tags, version_history) on top of the universal baseFields (id, provenance, confidence, source) defined in _meta.schema.json. Schema version: 0.1.0.",
   "type": "object",
   "allOf": [
     { "$ref": "../_meta.schema.json#/$defs/baseFields" }
@@ -74,6 +74,5 @@
       }
     }
   },
-  "required": ["type", "schema_version", "i18n"],
-  "unevaluatedProperties": false
+  "required": ["type", "schema_version", "i18n"]
 }
