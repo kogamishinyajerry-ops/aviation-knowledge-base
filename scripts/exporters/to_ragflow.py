@@ -133,6 +133,44 @@ is a hole.
 If you find yourself wanting to add a real import here, STOP — that work
 belongs to Phase 7 plan 07-XX, not Phase 5 plan 05-03.
 
+--- Per-corpus metadata mapping reference ---
+
+For each Document under docs/<domain>/<doc-id>/, the sidecar metadata.yaml
+maps to RAGFlow doc meta_fields as follows (Phase 7 implementer: this is the
+input → output translation contract; keep these field names stable across
+the whole corpus so retrieval-time filters are predictable).
+
+Example 1 — docs/regulations/far-25-1309/metadata.yaml:
+    title             → ragflow.meta.title
+    doc_type          → ragflow.meta.doc_type           ("regulation")
+    language          → ragflow.meta.language           ("en")
+    source_url        → ragflow.meta.source_url
+    publication_date  → ragflow.meta.publication_date
+    effective_date    → ragflow.meta.effective_date
+    confidentiality   → (gate; NOT uploaded — see is_ingest_eligible)
+    domain_tags       → ragflow.meta.tags               (joined with comma)
+    version           → ragflow.meta.version
+    file_hash         → ragflow.meta.file_hash          (used for cross-check vs compute_doc_id)
+    processed_by      → ragflow.meta.processed_by
+
+Plus these synthesized fields (Phase 7 derives, not from metadata.yaml):
+    document_uri      = "aviationkb://document/" + <doc-id> + "@" + <version>
+                        (resolves to instances/entities/document/<doc-id>.yaml)
+    chunk_strategy    = per RAG_PIPELINE.md §2.4 (regulation = §-clause-aware)
+    section_anchor_re = "§\\s*\\d+\\.\\d+(\\([a-z]\\))?(\\(\\d+\\))?"
+
+Example 2 — docs/cfd-papers/nasa-tm-2014-218175/metadata.yaml:
+    Same shape; chunk_strategy = "equation-block + figure-caption atomic" per RAG_PIPELINE.md §2.4.
+
+Example 3 — docs/accident-reports/ntsb-aar-09-03/metadata.yaml:
+    Same shape; chunk_strategy = "factor-table atomic" per RAG_PIPELINE.md §2.4.
+
+Cross-check rule: file_hash from metadata.yaml MUST match sha256(processed.md
+contents). Phase 7 SHOULD log a warning if mismatch (indicates stale metadata
+that the maintainer forgot to refresh after editing processed.md). The
+mismatch is a soft warning, not an upload-blocking error — the upload still
+proceeds with the live content_hash in the RAGFlow meta_field.
+
 --- See also ---
 
 - .planning/design/RAG_PIPELINE.md           — chunking/embedding/retrieval (Phase 5 sibling)
@@ -141,6 +179,8 @@ belongs to Phase 7 plan 07-XX, not Phase 5 plan 05-03.
 - scripts/exporters/to_jsonl_triples.py      — sibling stub pattern (Phase 1/2)
 - scripts/exporters/to_rdf.py                — sibling stub for v0.3.0+ semantic-web export
 - scripts/exporters/to_neo4j.py              — sibling stub for v0.2.0+ GraphRAG loader
+
+Last touched by: Phase 5 plan 05-03 (RAG-08 to_ragflow.py skeleton), 2026-05-03.
 """
 from __future__ import annotations
 
