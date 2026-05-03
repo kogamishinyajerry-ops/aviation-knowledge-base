@@ -1,6 +1,30 @@
 # Ontology Changelog
 
-> AI 接力开发指南: This file is the truth source for ontology version transitions. Every schema change (additive or breaking) MUST land a CHANGELOG entry in the same PR. Format: Keep a Changelog (https://keepachangelog.com); semver per ontology/VERSION. Cross-reference: schema field shapes locked in ADR-004; provenance enum locked in ADR-005; entity additions in ADR-002; relation additions in ADR-003; triple export in ADR-006; schema versioning in ADR-007.
+> AI 接力开发指南: This file is the truth source for ontology version transitions. Every schema change (additive or breaking) MUST land a CHANGELOG entry in the same PR. Format: Keep a Changelog (https://keepachangelog.com); semver per ontology/VERSION. Cross-reference: schema field shapes locked in ADR-004; provenance enum locked in ADR-005; entity additions in ADR-002; relation additions in ADR-003; triple export in ADR-006; schema versioning in ADR-007. **This file is also the canonical sign-off ledger for PRD versions** (per Phase 6 plan 06-04 task 2 — see PRD_v1 sign-off entry below).
+
+## [PRD_v1 sign-off] — 2026-05-03
+
+### Added
+
+- **PRD_v1 final, contractual** at `.planning/design/PRD_v1.md`
+  - 94 v1 REQ-IDs covered with per-requirement acceptance criteria (§9 matrix)
+  - Synthesizes all locked decisions across phases 1–6 (Vision / Stack / Schema / Validators / RAG / Deployment / Roadmap / Out-of-Scope / Risks / Open Questions / Sign-off)
+  - Replaces: `.planning/design/PRD_v0.md` (directional, frozen at end of Phase 1) — PRD_v0 back-edited with bidirectional cross-link
+  - Authority for: schema set v0.1.0, validator pipeline (VAL-01..05), RAG pipeline contract (RAG-01..08), deployment posture (DEP-01..06, DRAFT only), v2+ "Promote when" triggers (ROAD-01..02 → `.planning/ROADMAP_FUTURE.md`), AI handoff polish (AIH-01..04)
+- **Sign-off recorded** in this CHANGELOG (canonical sign-off ledger established in Phase 2 plan 02-01)
+
+### Cross-references
+
+- `.planning/design/PRD_v1.md` — the contract itself
+- `.planning/design/PRD_v0.md` — back-edited to point at PRD_v1 as its replacement
+- `.planning/ROADMAP_FUTURE.md` — v2+ "Promote when" triggers (plan 06-03)
+- `deploy/docker-compose.yml.draft` + `deploy/topology.md` + `deploy/{wiki-git-storage,authentik-phase2,backup-restore}.md` — deployment artifacts (plan 06-01)
+- `docs/GLOSSARY.md` (≥50 bilingual entries; plan 06-02)
+- `process-log/phase-{1..6}-completion.md` (audit trail; plan 06-02 + this plan)
+
+### Verification
+
+`grep -q "PRD_v1" ontology/CHANGELOG.md` exits 0 (this entry is the sign-off proof for REQ PRD-02).
 
 ## 0.1.0 — 2026-05-03 (post-release patch, applied during Phase 3 plan 03-01)
 
