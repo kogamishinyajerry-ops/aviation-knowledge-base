@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/_meta.schema.json",
+  "title": "Ontology Meta Schema (Composition Root)",
+  "description": "Composition root for all entity/relation schemas. Pattern: allOf + unevaluatedProperties: false (NEVER additionalProperties: false). H-Darrieus REJECT rule lives in $defs/provenance description and is enforced in Phase 3 validator.",
+  "$defs": {
+    "uri": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^aviationkb://[a-z][a-z-]*\\/[a-z0-9]+(-[a-z0-9]+)*@[0-9]+$",
+      "description": "Canonical external URI for an entity or relation. Form: aviationkb://<type>/<slug>@<version>. Per D-23 (02-CONTEXT.md). Example: aviationkb://aircraft-model/boeing-737-max-8@1."
+    },
+    "internalId": {
+      "type": "string",
+      "pattern": "^[a-z]+:[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 80,
+      "description": "Internal foreign-key id. Form: <type-prefix>:<kebab-slug>. Per D-24/D-25 (02-CONTEXT.md). Type prefixes: am (AircraftModel), sys (AircraftSystem), subsys (Subsystem), comp (Component), req (Requirement), regclause (RegulationClause), std (Standard), proc (Procedure), fmode (FailureMode), mtask (MaintenanceTask), cfdmethod (CFDMethod), simcase (SimulationCase), mesh (MeshRequirement), turb (TurbulenceModel), acc (AccidentCase), doc (Document), note (ExpertNote), mat (Material), test (TestCase), report (TestReport), org (Organization), pers (Person)."
+    },
+    "isoDateTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp (RFC 3339 profile)."
+    },
+    "i18nLabel": {
+      "type": "object",
+      "description": "Bilingual label per D-14 (02-CONTEXT.md). Both zh and en strings required; either may be empty string for entity-level decisions (e.g. accident-report Chinese-only).",
+      "properties": {
+        "zh": {"type": "string"},
+        "en": {"type": "string"}
+      },
+      "required": ["zh", "en"],
+      "unevaluatedProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Provenance block per PROV-01..PROV-05 and D-16/D-17 (02-CONTEXT.md). ENFORCED IN PHASE 3 VALIDATOR — H-Darrieus REJECT condition: (method == 'ai_extracted') AND (confidence.score > 0.85) AND (reviewer is null OR reviewer == '') → REJECT. Promotion from instances/_pending/ to canonical (D-17) requires method == 'hybrid_reviewed' AND non-empty reviewer URI AND reviewed_at timestamp. The enum is exactly three values per ADR-005: human, ai_extracted, hybrid_reviewed.",
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["human", "ai_extracted", "hybrid_reviewed"],
+          "description": "Authorship method. human = no AI involvement; ai_extracted = AI tool extracted, must live in instances/_pending/ until reviewed; hybrid_reviewed = AI drafted + human signed off, eligible for canonical instances/."
+        },
+        "actor": {
+          "$ref": "#/$defs/uri",
+          "description": "Person or Organization URI of the primary author (or operating user for ai_extracted)."
+        },
+        "actor_role": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Free-text role of the actor (e.g. 'systems-engineer', 'cfd-analyst', 'reviewer')."
+        },
+        "created_at": {
+          "$ref": "#/$defs/isoDateTime",
+          "description": "Timestamp when this record was authored."
+        },
+        "reviewer": {
+          "$ref": "#/$defs/uri",
+          "description": "Person URI of the human reviewer. REQUIRED (non-empty) for method == 'hybrid_reviewed' per D-17 promotion gate."
+        },
+        "reviewed_at": {
+          "$ref": "#/$defs/isoDateTime",
+          "description": "Timestamp when reviewer signed off. REQUIRED for method == 'hybrid_reviewed' per D-17 promotion gate."
+        },
+        "tool": {
+          "type": "string",
+          "description": "Identifier of the AI tool / model used (e.g. 'claude-opus-4-7', 'gpt-5.4'). SHOULD be set when method != 'human'."
+        }
+      },
+      "required": ["method", "actor", "actor_role", "created_at"],
+      "unevaluatedProperties": false
+    },
+    "confidence": {
+      "type": "object",
+      "description": "Confidence block per D-13 (02-CONTEXT.md). score is a decimal in [0.0, 1.0]; rationale is mandatory and must be at least one sentence (≥20 chars). The H-Darrieus REJECT rule keys on score > 0.85 — see $defs/provenance.",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Confidence score in [0.0, 1.0]. Threshold > 0.85 triggers H-Darrieus REJECT when method == 'ai_extracted' and reviewer is empty."
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 20,
+          "description": "≥1 sentence explaining the score. Empty / placeholder rationales fail validation by design."
+        },
+        "calibration_method": {
+          "type": "string",
+          "description": "Optional: how the score was produced (e.g. 'self-reported', 'cross-source-agreement', 'expert-elicited')."
+        }
+      },
+      "required": ["score", "rationale"],
+      "unevaluatedProperties": false
+    },
+    "source": {
+      "type": "object",
+      "description": "Source block per PROV-03. Every record cites at least one document_id (Document entity URI) plus a structured locator (page / section / paragraph) and retrieval metadata (url + retrieved_at).",
+      "properties": {
+        "document_id": {
+          "$ref": "#/$defs/uri",
+          "description": "URI of the Document entity this record was sourced from."
+        },
+        "locator": {
+          "type": "object",
+          "description": "Where in the document — at least one of page, section, paragraph.",
+          "properties": {
+            "page": {"type": "integer", "minimum": 1},
+            "section": {"type": "string", "minLength": 1},
+            "paragraph": {"type": "string", "minLength": 1}
+          },
+          "anyOf": [
+            {"required": ["page"]},
+            {"required": ["section"]},
+            {"required": ["paragraph"]}
+          ],
+          "unevaluatedProperties": false
+        },
+        "retrieval": {
+          "type": "object",
+          "description": "How the source was retrieved. url + retrieved_at required; content_hash recommended for integrity audit.",
+          "properties": {
+            "url": {"type": "string", "format": "uri"},
+            "retrieved_at": {"$ref": "#/$defs/isoDateTime"},
+            "content_hash": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$",
+              "description": "Optional content hash of the retrieved document, prefixed sha256:."
+            }
+          },
+          "required": ["url", "retrieved_at"],
+          "unevaluatedProperties": false
+        },
+        "effective_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Optional effective date for the source content (e.g. regulation amendment date)."
+        }
+      },
+      "required": ["document_id", "locator", "retrieval"],
+      "unevaluatedProperties": false
+    },
+    "baseFields": {
+      "type": "object",
+      "description": "Base composition for every entity and relation record. Composed via allOf + $ref by entity.base.schema.json and relation.base.schema.json (Plan 02-02 / 02-03).",
+      "properties": {
+        "id": {"$ref": "#/$defs/uri"},
+        "provenance": {"$ref": "#/$defs/provenance"},
+        "confidence": {"$ref": "#/$defs/confidence"},
+        "source": {"$ref": "#/$defs/source"}
+      },
+      "required": ["id", "provenance", "confidence", "source"]
+    },
+    "schemaVersionString": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver string used by every leaf schema's schema_version field per VER-03 (D-20). Frozen at write time; CI rejects records older than N-1."
+    }
+  }
+}
