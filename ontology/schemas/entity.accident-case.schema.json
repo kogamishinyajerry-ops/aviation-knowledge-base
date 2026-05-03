@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.accident-case.schema.json",
+  "title": "AccidentCase entity (ONT-E-16)",
+  "description": "A documented accident or incident case (NTSB, AAIB, BEA, CAAC, ICAO ADREP). Composes entity.base.schema.json via allOf + $ref. phase_of_flight enum aligns with the applicable_during_phase relation (D-08, ADR-003). The lessons_learned field is the audit-relevant takeaway and is required. Pitfall #1 lock: unevaluatedProperties: false. Pitfall #9 lock: $schema = JSON Schema Draft 2020-12. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "AccidentCase",
+      "description": "Discriminator. Locked to 'AccidentCase' for this entity type."
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date of the accident / incident occurrence."
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Geographic location free-text (e.g. 'KSFO Runway 28L', 'En-route 200 nm SW of YBBN'). Coordinates not required at v0.1.0."
+    },
+    "aircraft_model_ref": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Optional URI of the AircraftModel involved. Sometimes unknown / not yet identified at incident-recording time."
+    },
+    "phase_of_flight": {
+      "type": "string",
+      "enum": ["taxi", "takeoff", "climb", "cruise", "approach", "landing", "missed_approach", "emergency", "ground", "unknown"],
+      "description": "Flight phase when the event occurred. Aligns with the applicable_during_phase relation enum (D-08, ADR-003). 'ground' covers events while parked / in maintenance bay; 'unknown' is permitted for incomplete reports."
+    },
+    "causal_factors": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Required ≥1 free-text causal factor. Maps to NTSB/ICAO 'cause' findings."
+    },
+    "contributing_factors": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Optional free-text contributing factors (distinct from primary causal factors)."
+    },
+    "lessons_learned": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Audit-relevant takeaway (≥20 chars). The 'why this case matters' summary that answers 'what should designers / operators do differently'. Empty / placeholder strings fail validation by design."
+    },
+    "official_report_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional URI to the official accident report (NTSB docket, AAIB final report, BEA report, ICAO ADREP)."
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["accident", "serious_incident", "incident", "occurrence"],
+      "description": "Optional ICAO Annex 13 severity classification."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "date", "location", "phase_of_flight", "causal_factors", "lessons_learned"],
+  "unevaluatedProperties": false
+}
