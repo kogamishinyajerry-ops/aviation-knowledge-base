@@ -129,7 +129,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Repo Skeleton + Git Baseline + PRD v0 | 5/5 | Complete    | 2026-05-03 |
-| 2. Ontology Schema v0.1.0 | 10/10 | Complete   | 2026-05-03 |
+| 2. Ontology Schema v0.1.0 | 10/10 | Complete    | 2026-05-03 |
 | 3. Validators + CI Active | 0/TBD | Not started | - |
 | 4. Demo Data + Document Import Spec | 0/TBD | Not started | - |
 | 5. RAG Pipeline Design (document-only) | 0/TBD | Not started | - |
