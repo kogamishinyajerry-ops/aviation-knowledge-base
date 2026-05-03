@@ -1,0 +1,45 @@
+---
+# Component canonical instance (DEMO-01) — citation-chain anchor for failure
+# modes / maintenance tasks. Demonstrates optional fields (mass, dimensions,
+# parent_subsystem, composition_material) to exercise the schema.
+# NOTE: schema's `criticality` enum is [primary, secondary, advisory] — the
+# 5-value catastrophic-class hierarchy lives on AircraftSystem.criticality_level
+# and FailureMode.severity. We use `primary` here (loss-of-function blocks safe
+# operation), which is consistent with the parent system being level-A.
+id: aviationkb://component/b737max-fadec-cpu-card@1
+type: Component
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "波音 737 MAX FADEC CPU 板"
+    en: "Boeing 737 MAX FADEC CPU card"
+ata_chapter: "ATA-73"
+parent_subsystem: aviationkb://subsystem/b737max-fadec-channel-a@1
+manufacturer: "BAE Systems Controls (demo)"
+part_number: "CPU-CARD-7301-A"
+mass:
+  value: 1.2
+  unit: kg
+dimensions:
+  length: 200
+  width: 150
+  height: 25
+  unit: mm
+criticality: primary
+composition_material: aviationkb://material/inconel-718@1
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: systems-engineer
+  created_at: "2026-05-03T15:05:00Z"
+confidence:
+  score: 0.85
+  rationale: "Synthetic Component for demo; structural fields populated to exercise the schema; not a real BAE part. Criticality 'primary' chosen because the schema enum is the {primary, secondary, advisory} consequence class, not the 5-value FAR §25.1309 severity ladder."
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "FAR §25.1309 component-criticality framing"
+  retrieval:
+    url: "https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309"
+    retrieved_at: "2026-05-03T13:30:00Z"
