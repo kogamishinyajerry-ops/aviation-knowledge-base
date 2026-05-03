@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.subsystem.schema.json",
+  "title": "Subsystem entity (ONT-E-04)",
+  "description": "A subsystem within an AircraftSystem, identified by ATA subchapter. Example: ATA-21-50 cabin pressurization is a subsystem of ATA-21 air conditioning. Composes entity.base.schema.json (which composes _meta.schema.json#/$defs/baseFields). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "Subsystem",
+      "description": "Discriminator. Must equal the string 'Subsystem'."
+    },
+    "parent_system": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "AircraftSystem URI this subsystem belongs to. Foreign key — Phase 3 validator enforces existence."
+    },
+    "ata_subchapter": {
+      "type": "string",
+      "pattern": "^ATA-[0-9]{2}-[0-9]{2}$",
+      "description": "ATA iSpec 2200 subchapter code (chapter-subchapter form). Validated against ontology/vocabularies/ata-chapters.yaml at runtime by Phase 3 validator. Pattern here is structural only; enum membership is loaded dynamically. Example: 'ATA-21-50' (cabin pressurization), 'ATA-32-40' (wheels and brakes)."
+    },
+    "function": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Functional description of the subsystem (≥1 sentence, ≥20 chars). Empty / placeholder descriptions fail validation by design."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "parent_system", "ata_subchapter", "function"],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.aircraft-system.schema.json",
+  "title": "AircraftSystem entity (ONT-E-03)",
+  "description": "An aircraft-level system, decomposed by ATA chapter. Example: a Boeing 737-MAX-8 has an ATA-21 Air Conditioning system as one of its AircraftSystems. Composes entity.base.schema.json (which composes _meta.schema.json#/$defs/baseFields). Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "AircraftSystem",
+      "description": "Discriminator. Must equal the string 'AircraftSystem'."
+    },
+    "parent_aircraft_model": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "AircraftModel URI this system belongs to. Foreign key — Phase 3 validator enforces existence."
+    },
+    "ata_chapter": {
+      "type": "string",
+      "pattern": "^ATA-[0-9]{2}$",
+      "description": "ATA iSpec 2200 chapter code. Validated against ontology/vocabularies/ata-chapters.yaml at runtime by Phase 3 validator. Pattern here is structural only; enum membership is loaded dynamically. Example: 'ATA-21' (Air Conditioning), 'ATA-71' (Powerplant)."
+    },
+    "function": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Functional description of the system (≥1 sentence, ≥20 chars). Empty / placeholder descriptions fail validation by design."
+    },
+    "criticality_level": {
+      "type": "string",
+      "enum": ["catastrophic", "hazardous", "major", "minor", "no_safety_effect"],
+      "description": "Failure-condition severity per FAR/CS 25.1309 categories. Used by FailureMode entities and AccidentCase analysis."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "parent_aircraft_model", "ata_chapter", "function", "criticality_level"],
+  "unevaluatedProperties": false
+}
