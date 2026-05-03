@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.test-report.schema.json",
+  "title": "TestReport entity (ONT-E-20, D-02)",
+  "description": "A test report — outcome of a TestCase execution. Linked to TestCase via test_case_ref FOREIGN KEY (NOT a relation per RESEARCH.md Open Question #2 and ADR-002). Composes entity.base.schema.json via allOf + $ref + unevaluatedProperties: false (Pitfall #1 lock; NEVER additionalProperties: false). Per ADR-002, detailed step-by-step trace and DO-178C/DO-254 evidence-classification fields are deferred to v0.2.0+. T-02-07-03 mitigation: test_case_ref is REQUIRED so fabricated outcomes cannot dangle without a plan; Phase 3 validator confirms FK resolves. Examples: 'TR-PWR-001 PASS for TestCase TC-PWR-001 executed 2026-04-15 by ACME Test Lab'. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "./entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "TestReport",
+      "description": "Discriminator. MUST equal 'TestReport'."
+    },
+    "test_case_ref": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "FOREIGN KEY — URI of the TestCase this report executes. Per ADR-002 / RESEARCH.md Open Question #2, this is a typed field rather than a relation; Phase 3 broken-ref check confirms resolution. Example: 'aviationkb://test-case/tc-pwr-001@1'."
+    },
+    "executed_at": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date the test was executed (YYYY-MM-DD). Use the start date for multi-day tests; record duration in results_summary if relevant."
+    },
+    "executed_by": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "URI to the Person OR Organization that executed the test. Phase 3 validator confirms URI resolves to a Person or Organization entity."
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["pass", "fail", "partial", "inconclusive"],
+      "description": "Test outcome. pass = all acceptance_criteria met. fail = at least one acceptance criterion not met. partial = test partially executed (some criteria met, others not exercised). inconclusive = test executed but results do not support a pass/fail call (e.g. instrumentation failure)."
+    },
+    "results_summary": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Human-readable summary of what happened and what was measured. ≥20 characters. Example: 'All 47 DO-160G Section 21 sub-tests passed within ±5% of nominal. Minor anomaly observed in voltage-spike-recovery transient at -55°C; root-caused to instrumentation lag and re-tested with corrected setup, no anomaly.'"
+    },
+    "artifacts_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional link to test data, photographs, oscilloscope traces, or full report PDF. Should be a stable URL the reviewer can resolve. Example: 'https://test-archive.example.com/TR-PWR-001/'."
+    },
+    "reviewers": {
+      "type": "array",
+      "items": { "$ref": "../_meta.schema.json#/$defs/uri" },
+      "uniqueItems": true,
+      "description": "Optional list of Person URIs who reviewed and signed off on this report. Distinct from provenance.reviewer (which is the reviewer of the YAML record itself); these are the engineers who reviewed the underlying test."
+    }
+  },
+  "required": [
+    "type",
+    "schema_version",
+    "i18n",
+    "test_case_ref",
+    "executed_at",
+    "executed_by",
+    "outcome",
+    "results_summary"
+  ],
+  "unevaluatedProperties": false
+}
