@@ -1,0 +1,37 @@
+# INVALID FIXTURE — failure mode: provenance.h-darrieus (PROV-04 REJECT)
+# Trigger: provenance.method == "ai_extracted" AND confidence.score > 0.85 AND NO reviewer.
+#   ADR-005 boundary is strict ">" — so 0.90 (this fixture) fires; 0.85 would NOT.
+# Expected validator: schema PASSES (ai_extracted is enum-allowed; reviewer is not schema-required).
+#   provenance.validate_record returns ValidationError(rule="provenance.h-darrieus", ...).
+# REQ-ID: PROV-04
+# CRITICAL: do NOT add a `reviewer:` field. The absence of the key IS the failure mode.
+id: aviationkb://expert-note/h-darrieus-rejected-demo@1
+type: ExpertNote
+schema_version: "0.1.0"
+i18n:
+  label:
+    zh: "高置信度 AI 抽取且无审阅人——H-Darrieus 拒绝示例"
+    en: "High-confidence AI-extracted note with no reviewer — H-Darrieus REJECT demo"
+author: aviationkb://person/jane-doe@1
+topic: h-darrieus-rejected-demo
+content_md: |
+  This note simulates the exact H-Darrieus failure mode: a confident-looking AI-extracted
+  claim that was never reviewed by a human. ADR-005 says: REJECT. This fixture exists so
+  the Phase 3 validator can prove it does so.
+provenance:
+  method: ai_extracted
+  actor: aviationkb://person/jane-doe@1
+  actor_role: "ai-operator"
+  created_at: "2026-05-03T00:00:00Z"
+  tool: "claude-opus-4-7"
+  # NO reviewer key — fixture would mask the failure mode if this were filled in.
+confidence:
+  score: 0.90
+  rationale: "Score deliberately set > 0.85 strict threshold per ADR-005 boundary case."
+source:
+  document_id: aviationkb://document/fixture-source-doc@1
+  locator:
+    page: 1
+  retrieval:
+    url: "https://example.invalid/fixtures/h-darrieus-rejected"
+    retrieved_at: "2026-05-03T00:00:00Z"

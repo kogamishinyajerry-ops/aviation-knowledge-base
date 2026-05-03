@@ -1,0 +1,28 @@
+# INVALID FIXTURE — failure mode: schema (required field absent)
+# Trigger: entire `provenance:` block is missing.
+# Expected validator: schema.validate_record returns ≥1 error with rule="schema",
+#   message containing "provenance".
+# REQ-ID: PROV-01 (Phase 2 enforced; schema.py re-asserts in Phase 3)
+# DO NOT add a provenance block — that would mask the failure mode this fixture exists to isolate.
+id: aviationkb://expert-note/missing-provenance-demo@1
+type: ExpertNote
+schema_version: "0.1.0"
+i18n:
+  label:
+    zh: "缺失 provenance 块的演示笔记"
+    en: "Demo note missing the provenance block"
+author: aviationkb://person/jane-doe@1
+topic: missing-provenance-demo
+content_md: |
+  This expert note is intentionally missing the provenance block so the schema
+  validator (jsonschema Draft 2020-12) flags `provenance` as a required-but-absent field.
+confidence:
+  score: 0.7
+  rationale: "Demonstration fixture for the missing-provenance failure mode."
+source:
+  document_id: aviationkb://document/fixture-source-doc@1
+  locator:
+    page: 1
+  retrieval:
+    url: "https://example.invalid/fixtures/missing-provenance"
+    retrieved_at: "2026-05-03T00:00:00Z"

@@ -1,0 +1,28 @@
+# INVALID FIXTURE — failure mode: ids.uri-format (and schema pattern fail)
+# Trigger: top-level `id` is "not-a-valid-uri" (no aviationkb:// scheme, fails $defs/uri pattern).
+# Expected validators: BOTH schema (pattern fails) AND ids.uri-format fire — pytest asserts dual fire.
+# REQ-ID: D-23
+id: "not-a-valid-uri"
+type: AircraftModel
+schema_version: "0.1.0"
+i18n:
+  label:
+    zh: "URI 格式错误的飞机型号示例"
+    en: "AircraftModel demo with malformed top-level URI"
+manufacturer: "DemoCorp"
+model_designation: "DEMO-002"
+provenance:
+  method: human
+  actor: aviationkb://person/jane-doe@1
+  actor_role: "systems-engineer"
+  created_at: "2026-05-03T00:00:00Z"
+confidence:
+  score: 0.95
+  rationale: "Demonstration fixture intentionally using a non-conforming id string."
+source:
+  document_id: aviationkb://document/fixture-source-doc@1
+  locator:
+    page: 1
+  retrieval:
+    url: "https://example.invalid/fixtures/bad-uri-format"
+    retrieved_at: "2026-05-03T00:00:00Z"

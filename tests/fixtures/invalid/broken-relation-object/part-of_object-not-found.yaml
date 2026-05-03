@@ -1,0 +1,26 @@
+# INVALID FIXTURE — failure mode: relations.object-not-found (relations rule)
+# Trigger: part_of.object URI is well-formed but does NOT resolve to any record in the corpus.
+# Expected validator: schema PASSES; relations.validate_record returns
+#   ValidationError(rule="relations.object-not-found", ...).
+# REQ-ID: VAL-01
+id: aviationkb://relation/part-of-broken-object-demo@1
+type: part_of
+schema_version: "0.1.0"
+subject: aviationkb://component/fixture-known-component@1
+object: aviationkb://aircraft-model/does-not-exist-anywhere-in-corpus@1
+valid_from: "2026-05-03T00:00:00Z"
+provenance:
+  method: human
+  actor: aviationkb://person/jane-doe@1
+  actor_role: "systems-engineer"
+  created_at: "2026-05-03T00:00:00Z"
+confidence:
+  score: 0.9
+  rationale: "Demonstration fixture isolating the relations.object-not-found failure mode."
+source:
+  document_id: aviationkb://document/fixture-source-doc@1
+  locator:
+    page: 1
+  retrieval:
+    url: "https://example.invalid/fixtures/broken-relation-object"
+    retrieved_at: "2026-05-03T00:00:00Z"

@@ -1,0 +1,28 @@
+# INVALID FIXTURE — failure mode: schema (required field absent) + cross-record VER-03
+# Trigger: AircraftModel with NO `schema_version:` field.
+# Expected validator: schema.validate_record catches via entity.base required list.
+# REQ-ID: VER-03
+id: aviationkb://aircraft-model/no-schema-version-demo@1
+type: AircraftModel
+# schema_version intentionally omitted — this is the failure mode under test
+i18n:
+  label:
+    zh: "无 schema_version 字段的飞机型号示例"
+    en: "AircraftModel demo without a schema_version field"
+manufacturer: "DemoCorp"
+model_designation: "DEMO-001"
+provenance:
+  method: human
+  actor: aviationkb://person/jane-doe@1
+  actor_role: "systems-engineer"
+  created_at: "2026-05-03T00:00:00Z"
+confidence:
+  score: 0.95
+  rationale: "Manufacturer / model published in the type-certificate database."
+source:
+  document_id: aviationkb://document/fixture-source-doc@1
+  locator:
+    section: "TC §1.0"
+  retrieval:
+    url: "https://example.invalid/fixtures/missing-schema-version"
+    retrieved_at: "2026-05-03T00:00:00Z"

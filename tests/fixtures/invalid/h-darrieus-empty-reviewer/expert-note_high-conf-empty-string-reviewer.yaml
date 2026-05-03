@@ -1,0 +1,37 @@
+# INVALID FIXTURE — failure mode: provenance.h-darrieus (PROV-04, edge case: empty reviewer)
+# Trigger: provenance.method == "ai_extracted" AND score > 0.85 AND reviewer == ""
+#   (empty string treated as "no reviewer" by H-Darrieus rule).
+# Expected validators: dual fire —
+#   schema: rejects "" against $defs/uri pattern (pattern fail, also format mismatch)
+#   provenance.h-darrieus: rejects empty-string reviewer same as missing
+# REQ-ID: PROV-04 (edge case)
+id: aviationkb://expert-note/h-darrieus-empty-reviewer-demo@1
+type: ExpertNote
+schema_version: "0.1.0"
+i18n:
+  label:
+    zh: "审阅人为空字符串——H-Darrieus 拒绝边界情况"
+    en: "Reviewer is empty string — H-Darrieus REJECT edge case"
+author: aviationkb://person/jane-doe@1
+topic: h-darrieus-empty-reviewer-demo
+content_md: |
+  Like h-darrieus-rejected, but reviewer is the empty string rather than missing.
+  The H-Darrieus rule must treat "" as equivalent to "no reviewer" — this fixture
+  documents that requirement and lets the validator prove it.
+provenance:
+  method: ai_extracted
+  actor: aviationkb://person/jane-doe@1
+  actor_role: "ai-operator"
+  created_at: "2026-05-03T00:00:00Z"
+  tool: "claude-opus-4-7"
+  reviewer: ""
+confidence:
+  score: 0.90
+  rationale: "Score > 0.85 strict per ADR-005; reviewer empty so the rule still trips."
+source:
+  document_id: aviationkb://document/fixture-source-doc@1
+  locator:
+    page: 1
+  retrieval:
+    url: "https://example.invalid/fixtures/h-darrieus-empty-reviewer"
+    retrieved_at: "2026-05-03T00:00:00Z"
