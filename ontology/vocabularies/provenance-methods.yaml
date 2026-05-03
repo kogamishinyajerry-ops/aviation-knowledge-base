@@ -1,0 +1,29 @@
+---
+# AI 接力开发指南: Provenance method enum reference. Schema-side definition
+# is _meta.schema.json#/$defs/provenance.method (enum hard-coded). This
+# file is the human-readable reference document explaining when to use which
+# value. Loaded by validators only as documentation; the enum is hard-coded
+# in the schema. Per ADR-005 / D-16.
+
+verified_against: "ADR-005 (provenance enum)"
+last_verified: "2026-05-03"
+
+methods:
+  - code: human
+    description: >-
+      Human-authored without AI assistance. provenance.actor is a Person URI;
+      provenance.tool is typically 'manual'. reviewer not required.
+  - code: ai_extracted
+    description: >-
+      AI-extracted from a source document. MUST live in instances/_pending/
+      until human-reviewed and promoted (D-17). H-Darrieus REJECT condition
+      (PROV-04, ADR-005): if confidence.score > 0.85 AND reviewer is empty
+      → validator REJECTS (Phase 3 enforces; this rule is the showcase of
+      the project's Core Value — every high-confidence AI claim must have
+      a human signoff or it does not enter canonical instances/).
+  - code: hybrid_reviewed
+    description: >-
+      AI-drafted + human-reviewed and signed off. ONLY records with this
+      method are allowed in canonical instances/entities/ and
+      instances/relations/. provenance.reviewer is non-empty Person URI;
+      provenance.reviewed_at is ISO 8601 timestamp.

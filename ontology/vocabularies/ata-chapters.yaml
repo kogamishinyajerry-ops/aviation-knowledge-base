@@ -1,0 +1,230 @@
+---
+# AI 接力开发指南: ATA iSpec 2200 chapter taxonomy. Loaded at runtime by
+# Phase 3 validator (scripts/validators/schema.py) and injected into the
+# in-memory enum for fields whose pattern is "^ATA-[0-9]{2}$" (e.g.
+# AircraftSystem.ata_chapter, Subsystem.ata_chapter, Component.ata_chapter,
+# MaintenanceTask.ata_chapter, Document.ata_chapter_tags). Updating this file:
+#   1. Bump ontology/VERSION minor version
+#   2. Write ontology/CHANGELOG.md entry citing the A4A revision source
+#   3. Re-run pre-commit + CI green
+# Sources: A4A iSpec 2200 Revision 2024.1; Wikipedia ATA_Spec_100/iSpec_2200; aviationhunt.com
+# Pitfall #7 (RESEARCH.md): this file is updated manually; annual A4A revision
+# review tracked in ROADMAP_FUTURE.md to catch drift between releases.
+
+verified_against: "iSpec 2200 Revision 2024.1"
+last_verified: "2026-05-03"
+
+sections:
+  - aircraft_general    # chapters 5-12, 18, 89
+  - airframe_systems    # chapters 20-50
+  - structure           # chapters 51-57
+  - power_plant         # chapters 60-92
+
+chapters:
+  - code: "ATA-05"
+    name: "Time Limits / Maintenance Checks"
+    section: aircraft_general
+  - code: "ATA-06"
+    name: "Dimensions and Areas"
+    section: aircraft_general
+  - code: "ATA-07"
+    name: "Lifting and Shoring"
+    section: aircraft_general
+  - code: "ATA-08"
+    name: "Leveling and Weighing"
+    section: aircraft_general
+  - code: "ATA-09"
+    name: "Towing and Taxiing"
+    section: aircraft_general
+  - code: "ATA-10"
+    name: "Parking, Mooring, Storage and Return to Service"
+    section: aircraft_general
+  - code: "ATA-11"
+    name: "Placards and Markings"
+    section: aircraft_general
+  - code: "ATA-12"
+    name: "Servicing — Routine Maintenance"
+    section: aircraft_general
+  - code: "ATA-18"
+    name: "Vibration and Noise Analysis (Helicopter only)"
+    section: aircraft_general
+  - code: "ATA-20"
+    name: "Standard Practices — Airframe"
+    section: airframe_systems
+  - code: "ATA-21"
+    name: "Air Conditioning and Pressurization"
+    section: airframe_systems
+  - code: "ATA-22"
+    name: "Auto Flight"
+    section: airframe_systems
+  - code: "ATA-23"
+    name: "Communications"
+    section: airframe_systems
+  - code: "ATA-24"
+    name: "Electrical Power"
+    section: airframe_systems
+  - code: "ATA-25"
+    name: "Equipment and Furnishings"
+    section: airframe_systems
+  - code: "ATA-26"
+    name: "Fire Protection"
+    section: airframe_systems
+  - code: "ATA-27"
+    name: "Flight Controls"
+    section: airframe_systems
+  - code: "ATA-28"
+    name: "Fuel"
+    section: airframe_systems
+  - code: "ATA-29"
+    name: "Hydraulic Power"
+    section: airframe_systems
+  - code: "ATA-30"
+    name: "Ice and Rain Protection"
+    section: airframe_systems
+  - code: "ATA-31"
+    name: "Indicating / Recording Systems"
+    section: airframe_systems
+  - code: "ATA-32"
+    name: "Landing Gear"
+    section: airframe_systems
+  - code: "ATA-33"
+    name: "Lights"
+    section: airframe_systems
+  - code: "ATA-34"
+    name: "Navigation"
+    section: airframe_systems
+  - code: "ATA-35"
+    name: "Oxygen"
+    section: airframe_systems
+  - code: "ATA-36"
+    name: "Pneumatic"
+    section: airframe_systems
+  - code: "ATA-37"
+    name: "Vacuum"
+    section: airframe_systems
+  - code: "ATA-38"
+    name: "Water / Waste"
+    section: airframe_systems
+  - code: "ATA-41"
+    name: "Water Ballast"
+    section: airframe_systems
+  - code: "ATA-42"
+    name: "Integrated Modular Avionics"
+    section: airframe_systems
+  - code: "ATA-44"
+    name: "Cabin Systems"
+    section: airframe_systems
+  - code: "ATA-45"
+    name: "Central Maintenance / Diagnostic System"
+    section: airframe_systems
+  - code: "ATA-46"
+    name: "Information Systems"
+    section: airframe_systems
+  - code: "ATA-47"
+    name: "Nitrogen Generation"
+    section: airframe_systems
+  - code: "ATA-48"
+    name: "In-Flight Fuel Dispensing"
+    section: airframe_systems
+  - code: "ATA-49"
+    name: "Airborne Auxiliary Power"
+    section: airframe_systems
+  - code: "ATA-50"
+    name: "Cargo and Accessory Compartments"
+    section: airframe_systems
+  - code: "ATA-51"
+    name: "Standard Practices and Structures — General"
+    section: structure
+  - code: "ATA-52"
+    name: "Doors"
+    section: structure
+  - code: "ATA-53"
+    name: "Fuselage"
+    section: structure
+  - code: "ATA-54"
+    name: "Nacelles / Pylons"
+    section: structure
+  - code: "ATA-55"
+    name: "Stabilizers"
+    section: structure
+  - code: "ATA-56"
+    name: "Windows"
+    section: structure
+  - code: "ATA-57"
+    name: "Wings"
+    section: structure
+  - code: "ATA-60"
+    name: "Standard Practices — Propeller / Rotor"
+    section: power_plant
+  - code: "ATA-61"
+    name: "Propellers / Propulsion"
+    section: power_plant
+  - code: "ATA-62"
+    name: "Main Rotor (Helicopter)"
+    section: power_plant
+  - code: "ATA-63"
+    name: "Main Rotor Drive (Helicopter)"
+    section: power_plant
+  - code: "ATA-64"
+    name: "Tail Rotor (Helicopter)"
+    section: power_plant
+  - code: "ATA-65"
+    name: "Tail Rotor Drive (Helicopter)"
+    section: power_plant
+  - code: "ATA-66"
+    name: "Folding Blades / Pylons (Helicopter)"
+    section: power_plant
+  - code: "ATA-67"
+    name: "Rotors Flight Control (Helicopter)"
+    section: power_plant
+  - code: "ATA-71"
+    name: "Power Plant — General"
+    section: power_plant
+  - code: "ATA-72"
+    name: "Engine"
+    section: power_plant
+  - code: "ATA-73"
+    name: "Engine Fuel and Control"
+    section: power_plant
+  - code: "ATA-74"
+    name: "Ignition"
+    section: power_plant
+  - code: "ATA-75"
+    name: "Engine Bleed Air"
+    section: power_plant
+  - code: "ATA-76"
+    name: "Engine Controls"
+    section: power_plant
+  - code: "ATA-77"
+    name: "Engine Indicating"
+    section: power_plant
+  - code: "ATA-78"
+    name: "Engine Exhaust"
+    section: power_plant
+  - code: "ATA-79"
+    name: "Engine Oil"
+    section: power_plant
+  - code: "ATA-80"
+    name: "Engine Starting"
+    section: power_plant
+  - code: "ATA-81"
+    name: "Engine Turbines (Reciprocating)"
+    section: power_plant
+  - code: "ATA-82"
+    name: "Engine Water Injection"
+    section: power_plant
+  - code: "ATA-83"
+    name: "Engine Accessory Gearboxes"
+    section: power_plant
+  - code: "ATA-84"
+    name: "Propulsion Augmentation"
+    section: power_plant
+  - code: "ATA-85"
+    name: "Reciprocating Engine"
+    section: power_plant
+  - code: "ATA-91"
+    name: "Charts"
+    section: power_plant
+  - code: "ATA-92"
+    name: "Electrical System Installation"
+    section: power_plant

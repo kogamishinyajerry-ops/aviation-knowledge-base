@@ -1,0 +1,33 @@
+---
+# AI 接力开发指南: Regulatory jurisdictions. Aligned with the enum domain in
+# entity.regulation-clause.schema.json (jurisdiction field) and
+# entity.organization.schema.json (jurisdiction field). Adding a new
+# jurisdiction requires bumping ontology/VERSION and writing a CHANGELOG entry.
+# Source: project decision per .planning/phases/02-ontology-schema-v0-1-0/02-CONTEXT.md
+# (no formal external taxonomy; ICAO state-of-registry codes considered out of scope v0.1.0).
+
+verified_against: "Project decision 2026-05-03"
+last_verified: "2026-05-03"
+
+jurisdictions:
+  - code: "FAA"
+    name: "Federal Aviation Administration"
+    country: US
+  - code: "EASA"
+    name: "European Union Aviation Safety Agency"
+    country: EU
+  - code: "CAAC"
+    name: "Civil Aviation Administration of China"
+    country: CN
+  - code: "ICAO"
+    name: "International Civil Aviation Organization"
+    country: international
+  - code: "Transport-Canada"
+    name: "Transport Canada Civil Aviation"
+    country: CA
+  - code: "CASA-AU"
+    name: "Civil Aviation Safety Authority Australia"
+    country: AU
+  - code: "other"
+    name: "Other / unspecified jurisdiction"
+    country: null
