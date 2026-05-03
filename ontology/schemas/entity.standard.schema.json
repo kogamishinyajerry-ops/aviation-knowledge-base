@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.standard.schema.json",
+  "title": "Standard entity (ONT-E-08)",
+  "description": "An industry / military / consensus standard (e.g. RTCA DO-178C, MIL-STD-1553B, SAE AS9100, ISO 9001, ARINC 429). Composes entity.base.schema.json via allOf + $ref. Pitfall #1 lock: unevaluatedProperties: false. Pitfall #9 lock: $schema = JSON Schema Draft 2020-12. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "Standard",
+      "description": "Discriminator. Locked to 'Standard' for this entity type."
+    },
+    "issuing_body": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Standards-issuing organization. Examples: 'RTCA', 'MIL', 'SAE', 'ISO', 'ARINC', 'EUROCAE', 'IEEE'."
+    },
+    "standard_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Standard's canonical identifier. Examples: 'DO-178C', 'MIL-STD-1553B', 'AS9100D', 'ISO 9001:2015', 'ARINC 429'."
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional. Standard's own published version (e.g. 'C', 'Rev D', '2015'). Distinct from the entity record's `version` integer counter and `schema_version` semver, both inherited from entity.base."
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Optional ISO 8601 date when this standard version was published / takes effect."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "superseded", "withdrawn"],
+      "description": "Lifecycle status. 'superseded' standards may still be cited (legacy programs) but should be flagged; 'withdrawn' standards must not be the basis of new compliance arguments."
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Optional free-text scope description (≥20 chars when present). Captures what the standard covers (e.g. 'Software considerations in airborne systems and equipment certification')."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "issuing_body", "standard_id", "status"],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.regulation-clause.schema.json",
+  "title": "RegulationClause entity (ONT-E-07)",
+  "description": "A specific clause within a regulation (e.g. FAR §25.1309, EASA CS 25.1329, CAAC CCAR-25.1309, AMC 25.1309). Includes supersession chain support per Pitfall #6 (status enum + superseded_by URI). Composes entity.base.schema.json via allOf + $ref. Jurisdiction enum is canonical per ontology/vocabularies/jurisdictions.yaml (Plan 10). Pitfall #1 lock: unevaluatedProperties: false. Pitfall #9 lock: $schema = JSON Schema Draft 2020-12. Phase 3 validator enforces conditional: status == 'superseded' → superseded_by required. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "RegulationClause",
+      "description": "Discriminator. Locked to 'RegulationClause' for this entity type."
+    },
+    "jurisdiction": {
+      "type": "string",
+      "enum": ["FAA", "EASA", "CAAC", "ICAO", "Transport-Canada", "CASA-AU", "other"],
+      "description": "Issuing jurisdiction. Canonical labels per ontology/vocabularies/jurisdictions.yaml (Plan 10). Example: 'FAA' for FAR §25.1309, 'EASA' for CS 25.1329, 'CAAC' for CCAR-25.1309."
+    },
+    "document": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "URI of the parent Document entity that holds the regulation (the containing FAR Part / CS Book / CCAR / ICAO Annex)."
+    },
+    "clause_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Clause identifier within the document. Example: '25.1309', 'AMC 25.1309', 'CCAR-25.1309(b)(1)'."
+    },
+    "effective_date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date when this clause version takes effect."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "superseded", "withdrawn", "draft"],
+      "description": "Lifecycle status. Pitfall #6 supersession chain: 'superseded' clauses MUST set superseded_by; 'withdrawn' clauses are no longer cited even by superseded chain; 'draft' clauses are NPRM/proposed text and MUST NOT be cited as authority. Phase 3 validator enforces conditional supersession-chain integrity."
+    },
+    "superseded_by": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "URI of the active replacement RegulationClause. REQUIRED (Phase 3 validator) when status == 'superseded'. Forms the supersession chain that lets a citation walk forward to the currently effective clause."
+    },
+    "full_text_zh": {
+      "type": "string",
+      "description": "Optional canonical clause text in Chinese (when available). The base i18n.label and i18n.full_text fields cover bilingual labels and free-form bilingual content; full_text_zh / full_text_en are the verbatim regulation text where official translations exist."
+    },
+    "full_text_en": {
+      "type": "string",
+      "description": "Optional canonical clause text in English."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "jurisdiction", "document", "clause_id", "effective_date", "status"],
+  "unevaluatedProperties": false
+}

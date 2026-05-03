@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.requirement.schema.json",
+  "title": "Requirement entity (ONT-E-06)",
+  "description": "An engineering requirement (functional / safety / performance / environmental / interface). Composes entity.base.schema.json via allOf + $ref. Pitfall #1 lock: unevaluatedProperties: false (NEVER additionalProperties: false). Pitfall #9 lock: $schema = JSON Schema Draft 2020-12. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "Requirement",
+      "description": "Discriminator. Locked to 'Requirement' for this entity type."
+    },
+    "requirement_text": {
+      "type": "string",
+      "minLength": 20,
+      "description": "The normative requirement text in canonical form. ≥20 chars to reject placeholder stubs."
+    },
+    "requirement_type": {
+      "type": "string",
+      "enum": ["functional", "safety", "performance", "environmental", "interface", "other"],
+      "description": "Requirement classification. Drives downstream verification routing (e.g. safety → DO-178C/DO-254 evidence; performance → flight-test/CFD)."
+    },
+    "jurisdiction": {
+      "type": "string",
+      "enum": ["FAA", "EASA", "CAAC", "ICAO", "Transport-Canada", "CASA-AU", "other"],
+      "description": "Optional. Set ONLY when this requirement is regulatory in nature (i.e. derived from a RegulationClause). See ontology/vocabularies/jurisdictions.yaml (Plan 10) for canonical labels."
+    },
+    "parent_artifact": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Optional. URI of the artifact this requirement is on (AircraftSystem / Subsystem / Component / Standard / RegulationClause / etc)."
+    },
+    "traceability_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional cross-system identifier (e.g. DOORS object ID, Jira issue key, internal req-tracker tag)."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "requirement_text", "requirement_type"],
+  "unevaluatedProperties": false
+}
