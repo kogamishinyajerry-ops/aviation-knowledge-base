@@ -38,22 +38,33 @@
 >
 > ### Locked vs Directional
 >
-> | Section | Locked? | Notes |
-> |---------|---------|-------|
-> | §2 Chunking — RAGFlow OpenDataLoader-PDF backend | **Locked** | STACK.md pins RAGFlow 0.25.1; OpenDataLoader is the v1 default per §2.1 of STACK.md "Document Ingestion Stack" table |
-> | §2 Atomic-chunk rules (tables / equations / regulation clauses) | **Locked** | Regex `§\s*\d+\.\d+(\([a-z]\))?(\(\d+\))?` for FAR/CCAR clause boundaries; tables and `$$...$$` blocks atomic |
-> | §2.3 Chunk size 512 tokens default / 1024 max / 64 overlap | **Locked** | Concrete values; Phase 7 may tune within ±25% based on eval, not redesign |
-> | §3 Default embedding = BGE-M3 + bge-reranker-v2-m3 | **Locked** | STACK.md "Embedding & LLM Layer" + AeroPower-RAG validation |
-> | §3.2 Mini-benchmark candidates (nomic-embed-text, multilingual-e5-large) | Directional | Phase 7 may add candidates; cannot remove BGE-M3 baseline |
-> | §4 Hybrid = Vector + BM25 + RRF | **Locked** | RAGFlow 0.25.1 native; AeroPower-RAG pattern |
-> | §4.2 Synonym expansion weight 0.3 | **Locked** | AeroPower-RAG-validated; do NOT raise without re-eval |
-> | §5 Citation token format `[CITE:c_<8hex>]` | **Locked** | Pitfall 8 mitigation; LLM cannot self-author citations |
-> | §5.3 Post-validator REJECTS unresolved citations | **Locked** | NOT a warning — Core Value enforcement |
-> | §6.1 Thresholds `min_chunk_score = 0.5`, `min_chunks_required = 2` | **Locked** | Pitfall 9 mitigation; Phase 7 may surface for ops tuning but defaults stay |
-> | §6.2 Bilingual canned no-context response | **Locked** | Verbatim text, ZH + EN, both required |
-> | §7 BGE-M3 native multilingual + glossary expansion + entity i18n | **Locked** | Pitfall 7 mitigation; AeroPower-RAG ZH↔EN recall@3=100% precedent |
-> | §7.2 Glossary seed target ≥50 bilingual terms | Directional | Target for `docs/GLOSSARY.md` (Phase 6 deliverable, AIH-04) |
-> | §3.3 Decision criteria thresholds (recall@5, latency 1.2×) | Directional | Phase 7 may refine after first measured run |
+> Refreshed 2026-05-03 (Phase 5 plan 05-04) to reflect what plans 05-01..03 actually shipped.
+> Each Locked row references a section in this doc OR a sibling artifact (`evaluation/queries.yaml`,
+> `scripts/exporters/to_ragflow.py`).
+>
+> | Item | Locked? | Notes |
+> |------|---------|-------|
+> | RAGFlow 0.25.1 + OpenDataLoader-PDF | **Locked** | From STACK.md; no alternative considered in v1 |
+> | BGE-M3 default + bge-reranker-v2-m3 | **Locked (default)** | Mini-benchmark may swap if Phase 7 measures a clear winner per §3.3 |
+> | Chunk size 512 / max 1024 / overlap 64 | **Locked (defaults)** | §2.3 — atomic blocks override size cap |
+> | Atomic-chunk rules: tables, equations, regulation §-clauses, figure-captions | **Locked** | §2.2 — Pitfall 6 prevention; CANNOT relax |
+> | Hybrid retrieval (vector + BM25 + RRF, k=60) | **Locked** | §4 — AeroPower-RAG-validated |
+> | Synonym expansion weight 0.3 | **Locked** | §4.2, §7.2 — AeroPower-RAG-validated; Pitfall 7 |
+> | Citation token format `[CITE:c_<8hex>]` | **Locked** | §5.1 — Pitfall 8 prevention; CANNOT change without ADR |
+> | LLM forbidden to self-author citations | **Locked** | §5.1 — Pitfall 8; Core Value defender |
+> | Post-generation citation validator | **Locked** | §5.3 — rejects unresolved chunk_ids |
+> | min_chunk_score = 0.5 | **Locked** | §6.1 — Pitfall 9 prevention; tunable per Phase 7 measurement only |
+> | min_chunks_required = 2 | **Locked** | §6.1 — single-hit retrieval too brittle |
+> | Canned no-context response (ZH + EN) | **Locked** | §6.2 — text is contractual; localization changes are translation only |
+> | LLM-not-called on guardrail trip | **Locked** | §6.3 — pipeline branch, NOT prompt instruction |
+> | Cross-lingual eval ≥6 in queries.yaml | **Locked** | RAG-07; verified by 05-COVERAGE.md |
+> | Out-of-scope eval ≥3 in queries.yaml | **Locked** | RAG-07; verified by 05-COVERAGE.md |
+> | to_ragflow.py CLI surface (--rebuild, --dry-run, --since=, --paths) | **Locked** | RAG-08 plan 05-03; argparse implemented |
+> | to_ragflow.py compute_doc_id rule (sha256 of path+content) | **Locked** | §-of-its-docstring; idempotency contract |
+> | LLM choice (Ollama Qwen2.5 vs remote Claude/GPT) | **Directional** | Phase 6 deployment plan picks based on hardware reality |
+> | Mini-benchmark numbers | **Directional** | §3.2 specifies the protocol; Phase 7 runs and updates §3.3 |
+> | Glossary seed-terms count target ≥50 | **Directional** | AIH-04 / Phase 6 deliverable; this doc points at it |
+> | Confidence-aware retrieval filter | **Directional** | Open question §9 — schema field exists, retrieval filter not wired in v1 |
 >
 > ### 5-minute stranger test checklist
 >
@@ -831,4 +842,41 @@ These are explicitly deferred to Phase 7 or later. Each item is a known gap, NOT
 - AeroPower-RAG (per CLAUDE.md MEMORY.md) — hybrid retrieval (BM25 + vector + RRF), recall@3=100% on ZH aviation regulations, synonym weight 0.3, BM25 bigram. The validated pattern this doc inherits.
 - cfd-harness-unified — Notion/Git dual-truth + audit-trail discipline. Background context for Core Value commitment.
 - cfd-ai-workbench Case 3 (H-Darrieus) — "捏造图表" failure mode. Direct motivation for §5 citation injection mechanism (Pitfall 8 defense).
+
+## 11. REQ-Coverage Matrix
+
+This matrix is the forward-traceability index for Phase 5. For each requirement,
+the table shows the section in this document (or sibling artifact) that delivers
+the design AND a shell command the Phase-5 verifier can run to confirm presence.
+The reverse-traceability matrix (artifact → REQ-IDs) lives in
+`.planning/phases/05-rag-pipeline-design-document-only-no-run/05-COVERAGE.md`.
+
+| REQ-ID  | Delivered by                                                          | Section / File                                  | Verifier command                                                                                                                                              |
+|---------|-----------------------------------------------------------------------|-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| RAG-01  | Chunking strategy with table-atomic + §-clause-atomic rules           | RAG_PIPELINE.md §2                              | `grep -q "OpenDataLoader-PDF" .planning/design/RAG_PIPELINE.md && grep -q "atomic" .planning/design/RAG_PIPELINE.md`                                          |
+| RAG-02  | BGE-M3 default + bge-reranker-v2-m3 + mini-benchmark plan             | RAG_PIPELINE.md §3                              | `grep -q "BGE-M3" .planning/design/RAG_PIPELINE.md && grep -q "bge-reranker-v2-m3" .planning/design/RAG_PIPELINE.md && grep -qE "nomic-embed-text\|multilingual-e5-large" .planning/design/RAG_PIPELINE.md` |
+| RAG-03  | Hybrid retrieval vector + BM25 + RRF + query expansion w=0.3          | RAG_PIPELINE.md §4                              | `grep -qE "RRF\|rrf" .planning/design/RAG_PIPELINE.md && grep -q "weight: 0.3" .planning/design/RAG_PIPELINE.md`                                              |
+| RAG-04  | Citation injection (token + render + validator)                       | RAG_PIPELINE.md §5                              | `grep -q "\[CITE:c_" .planning/design/RAG_PIPELINE.md && grep -q "validate_answer_citations" .planning/design/RAG_PIPELINE.md`                                |
+| RAG-05  | Guardrail short-circuit (no-LLM-call when below threshold)            | RAG_PIPELINE.md §6                              | `grep -q "min_chunk_score" .planning/design/RAG_PIPELINE.md && grep -q "llm_called=False" .planning/design/RAG_PIPELINE.md`                                   |
+| RAG-06  | Cross-lingual: BGE-M3 multilingual + glossary expansion + i18n        | RAG_PIPELINE.md §7                              | `grep -q "i18n" .planning/design/RAG_PIPELINE.md && grep -qE "glossary\|GLOSSARY" .planning/design/RAG_PIPELINE.md`                                           |
+| RAG-07  | Eval set with ≥30 queries, ≥20% table, ≥3 out-of-scope                | evaluation/queries.yaml + evaluation/README.md  | `python -c "import yaml; q=yaml.safe_load(open('evaluation/queries.yaml'))['queries']; assert len(q)>=30 and sum(1 for x in q if x['type']=='table')>=6 and sum(1 for x in q if x['type']=='out_of_scope')>=3"` |
+| RAG-08  | to_ragflow.py skeleton: argparse + Git-watch + idempotency + --rebuild | scripts/exporters/to_ragflow.py                 | `python scripts/exporters/to_ragflow.py --help > /dev/null && grep -q "compute_doc_id" scripts/exporters/to_ragflow.py && grep -q "rebuild_index" scripts/exporters/to_ragflow.py` |
+
+### ROADMAP success-criterion mapping
+
+These are the Phase-5 success criteria copied verbatim from
+`.planning/ROADMAP.md` "Phase 5: RAG Pipeline Design" → "Success Criteria" 1-6,
+mapped to the REQ-IDs that deliver each one.
+
+| ROADMAP SC# | Description (verbatim from ROADMAP.md Phase 5)                                                       | REQ-ID(s)         |
+|-------------|------------------------------------------------------------------------------------------------------|-------------------|
+| SC-1        | RAG_PIPELINE.md documents chunking with table preservation, citing RAGFlow 0.25.1                    | RAG-01            |
+| SC-2        | Embedding rationale + mini-benchmark plan + cross-lingual                                            | RAG-02 + RAG-06   |
+| SC-3        | Citation injection: system-side token, render layer resolves, post-validator rejects unresolved      | RAG-04            |
+| SC-4        | Guardrail hard-codes empty/below-threshold → "not found" without LLM                                 | RAG-05            |
+| SC-5        | evaluation/queries.yaml ≥30, ≥20% table, out-of-scope                                                | RAG-07            |
+| SC-6        | to_ragflow.py skeleton: Git-watch, content-hash idempotency, --rebuild                              | RAG-08            |
+
+The Phase-5 verifier (`/gsd-execute-phase` next step) executes each Verifier
+command above and asserts exit code 0; any failing row blocks Phase 5 closure.
 
