@@ -37,8 +37,8 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
 **Plans**: 5 plans
   - [x] 01-01-PLAN.md — Repo skeleton + .gitignore + .gitattributes (LFS) + exporter stubs
   - [x] 01-02-PLAN.md — README.md with AI 接力开发指南 + 5-minute stranger test
-  - [ ] 01-03-PLAN.md — pre-commit config + .yamllint (pinned versions)
-  - [ ] 01-04-PLAN.md — GitHub Actions CI baseline (lint + stub jobs)
+  - [x] 01-03-PLAN.md — pre-commit config + .yamllint (pinned versions)
+  - [x] 01-04-PLAN.md — GitHub Actions CI baseline (lint + stub jobs)
   - [ ] 01-05-PLAN.md — PRD v0 directional + .planning/design/ scaffold
 **Research needed**: No (standard patterns)
 
@@ -118,7 +118,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Repo Skeleton + Git Baseline + PRD v0 | 2/5 | In Progress|  |
+| 1. Repo Skeleton + Git Baseline + PRD v0 | 4/5 | In Progress|  |
 | 2. Ontology Schema v0.1.0 | 0/TBD | Not started | - |
 | 3. Validators + CI Active | 0/TBD | Not started | - |
 | 4. Demo Data + Document Import Spec | 0/TBD | Not started | - |
