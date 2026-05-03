@@ -832,3 +832,40 @@ These are explicitly deferred to Phase 7 or later. Each item is a known gap, NOT
 - cfd-harness-unified — Notion/Git dual-truth + audit-trail discipline. Background context for Core Value commitment.
 - cfd-ai-workbench Case 3 (H-Darrieus) — "捏造图表" failure mode. Direct motivation for §5 citation injection mechanism (Pitfall 8 defense).
 
+## 11. REQ-Coverage Matrix
+
+This matrix is the forward-traceability index for Phase 5. For each requirement,
+the table shows the section in this document (or sibling artifact) that delivers
+the design AND a shell command the Phase-5 verifier can run to confirm presence.
+The reverse-traceability matrix (artifact → REQ-IDs) lives in
+`.planning/phases/05-rag-pipeline-design-document-only-no-run/05-COVERAGE.md`.
+
+| REQ-ID  | Delivered by                                                          | Section / File                                  | Verifier command                                                                                                                                              |
+|---------|-----------------------------------------------------------------------|-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| RAG-01  | Chunking strategy with table-atomic + §-clause-atomic rules           | RAG_PIPELINE.md §2                              | `grep -q "OpenDataLoader-PDF" .planning/design/RAG_PIPELINE.md && grep -q "atomic" .planning/design/RAG_PIPELINE.md`                                          |
+| RAG-02  | BGE-M3 default + bge-reranker-v2-m3 + mini-benchmark plan             | RAG_PIPELINE.md §3                              | `grep -q "BGE-M3" .planning/design/RAG_PIPELINE.md && grep -q "bge-reranker-v2-m3" .planning/design/RAG_PIPELINE.md && grep -qE "nomic-embed-text\|multilingual-e5-large" .planning/design/RAG_PIPELINE.md` |
+| RAG-03  | Hybrid retrieval vector + BM25 + RRF + query expansion w=0.3          | RAG_PIPELINE.md §4                              | `grep -qE "RRF\|rrf" .planning/design/RAG_PIPELINE.md && grep -q "weight: 0.3" .planning/design/RAG_PIPELINE.md`                                              |
+| RAG-04  | Citation injection (token + render + validator)                       | RAG_PIPELINE.md §5                              | `grep -q "\[CITE:c_" .planning/design/RAG_PIPELINE.md && grep -q "validate_answer_citations" .planning/design/RAG_PIPELINE.md`                                |
+| RAG-05  | Guardrail short-circuit (no-LLM-call when below threshold)            | RAG_PIPELINE.md §6                              | `grep -q "min_chunk_score" .planning/design/RAG_PIPELINE.md && grep -q "llm_called=False" .planning/design/RAG_PIPELINE.md`                                   |
+| RAG-06  | Cross-lingual: BGE-M3 multilingual + glossary expansion + i18n        | RAG_PIPELINE.md §7                              | `grep -q "i18n" .planning/design/RAG_PIPELINE.md && grep -qE "glossary\|GLOSSARY" .planning/design/RAG_PIPELINE.md`                                           |
+| RAG-07  | Eval set with ≥30 queries, ≥20% table, ≥3 out-of-scope                | evaluation/queries.yaml + evaluation/README.md  | `python -c "import yaml; q=yaml.safe_load(open('evaluation/queries.yaml'))['queries']; assert len(q)>=30 and sum(1 for x in q if x['type']=='table')>=6 and sum(1 for x in q if x['type']=='out_of_scope')>=3"` |
+| RAG-08  | to_ragflow.py skeleton: argparse + Git-watch + idempotency + --rebuild | scripts/exporters/to_ragflow.py                 | `python scripts/exporters/to_ragflow.py --help > /dev/null && grep -q "compute_doc_id" scripts/exporters/to_ragflow.py && grep -q "rebuild_index" scripts/exporters/to_ragflow.py` |
+
+### ROADMAP success-criterion mapping
+
+These are the Phase-5 success criteria copied verbatim from
+`.planning/ROADMAP.md` "Phase 5: RAG Pipeline Design" → "Success Criteria" 1-6,
+mapped to the REQ-IDs that deliver each one.
+
+| ROADMAP SC# | Description (verbatim from ROADMAP.md Phase 5)                                                       | REQ-ID(s)         |
+|-------------|------------------------------------------------------------------------------------------------------|-------------------|
+| SC-1        | RAG_PIPELINE.md documents chunking with table preservation, citing RAGFlow 0.25.1                    | RAG-01            |
+| SC-2        | Embedding rationale + mini-benchmark plan + cross-lingual                                            | RAG-02 + RAG-06   |
+| SC-3        | Citation injection: system-side token, render layer resolves, post-validator rejects unresolved      | RAG-04            |
+| SC-4        | Guardrail hard-codes empty/below-threshold → "not found" without LLM                                 | RAG-05            |
+| SC-5        | evaluation/queries.yaml ≥30, ≥20% table, out-of-scope                                                | RAG-07            |
+| SC-6        | to_ragflow.py skeleton: Git-watch, content-hash idempotency, --rebuild                              | RAG-08            |
+
+The Phase-5 verifier (`/gsd-execute-phase` next step) executes each Verifier
+command above and asserts exit code 0; any failing row blocks Phase 5 closure.
+
