@@ -1,0 +1,24 @@
+# Phase 3: Validators + CI Active — Completion Log
+
+- **AI session:** Claude Opus 4.7 (1M context) — primary executor.
+- **Date:** 2026-05-03.
+- **Plans:** 6 plans landed across 4 execution waves.
+  - `03-01-PLAN.md` (Wave 1) — Validator package skeleton (`scripts/validators/`) + `schema.py` ($ref-resolving JSON Schema runner) + valid fixture corpus + `pyproject.toml` + `tests/conftest.py`.
+  - `03-02-PLAN.md` (Wave 1) — Invalid fixture corpus (12 fixtures, one per failure mode: missing required field, bad URI, invalid provenance.method, broken-ref, supersession integrity violation, etc.).
+  - `03-03-PLAN.md` (Wave 2) — `ids.py` (URI format check) + `provenance.py` (H-Darrieus REJECT, `_pending/` gate, `schema_version` agreement check).
+  - `03-04-PLAN.md` (Wave 2) — `relations.py` (subject/object resolution + supersession integrity) + `links.py` (broken-ref detection across the canonical tree).
+  - `03-05-PLAN.md` (Wave 3) — `tests/test_validators.py` (pytest suite + parametrised fixture-to-rule assertions + sanity mutation tests).
+  - `03-06-PLAN.md` (Wave 4) — CI wiring (replace Phase 1 stub jobs with real validate.py + pytest jobs) + pre-commit local hook + `scripts/validators/README.md`.
+- **Decisions:**
+  - **Validator public API frozen**: `validate_record(path, record, **ctx) -> list[ValidationError]`. Wave-2 plans (03-03, 03-04) filled stubs without touching the dispatching `validate.py`. This kept Waves parallelisable.
+  - **`schema.py` uses `referencing.Registry`** (jsonschema 4.18+ API) for `$ref` resolution — keys both bare filename (`entity.base.schema.json`) and parent-relative path (`./entity.base.schema.json`) so leaf `$ref` resolution works regardless of how the leaf wrote the reference.
+  - **Phase-2 schema bug auto-fixed in 03-01** (Rule 1 deviation): removed `unevaluatedProperties: false` from `entity.base.schema.json` + `relation.base.schema.json`; kept on every leaf. Per JSON Schema 2020-12, `unevaluatedProperties` evaluates only against annotations from its own scope, so placing it on the base falsely rejected leaf-only fields. `ontology/CHANGELOG.md` entry added.
+- **Deviations:** (Rule 2 — files_modified addition for bootstrap)
+  - `03-01` added `pyproject.toml` and `tests/conftest.py` (`by_id` fixture) per `03-VALIDATION.md` Wave-0 deliverables. The plan's `files_modified` list did not enumerate them. Acceptable per Wave-0 bootstrap exception (you cannot validate without a `pyproject.toml`); logged in `03-01-SUMMARY.md` as a Rule-2 add.
+- **Verification:**
+  - `python scripts/validate.py` exits 0 on the canonical instances tree at Phase 3 close.
+  - `pytest tests/test_validators.py` green (parametrised: every invalid fixture rejected with the expected error class).
+  - CI runs validate.py + pytest on every push and PR; the no-op PR from Phase 1 still passes after CI activation.
+  - Commit search key: `feat(03-`, `test(03-`, `chore(03-`, `fix(03-` between Phase 2 close and Phase 4 first plan.
+- **REQ-IDs covered:** VAL-01, VAL-02, VAL-03, VAL-04, VAL-05.
+- **Next phase:** Phase 4 — Demo Data + Document Import Spec.
