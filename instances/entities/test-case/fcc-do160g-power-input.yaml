@@ -1,0 +1,36 @@
+---
+# TestCase canonical instance (ONT-E-20, D-02) — Plan 04-03 Task 3.
+# target FK points to Component from sibling plan 04-02 (cross-plan FK; resolves at
+# end-of-Wave-1 integration check per plan 04-05).
+id: aviationkb://test-case/fcc-do160g-power-input@1
+type: TestCase
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "FCC 单元 DO-160G 第 21 节供电输入合格性测试"
+    en: "FCC unit — DO-160G Section 21 power-input qualification test"
+test_objective: "Demonstrate that the FADEC CPU card operates within specification across the full DO-160G Section 21 power-input envelope including normal voltage, abnormal voltage transients, voltage dropout, voltage spike, and load-shed reapplication, without loss of function or permanent damage."
+target: aviationkb://component/b737max-fadec-cpu-card@1
+test_type: qualification
+environmental_conditions: "Operating temperature -55°C to +70°C, humidity 0-95% RH non-condensing, altitude up to 55,000 ft, vibration per DO-160G Section 8 Category B."
+acceptance_criteria: "No loss of function during voltage transients per DO-160G Section 21 Category B; recovery to nominal operation within 100 ms of return to nominal voltage; no permanent damage observed in post-test inspection per DO-160G Section 21.8.4."
+prerequisites:
+  - "BITE check passed within 24 hours of test start"
+  - "Pre-test calibration of test power supply to ±0.5% of nominal"
+  - "Temperature soak ≥ 1 hour at -55°C before initial test point"
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: test-engineer
+  created_at: "2026-05-03T16:20:00Z"
+confidence:
+  score: 0.9
+  rationale: "Test objective and acceptance criteria written to DO-160G Section 21 wording; demo-grade — not vendor-specific test plan."
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "FAR §25.1309 system-qualification context — DO-160G is the canonical environmental test standard"
+  retrieval:
+    url: "https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309"
+    retrieved_at: "2026-05-03T13:30:00Z"

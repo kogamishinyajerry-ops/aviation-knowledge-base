@@ -1,0 +1,39 @@
+---
+# CFDMethod canonical instance (ONT-E-12) — Plan 04-03 Task 1.
+# Cross-referenced by SimulationCase.cfd_method_ref (Task 2).
+id: aviationkb://cfd-method/rans-steady@1
+type: CFDMethod
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "稳态雷诺平均纳维-斯托克斯方法 (Steady RANS)"
+    en: "Steady Reynolds-Averaged Navier-Stokes (RANS)"
+method_class: RANS
+equations: "Steady incompressible Reynolds-Averaged Navier-Stokes equations with Boussinesq eddy-viscosity closure for the Reynolds-stress tensor; pressure-velocity coupling via SIMPLE/SIMPLEC algorithm."
+governing_assumptions:
+  - "steady-state mean flow"
+  - "incompressible (M < 0.3)"
+  - "single-phase, single-fluid"
+  - "fully turbulent boundary layer (no transition modelling)"
+  - "isothermal (no buoyancy)"
+validation_status: validated
+typical_applications:
+  - "external aerodynamics, attached flow"
+  - "low-to-moderate Reynolds-number airfoil and wing analysis"
+  - "verification cases on NASA Turbulence Modeling Resource"
+provenance:
+  method: human
+  actor: aviationkb://person/john-cfd-analyst@1
+  actor_role: cfd-analyst
+  created_at: "2026-05-03T16:00:00Z"
+confidence:
+  score: 0.95
+  rationale: "Steady RANS method description aligned with NASA TMR documentation and standard textbook formulations (Versteeg & Malalasekera, Wilcox)."
+source:
+  document_id: aviationkb://document/nasa-tm-2014-218175@1
+  locator:
+    section: "Methodology — RANS formulation in OVERFLOW"
+  retrieval:
+    url: "https://ntrs.nasa.gov/citations/20140017079"
+    retrieved_at: "2026-05-03T13:30:00Z"
