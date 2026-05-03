@@ -54,13 +54,13 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   5. `ontology/VERSION` reads `0.1.0`, `ontology/CHANGELOG.md` documents the initial schema set, every record carries `schema_version`, `migrations/` directory contains a placeholder pattern doc
   6. URI scheme ADR (`aviationkb://<type>/<slug>@<version>` and `<type-prefix>:<kebab-slug>`) committed in `.planning/decisions/`; S1000D Issue 6 DMC reservation documented in `ontology/mappings/`
 **Plans**: 10 plans
-  - [ ] 02-01-PLAN.md — _meta.schema.json composition root + VERSION + CHANGELOG + migrations PATTERN + _pending README + ADR-001 reserved + ADR-005 provenance enum
-  - [ ] 02-02-PLAN.md — entity.base.schema.json + ADR-002 entity additions + ADR-007 schema versioning
-  - [ ] 02-03-PLAN.md — relation.base.schema.json + ADR-003 relation additions + ADR-004 field shapes
-  - [ ] 02-04-PLAN.md — 5 baseline entity schemas (AircraftModel/System/Subsystem/Component/Document)
-  - [ ] 02-05-PLAN.md — 7 baseline entity schemas (Requirement/RegulationClause/Standard/Procedure/MaintenanceTask/AccidentCase/ExpertNote)
-  - [ ] 02-06-PLAN.md — 5 baseline entity schemas (FailureMode/CFDMethod/SimulationCase/MeshRequirement/TurbulenceModel)
-  - [ ] 02-07-PLAN.md — 5 ADR-002 added entity schemas (Material/TestCase/TestReport/Person/Organization; Configuration deferred)
+  - [x] 02-01-PLAN.md — _meta.schema.json composition root + VERSION + CHANGELOG + migrations PATTERN + _pending README + ADR-001 reserved + ADR-005 provenance enum
+  - [x] 02-02-PLAN.md — entity.base.schema.json + ADR-002 entity additions + ADR-007 schema versioning
+  - [x] 02-03-PLAN.md — relation.base.schema.json + ADR-003 relation additions + ADR-004 field shapes
+  - [x] 02-04-PLAN.md — 5 baseline entity schemas (AircraftModel/System/Subsystem/Component/Document)
+  - [x] 02-05-PLAN.md — 7 baseline entity schemas (Requirement/RegulationClause/Standard/Procedure/MaintenanceTask/AccidentCase/ExpertNote)
+  - [x] 02-06-PLAN.md — 5 baseline entity schemas (FailureMode/CFDMethod/SimulationCase/MeshRequirement/TurbulenceModel)
+  - [x] 02-07-PLAN.md — 5 ADR-002 added entity schemas (Material/TestCase/TestReport/Person/Organization; Configuration deferred)
   - [ ] 02-08-PLAN.md — 13 baseline relation schemas with boundary-discipline descriptions
   - [ ] 02-09-PLAN.md — 3 added relation schemas (interfaces_with/complies_with/applicable_during_phase) + ADR-006 triple export
   - [ ] 02-10-PLAN.md — 3 vocabularies + 2 mappings + to_jsonl_triples.py docstring enrichment
@@ -129,7 +129,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Repo Skeleton + Git Baseline + PRD v0 | 5/5 | Complete    | 2026-05-03 |
-| 2. Ontology Schema v0.1.0 | 0/TBD | Not started | - |
+| 2. Ontology Schema v0.1.0 | 7/10 | In Progress|  |
 | 3. Validators + CI Active | 0/TBD | Not started | - |
 | 4. Demo Data + Document Import Spec | 0/TBD | Not started | - |
 | 5. RAG Pipeline Design (document-only) | 0/TBD | Not started | - |
