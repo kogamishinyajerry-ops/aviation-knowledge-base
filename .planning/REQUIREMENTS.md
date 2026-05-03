@@ -197,17 +197,119 @@ Explicitly excluded for v1. Documented to prevent scope creep.
 
 ## Traceability
 
-Will be populated during roadmap creation. Each requirement maps to exactly one phase.
+Each requirement maps to exactly one phase. Populated by gsd-roadmapper on 2026-05-03.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (filled by gsd-roadmapper) | — | Pending |
+| REPO-01 | Phase 1 | Pending |
+| REPO-02 | Phase 1 | Pending |
+| REPO-03 | Phase 1 | Pending |
+| REPO-04 | Phase 1 | Pending |
+| REPO-05 | Phase 1 | Pending |
+| PRD-01 | Phase 1 | Pending |
+| ONT-E-01 | Phase 2 | Pending |
+| ONT-E-02 | Phase 2 | Pending |
+| ONT-E-03 | Phase 2 | Pending |
+| ONT-E-04 | Phase 2 | Pending |
+| ONT-E-05 | Phase 2 | Pending |
+| ONT-E-06 | Phase 2 | Pending |
+| ONT-E-07 | Phase 2 | Pending |
+| ONT-E-08 | Phase 2 | Pending |
+| ONT-E-09 | Phase 2 | Pending |
+| ONT-E-10 | Phase 2 | Pending |
+| ONT-E-11 | Phase 2 | Pending |
+| ONT-E-12 | Phase 2 | Pending |
+| ONT-E-13 | Phase 2 | Pending |
+| ONT-E-14 | Phase 2 | Pending |
+| ONT-E-15 | Phase 2 | Pending |
+| ONT-E-16 | Phase 2 | Pending |
+| ONT-E-17 | Phase 2 | Pending |
+| ONT-E-18 | Phase 2 | Pending |
+| ONT-E-19 | Phase 2 | Pending |
+| ONT-E-20 | Phase 2 | Pending |
+| ONT-E-21 | Phase 2 | Pending |
+| ONT-E-22 | Phase 2 | Pending |
+| ONT-R-01 | Phase 2 | Pending |
+| ONT-R-02 | Phase 2 | Pending |
+| ONT-R-03 | Phase 2 | Pending |
+| ONT-R-04 | Phase 2 | Pending |
+| ONT-R-05 | Phase 2 | Pending |
+| ONT-R-06 | Phase 2 | Pending |
+| ONT-R-07 | Phase 2 | Pending |
+| ONT-R-08 | Phase 2 | Pending |
+| ONT-R-09 | Phase 2 | Pending |
+| ONT-R-10 | Phase 2 | Pending |
+| ONT-R-11 | Phase 2 | Pending |
+| ONT-R-12 | Phase 2 | Pending |
+| ONT-R-13 | Phase 2 | Pending |
+| ONT-R-14 | Phase 2 | Pending |
+| ONT-R-15 | Phase 2 | Pending |
+| ONT-R-16 | Phase 2 | Pending |
+| ONT-R-17 | Phase 2 | Pending |
+| ONT-R-18 | Phase 2 | Pending |
+| ONT-R-19 | Phase 2 | Pending |
+| PROV-01 | Phase 2 | Pending |
+| PROV-02 | Phase 2 | Pending |
+| PROV-03 | Phase 2 | Pending |
+| PROV-04 | Phase 2 | Pending |
+| PROV-05 | Phase 2 | Pending |
+| PROV-06 | Phase 2 | Pending |
+| VER-01 | Phase 2 | Pending |
+| VER-02 | Phase 2 | Pending |
+| VER-03 | Phase 2 | Pending |
+| VER-04 | Phase 2 | Pending |
+| VAL-01 | Phase 3 | Pending |
+| VAL-02 | Phase 3 | Pending |
+| VAL-03 | Phase 3 | Pending |
+| VAL-04 | Phase 3 | Pending |
+| VAL-05 | Phase 3 | Pending |
+| DOC-01 | Phase 4 | Pending |
+| DOC-02 | Phase 4 | Pending |
+| DOC-03 | Phase 4 | Pending |
+| DOC-04 | Phase 4 | Pending |
+| DEMO-01 | Phase 4 | Pending |
+| DEMO-02 | Phase 4 | Pending |
+| DEMO-03 | Phase 4 | Pending |
+| DEMO-04 | Phase 4 | Pending |
+| DEMO-05 | Phase 4 | Pending |
+| DEMO-06 | Phase 4 | Pending |
+| DEMO-07 | Phase 4 | Pending |
+| RAG-01 | Phase 5 | Pending |
+| RAG-02 | Phase 5 | Pending |
+| RAG-03 | Phase 5 | Pending |
+| RAG-04 | Phase 5 | Pending |
+| RAG-05 | Phase 5 | Pending |
+| RAG-06 | Phase 5 | Pending |
+| RAG-07 | Phase 5 | Pending |
+| RAG-08 | Phase 5 | Pending |
+| DEP-01 | Phase 6 | Pending |
+| DEP-02 | Phase 6 | Pending |
+| DEP-03 | Phase 6 | Pending |
+| DEP-04 | Phase 6 | Pending |
+| DEP-05 | Phase 6 | Pending |
+| DEP-06 | Phase 6 | Pending |
+| PRD-02 | Phase 6 | Pending |
+| AIH-01 | Phase 6 | Pending |
+| AIH-02 | Phase 6 | Pending |
+| AIH-03 | Phase 6 | Pending |
+| AIH-04 | Phase 6 | Pending |
+| ROAD-01 | Phase 6 | Pending |
+| ROAD-02 | Phase 6 | Pending |
 
 **Coverage:**
-- v1 requirements: 78 total (counted across all categories)
-- Mapped to phases: TBD (roadmapper to fill)
-- Unmapped: TBD ⚠️
+- v1 requirements: 94 total (REPO 5 + PRD 2 + ONT-E 22 + ONT-R 19 + PROV 6 + VER 4 + VAL 5 + DOC 4 + RAG 8 + DEP 6 + DEMO 7 + AIH 4 + ROAD 2)
+- Mapped to phases: 94/94 ✓
+- Unmapped: 0
+- Note: Earlier preamble said 78; actual count after research-recommended additions (ONT-E-19..22, ONT-R-15..19) is 94. ROADMAP.md coverage summary documents the discrepancy.
+
+**Phase distribution:**
+- Phase 1 (Repo Skeleton + PRD v0): 6 requirements
+- Phase 2 (Ontology Schema v0.1.0): 51 requirements
+- Phase 3 (Validators + CI Active): 5 requirements
+- Phase 4 (Demo Data + Doc Import): 11 requirements
+- Phase 5 (RAG Pipeline Design): 8 requirements
+- Phase 6 (Deployment + PRD v1 + Roadmap + AIH Polish): 13 requirements
 
 ---
 *Requirements defined: 2026-05-03*
-*Last updated: 2026-05-03 after initial definition*
+*Last updated: 2026-05-03 after roadmap traceability mapping*
