@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.complies-with.schema.json",
+  "title": "complies_with relation (ONT-R-16, D-06)",
+  "description": "Explicit normative compliance with a regulation, standard, or certification clause. Audit-grade. USE FOR: Component(structure) complies_with RegulationClause(FAR §25.305); AircraftSystem(avionics) complies_with Standard(DO-178C_LevelB); Procedure complies_with RegulationClause(EASA AMC 25.1309). DO NOT USE FOR: budget / non-normative constraints — those are constrained_by (ONT-R-04). DO NOT USE FOR: 'soft compliance' without audit trail — also constrained_by. DO NOT USE FOR: citation only — use cites (ONT-R-08). Boundary per ADR-003 / D-11: constrained_by is generic (mass budget, cost ceiling, performance limit, soft regulation reference); complies_with is explicit normative compliance with audit-grade traceability. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "complies_with",
+      "description": "Discriminator. Must equal the string 'complies_with'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "compliance_evidence": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Optional URI to the TestReport / SimulationCase / Procedure entity that demonstrates the compliance claim. Phase 3 validator confirms the URI resolves to one of those entity types. Required for compliance_status == 'demonstrated' at the validator layer (not enforced by this schema)."
+    },
+    "compliance_status": {
+      "type": "string",
+      "enum": ["demonstrated", "claimed", "in_progress", "exempted"],
+      "description": "Optional. Lifecycle of the compliance claim. 'demonstrated' = evidence on file (compliance_evidence URI present); 'claimed' = asserted by author, not yet evidenced; 'in_progress' = compliance work underway; 'exempted' = compliance waived under a documented exemption (rationale belongs in confidence.rationale)."
+    }
+  },
+  "unevaluatedProperties": false
+}

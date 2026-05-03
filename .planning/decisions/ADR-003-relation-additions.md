@@ -131,3 +131,20 @@ A separate `generated_by(record, tool)` relation would duplicate this informatio
 - PROJECT.md "Out of Scope" — bilingual handling is curated, not auto-translated
 - ADR-004 (field shapes — i18n, version_history, confidence)
 - ADR-005 (provenance enum + H-Darrieus rule — `provenance.actor` URI form)
+
+## Post-baseline-review status (Plan 09 finalization, 2026-05-03)
+
+Status confirmation after Wave 4 (Plan 02-08 — 13 baseline relation schemas) and Wave 5 (Plan 02-09 — 3 added relation schemas) shipped:
+
+- **Status: ACCEPTED (FINALIZED).** All boundary worked-example tables in §"Boundary clarifications" have been verified against the schema files that ship them:
+  - `relation.requires.schema.json.description` carries the cross-tier vs peer-tier worked example pair (D-10) — verified by Plan 02-08.
+  - `relation.constrained-by.schema.json.description` carries the generic-vs-normative worked example pair (D-11) — verified by Plan 02-08.
+  - `relation.equivalent-to.schema.json.description` carries the "NOT cross-language pairs" foil (D-12) — verified by Plan 02-08.
+  - `relation.interfaces-with.schema.json.description` carries the peer-tier USE / cross-tier DON'T-USE pair (D-05/D-10) — verified by Plan 02-09 (this plan).
+  - `relation.complies-with.schema.json.description` carries the audit-grade-normative USE / non-normative DON'T-USE pair (D-06/D-11) — verified by Plan 02-09 (this plan).
+  - `relation.applicable-during-phase.schema.json` carries the inline flight_phase enum + `applicable_to` boundary callout (D-08) — verified by Plan 02-09 (this plan).
+- **Internalization decisions stand.** ONT-R-17 (`has_revision`) and ONT-R-19 (`generated_by`) ship NO schema file; they are satisfied by this ADR alone:
+  - `has_revision` → `version_history[]` field per D-15 / ADR-004; entity.base composition in Plans 02-02 / 02-04..07 carries it.
+  - `generated_by` → `provenance.actor` (Person/Org URI) + `provenance.tool` (string) per D-16 / `_meta.schema.json#/$defs/provenance`.
+- **Net relation count v0.1.0 = 16 relation schemas** (13 baseline + 3 additions), confirmed against `ontology/schemas/relation.*.schema.json` directory listing after Plan 02-09.
+- **No further changes anticipated for v0.1.0.** Subsequent ADR amendments (if any) belong in v0.1.1 / v0.2.0 ADRs.

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/relation.applicable-during-phase.schema.json",
+  "title": "applicable_during_phase relation (ONT-R-18, D-08)",
+  "description": "Flight phase scope. USE FOR: Procedure applicable_during_phase emergency; Requirement applicable_during_phase takeoff; Procedure applicable_during_phase landing; Requirement applicable_during_phase cruise. Phase enum is fixed (per CONTEXT.md Open Question #3 and D-08 — inline enum, not a separate vocabulary YAML). NOT for aircraft-model scope — that's applicable_to (ONT-R-03). NOT for cross-tier dependency on a phase-specific resource — model that with requires + applicable_during_phase on the depended-on entity. The semantic 'object' of this relation is the flight phase itself; v0.1.0 captures the phase via the required flight_phase enum field below. The base 'object' URI field (inherited from relation.base) is reserved for future use (e.g. when flight phases become first-class entities); for v0.1.0 demo data, set object to a placeholder phase-entity URI of the form aviationkb://flight-phase/<flight_phase>@1 — the flight_phase enum field is the semantic source of truth. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "relation.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "applicable_during_phase",
+      "description": "Discriminator. Must equal the string 'applicable_during_phase'."
+    },
+    "schema_version": {
+      "$ref": "../_meta.schema.json#/$defs/schemaVersionString"
+    },
+    "flight_phase": {
+      "type": "string",
+      "enum": ["taxi", "takeoff", "climb", "cruise", "approach", "landing", "missed_approach", "emergency", "ground_operations"],
+      "description": "Per D-08 inline enum. The flight phase during which the subject (Procedure / Requirement / etc) is applicable. Required."
+    }
+  },
+  "required": ["flight_phase"],
+  "unevaluatedProperties": false
+}
