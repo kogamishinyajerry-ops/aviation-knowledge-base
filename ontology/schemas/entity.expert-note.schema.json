@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aviation-knowledge-base.local/ontology/schemas/entity.expert-note.schema.json",
+  "title": "ExpertNote entity (ONT-E-18) — canonical provenance/source/confidence example",
+  "description": "A free-form expert note that demonstrates the full provenance + source + confidence pattern (cited as the worked example in docs/README.md AI 接力开发指南). Bilingual content goes via the inherited entity.base i18n field per ADR-003 / D-12 (NOT a separate equivalent_to relation — equivalent_to is explicitly NOT used for cross-language pairs). Revisions go via the inherited entity.base version_history[] array per ADR-003 / D-07 / D-15 (NOT a has_revision relation — has_revision was internalized as a field). The author URI is distinct from provenance.actor: author = the note's intellectual author; provenance.actor = whoever entered the data into the KB. Composes entity.base.schema.json via allOf + $ref. Pitfall #1 lock: unevaluatedProperties: false. Pitfall #9 lock: $schema = JSON Schema Draft 2020-12. Schema version: 0.1.0.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "entity.base.schema.json" }
+  ],
+  "properties": {
+    "type": {
+      "const": "ExpertNote",
+      "description": "Discriminator. Locked to 'ExpertNote' for this entity type."
+    },
+    "author": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "URI of the Person who is the note's intellectual author. DISTINCT from provenance.actor (provenance.actor is whoever entered the data into the KB; author is the domain expert whose knowledge the note represents). Required so that downstream citations can credit the expert correctly."
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Free-text topic identifier (kebab-case recommended). Example: 'fuel-system-corrosion-coastal-environment', 'composite-bvid-inspection-thresholds'."
+    },
+    "content_md": {
+      "type": "string",
+      "minLength": 40,
+      "description": "Markdown body of the note (≥40 chars). English by default; Chinese / bilingual content lives in the inherited i18n.full_text field per ADR-003 / D-12. content_md is the pragmatic 'just write it' field for single-language notes; i18n.full_text is the formal bilingual carrier."
+    },
+    "related_entities": {
+      "type": "array",
+      "items": { "$ref": "../_meta.schema.json#/$defs/uri" },
+      "uniqueItems": true,
+      "description": "Optional cross-references to AircraftSystem / Component / RegulationClause / Standard / etc URIs. Lightweight pointer list; formal relations go in relation YAML files."
+    },
+    "supersedes_note": {
+      "$ref": "../_meta.schema.json#/$defs/uri",
+      "description": "Optional URI to a previous ExpertNote that this one replaces. Used when the note evolves AND the entity ID changes (e.g. major topic rewrite). For in-place revisions to the same note, use the inherited entity.base version_history[] array per D-07 / D-15."
+    }
+  },
+  "required": ["type", "schema_version", "i18n", "author", "topic", "content_md"],
+  "unevaluatedProperties": false
+}
