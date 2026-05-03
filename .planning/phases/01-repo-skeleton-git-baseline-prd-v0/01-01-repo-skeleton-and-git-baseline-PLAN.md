@@ -18,6 +18,9 @@ files_modified:
   - docs/.gitkeep
   - wiki/.gitkeep
   - deploy/.gitkeep
+  - deploy/docker-compose/.gitkeep
+  - deploy/wiki-js/.gitkeep
+  - deploy/ragflow/.gitkeep
   - deploy/caddy/.gitkeep
   - deploy/authentik/.gitkeep
   - scripts/.gitkeep
@@ -39,7 +42,8 @@ requirements:
 
 must_haves:
   truths:
-    - "Top-level directory tree under repo root matches research/ARCHITECTURE.md (`ontology/`, `instances/`, `docs/`, `wiki/`, `deploy/`, `scripts/`, `tests/`, `evaluation/`, `process-log/`) — 9 directories visible at depth 1"
+    - "Top-level directory tree under repo root matches ROADMAP.md Phase 1 Success Criterion 1 + research/ARCHITECTURE.md (`ontology/`, `instances/`, `docs/`, `wiki/`, `deploy/`, `scripts/`, `tests/`, `evaluation/`, `process-log/`) — 9 directories visible at depth 1. Joint authority: ROADMAP SC1 enumerates the 9 names; ARCHITECTURE.md repo-tree section details the subtree of each (note: ARCHITECTURE.md's tree art omits `evaluation/` from the diagram but the directory is named in ROADMAP SC1 and is required for Phase 5 RAG eval queries — this plan creates it explicitly so future AI cross-check passes against either source)"
+    - "Sub-tree under `deploy/` matches research/ARCHITECTURE.md exactly: `deploy/docker-compose/`, `deploy/wiki-js/`, `deploy/ragflow/`, `deploy/authentik/`, plus `deploy/caddy/` for the Phase 6 reverse-proxy plan (Caddy/Traefik/nginx — Caddy chosen as the documented v1 default in research/STACK.md). Phase 6 DEP-04 (`wiki-git-storage.md` lands in `deploy/wiki-js/`) and Phase 6 docker-compose draft (`deploy/docker-compose/docker-compose.yml.draft`) MUST find these dirs already present."
     - "`.gitattributes` configures Git LFS for `*.pdf`, `*.docx`, `*.xlsx`, `*.pptx` BEFORE any binary source document is added"
     - "`.gitignore` excludes secrets (`.env`, `*.key`, `*.pem`), Python/Node build artifacts, OS junk"
     - "Exporter stub files exist under `scripts/exporters/` (to_ragflow.py / to_rdf.py / to_neo4j.py / to_jsonl_triples.py) — placeholders with docstring + `NotImplementedError`, signaling future migration hooks (per ARCHITECTURE.md guardrail #3)"
@@ -55,6 +59,12 @@ must_haves:
       provides: "Schema directory placeholder (Phase 2 fills it)"
     - path: "instances/_pending/.gitkeep"
       provides: "AI-extracted quarantine zone exists from day 1 (per Pitfall 2 / SUMMARY pinned decision #10)"
+    - path: "deploy/docker-compose/.gitkeep"
+      provides: "Phase 6 docker-compose.yml.draft target dir (per ARCHITECTURE.md repo tree)"
+    - path: "deploy/wiki-js/.gitkeep"
+      provides: "Phase 6 DEP-04 wiki-git-storage.md target dir (per ARCHITECTURE.md repo tree)"
+    - path: "deploy/ragflow/.gitkeep"
+      provides: "Phase 6 RAGFlow service_conf + ingestion-pipeline target dir (per ARCHITECTURE.md repo tree)"
     - path: "scripts/exporters/to_ragflow.py"
       provides: "Future Git→RAGFlow exporter stub (per ARCHITECTURE.md Pattern 4 / SUMMARY decision #7)"
     - path: "scripts/exporters/to_rdf.py"
@@ -72,6 +82,10 @@ must_haves:
       to: "future Phase 5 (RAGFlow) / future v2 (RDF/Neo4j)"
       via: "stub function bodies signaling intent"
       pattern: "NotImplementedError|TODO\\(phase"
+    - from: "deploy/{docker-compose,wiki-js,ragflow,authentik,caddy}/"
+      to: "Phase 6 deployment plan (DEP-01..06)"
+      via: "directories pre-created so Phase 6 just lands files"
+      pattern: "deploy/(docker-compose|wiki-js|ragflow|authentik|caddy)/"
 ---
 
 <objective>
@@ -105,13 +119,14 @@ Output: Locked directory tree + `.gitignore` + `.gitattributes` + 4 exporter stu
     ontology/.gitkeep, ontology/schemas/.gitkeep, ontology/vocabularies/.gitkeep, ontology/mappings/.gitkeep,
     instances/.gitkeep, instances/entities/.gitkeep, instances/relations/.gitkeep, instances/_pending/.gitkeep,
     docs/.gitkeep, wiki/.gitkeep,
-    deploy/.gitkeep, deploy/caddy/.gitkeep, deploy/authentik/.gitkeep,
+    deploy/.gitkeep, deploy/docker-compose/.gitkeep, deploy/wiki-js/.gitkeep, deploy/ragflow/.gitkeep, deploy/caddy/.gitkeep, deploy/authentik/.gitkeep,
     scripts/.gitkeep, scripts/validators/.gitkeep, scripts/importers/.gitkeep,
     tests/.gitkeep, tests/fixtures/valid/.gitkeep, tests/fixtures/invalid/.gitkeep,
     evaluation/.gitkeep, process-log/.gitkeep
   </files>
   <read_first>
-    - .planning/research/ARCHITECTURE.md (Recommended Project Structure section, lines 103–256 — defines the EXACT directory tree this task must materialize)
+    - .planning/ROADMAP.md (Phase 1 Success Criterion 1 — authoritative 9-directory list)
+    - .planning/research/ARCHITECTURE.md (Recommended Project Structure section, lines 103–256 — defines the EXACT directory tree this task must materialize, including `deploy/docker-compose/`, `deploy/wiki-js/`, `deploy/ragflow/`, `deploy/authentik/` sub-tree)
     - .planning/research/SUMMARY.md (Architecture > Repo structure block, lines 92–127)
   </read_first>
   <action>
@@ -120,11 +135,15 @@ Run from repo root `/Users/Zhuanz/aviation-knowledge-base`:
 ```bash
 cd /Users/Zhuanz/aviation-knowledge-base
 
-# Top-level dirs (9 per success criterion #1)
+# Top-level dirs (9 per ROADMAP SC1)
 mkdir -p ontology/schemas ontology/vocabularies ontology/mappings
 mkdir -p instances/entities instances/relations instances/_pending
 mkdir -p docs wiki
-mkdir -p deploy/caddy deploy/authentik
+# deploy/ subtree per research/ARCHITECTURE.md repo-tree section (deploy/docker-compose,
+# deploy/wiki-js, deploy/ragflow, deploy/authentik) plus deploy/caddy for the Phase 6
+# reverse-proxy plan (research/STACK.md picks Caddy as v1 default; Traefik/nginx are
+# documented alternatives but Caddy is the one we scaffold).
+mkdir -p deploy/docker-compose deploy/wiki-js deploy/ragflow deploy/caddy deploy/authentik
 mkdir -p scripts/validators scripts/importers scripts/exporters
 mkdir -p tests/fixtures/valid tests/fixtures/invalid
 mkdir -p evaluation process-log
@@ -134,7 +153,7 @@ for d in \
   ontology ontology/schemas ontology/vocabularies ontology/mappings \
   instances instances/entities instances/relations instances/_pending \
   docs wiki \
-  deploy deploy/caddy deploy/authentik \
+  deploy deploy/docker-compose deploy/wiki-js deploy/ragflow deploy/caddy deploy/authentik \
   scripts scripts/validators scripts/importers \
   tests tests/fixtures/valid tests/fixtures/invalid \
   evaluation process-log
@@ -145,6 +164,15 @@ done
 
 Note: `scripts/exporters/` does NOT get a `.gitkeep` because Task 3 will populate it with 4 real stub `.py` files.
 
+Why all 5 `deploy/` subdirs (not just `caddy/` + `authentik/`):
+- `deploy/docker-compose/` — Phase 6 lands `docker-compose.yml.draft` + `.env.example` here (per ROADMAP Phase 6 SC1 + ARCHITECTURE.md repo-tree)
+- `deploy/wiki-js/` — Phase 6 DEP-04 lands `wiki-git-storage.md` here (per ROADMAP Phase 6 SC2)
+- `deploy/ragflow/` — Phase 6 lands RAGFlow `service_conf.sample.yaml` + `ingestion-pipeline.sample.json` here (per ARCHITECTURE.md repo-tree)
+- `deploy/caddy/` — Phase 6 reverse-proxy config (research/STACK.md picks Caddy as v1 default)
+- `deploy/authentik/` — Phase 6 SSO future-hook (per ARCHITECTURE.md "Phase 2 optional")
+
+Pre-creating all 5 sub-dirs avoids a Phase 6 task spending budget on `mkdir`-then-`touch`-then-write churn and makes the architectural intent visible from day 1.
+
 Do NOT create files inside `.planning/` — that directory is already managed by GSD.
 
 Do NOT create `.github/workflows/` here — Plan 04 owns that path.
@@ -152,17 +180,18 @@ Do NOT create `.github/workflows/` here — Plan 04 owns that path.
 Do NOT create `README.md` here — Plan 02 owns it.
   </action>
   <verify>
-    <automated>cd /Users/Zhuanz/aviation-knowledge-base &amp;&amp; test "$(find ontology instances docs wiki deploy scripts tests evaluation process-log -maxdepth 0 -type d 2>/dev/null | wc -l | tr -d ' ')" = "9" &amp;&amp; test -f ontology/schemas/.gitkeep &amp;&amp; test -f instances/_pending/.gitkeep &amp;&amp; test -f tests/fixtures/invalid/.gitkeep &amp;&amp; test -d scripts/exporters &amp;&amp; echo OK</automated>
+    <automated>cd /Users/Zhuanz/aviation-knowledge-base &amp;&amp; test "$(find ontology instances docs wiki deploy scripts tests evaluation process-log -maxdepth 0 -type d 2>/dev/null | wc -l | tr -d ' ')" = "9" &amp;&amp; test -f ontology/schemas/.gitkeep &amp;&amp; test -f instances/_pending/.gitkeep &amp;&amp; test -f tests/fixtures/invalid/.gitkeep &amp;&amp; test -f deploy/docker-compose/.gitkeep &amp;&amp; test -f deploy/wiki-js/.gitkeep &amp;&amp; test -f deploy/ragflow/.gitkeep &amp;&amp; test -f deploy/authentik/.gitkeep &amp;&amp; test -f deploy/caddy/.gitkeep &amp;&amp; test -d scripts/exporters &amp;&amp; echo OK</automated>
   </verify>
   <acceptance_criteria>
     - `find /Users/Zhuanz/aviation-knowledge-base -maxdepth 1 -type d \( -name ontology -o -name instances -o -name docs -o -name wiki -o -name deploy -o -name scripts -o -name tests -o -name evaluation -o -name process-log \) | wc -l` returns `9`
-    - `find /Users/Zhuanz/aviation-knowledge-base -name .gitkeep | wc -l` returns at least `21`
+    - `find /Users/Zhuanz/aviation-knowledge-base -name .gitkeep | wc -l` returns at least `24` (9 top-level + 15 sub-dirs accounted for; `scripts/exporters/` is excluded because Task 3 fills it with .py files)
     - `test -d /Users/Zhuanz/aviation-knowledge-base/instances/_pending` exit 0 (P2 quarantine zone exists)
     - `test -d /Users/Zhuanz/aviation-knowledge-base/scripts/exporters` exit 0 (Task 3 will populate)
     - `test -d /Users/Zhuanz/aviation-knowledge-base/ontology/mappings` exit 0 (S1000D / ATA placeholder home per SUMMARY decision #6)
+    - `for d in deploy/docker-compose deploy/wiki-js deploy/ragflow deploy/caddy deploy/authentik; do test -d /Users/Zhuanz/aviation-knowledge-base/$d || exit 1; done` exit 0 (all 5 deploy sub-dirs per ARCHITECTURE.md repo-tree)
     - No files yet under `.github/` (Plan 04's territory) and no `README.md` yet (Plan 02's territory)
   </acceptance_criteria>
-  <done>9 top-level directories exist, all empty subdirs carry `.gitkeep`, layout matches ARCHITECTURE.md tree exactly.</done>
+  <done>9 top-level directories exist, all empty subdirs (including the 5-way `deploy/` split per ARCHITECTURE.md) carry `.gitkeep`, layout matches ARCHITECTURE.md tree exactly.</done>
 </task>
 
 <task type="auto">
@@ -507,6 +536,7 @@ Phase-1 Plan-01 is complete when:
 - [ ] `tree -L 2 -d /Users/Zhuanz/aviation-knowledge-base | head -40` shows 9 top-level directories matching ARCHITECTURE.md
 - [ ] `cat .gitattributes` contains LFS rules for `*.pdf`, `*.docx`, `*.xlsx`, `*.pptx`
 - [ ] `cat .gitignore` excludes `.env`, `node_modules/`, `__pycache__/`, `*.key`
+- [ ] `ls deploy/` shows `docker-compose/`, `wiki-js/`, `ragflow/`, `caddy/`, `authentik/` (5 sub-dirs per ARCHITECTURE.md)
 - [ ] `ls scripts/exporters/` shows 4 `.py` stub files
 - [ ] `python3 -c "import ast; [ast.parse(open(f).read()) for f in ['scripts/exporters/to_ragflow.py','scripts/exporters/to_rdf.py','scripts/exporters/to_neo4j.py','scripts/exporters/to_jsonl_triples.py']]"` exit 0
 - [ ] No accidental files created under `.planning/`, `.github/`, or top-level `README.md`
@@ -516,6 +546,7 @@ Phase-1 Plan-01 is complete when:
 - Repo skeleton is the canonical layout for the entire 6-phase build (REPO-01)
 - Git LFS configured BEFORE any binary doc lands, eliminating Performance-Trap "Git 仓库塞满 PDF" risk (REPO-02)
 - Exporter stubs make the "all consumers via scripts/exporters/" architectural guardrail visible from day 1 (ARCHITECTURE.md guardrail #3)
+- `deploy/` sub-tree (docker-compose, wiki-js, ragflow, caddy, authentik) pre-created so Phase 6 deployment plan finds its directories already present
 - AI接力开发指南 discipline starts in stub docstrings (every stub references the relevant ARCHITECTURE.md / SUMMARY decision)
 </success_criteria>
 
