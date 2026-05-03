@@ -4,8 +4,8 @@ milestone: v0.1.0
 milestone_name: "**Goal**: Define every entity type, relation type, vocabulary, and provenance/confidence/versioning rule as schema-enforced contracts before a single instance file is written."
 status: executing
 stopped_at: Phase 2 context gathered (4 areas, 16 decisions; ATA enum + S1000D DMC deferred to research)
-last_updated: "2026-05-03T06:55:06.604Z"
-last_activity: 2026-05-03 -- Phase 2 planning complete
+last_updated: "2026-05-03T06:59:53.358Z"
+last_activity: 2026-05-03 -- Phase 2 execution started
 progress:
   total_phases: 6
   completed_phases: 1
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-03)
 
 **Core value:** 每一条知识都可追溯来源，每一个 AI 回答都有 citation；schema 可演化、版本化、对人类和 AI 都可读。
-**Current focus:** Phase 1 — Repo Skeleton + Git Baseline + PRD v0
+**Current focus:** Phase 2 — Ontology Schema v0.1.0
 
 ## Current Position
 
-Phase: 2
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-05-03 -- Phase 2 planning complete
+Phase: 2 (Ontology Schema v0.1.0) — EXECUTING
+Plan: 1 of 10
+Status: Executing Phase 2
+Last activity: 2026-05-03 -- Phase 2 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
