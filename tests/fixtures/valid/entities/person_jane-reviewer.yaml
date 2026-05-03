@@ -1,0 +1,32 @@
+---
+# Canonical Person fixture — referenced by nearly every other fixture's
+# provenance.actor and by the _pending example's provenance.reviewer.
+# Required so Wave-2 plan 03-04 (links validator) sees a resolvable target.
+id: aviationkb://person/jane-reviewer@1
+type: Person
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "简·里维尔"
+    en: "Jane Reviewer"
+name: "Jane Reviewer"
+role: reviewer
+external_ids:
+  orcid: "0000-0001-2345-6789"
+  email: "jane.reviewer@example.org"
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: kb-administrator
+  created_at: "2026-05-03T10:00:00Z"
+confidence:
+  score: 0.95
+  rationale: "Self-registered KB user; identity verified via organizational SSO at onboarding."
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "n/a — synthetic Person record bootstrapped against the canonical Document fixture"
+  retrieval:
+    url: "https://www.example.org/internal/registry/person/jane-reviewer"
+    retrieved_at: "2026-05-03T09:30:00Z"

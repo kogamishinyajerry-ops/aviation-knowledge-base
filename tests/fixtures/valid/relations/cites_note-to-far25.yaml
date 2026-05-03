@@ -1,0 +1,33 @@
+---
+# cites relation — ExpertNote cites the active RegulationClause.
+# Subject must resolve to an entity in the corpus; object must resolve to a
+# Document or to anything cite-able. (The relation.cites schema does not
+# constrain the object beyond the URI shape; the locator field below
+# scopes the citation to a specific subsection.)
+id: aviationkb://cites/note-to-far25@1
+type: cites
+schema_version: "0.1.0"
+subject: aviationkb://expert-note/canonical-example@1
+object: aviationkb://regulation-clause/far-25-1309-active@1
+valid_from: "2026-05-03T10:25:00Z"
+valid_until: null
+locator:
+  section: "§25.1309(b)(1)"
+  page: 1
+quotation: "must be designed to ensure that they perform their intended functions"
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: airworthiness-engineer
+  created_at: "2026-05-03T10:25:00Z"
+confidence:
+  score: 0.95
+  rationale: "Citation extracted directly from the ExpertNote's content_md; quoted text matches active eCFR rendering verbatim."
+  calibration_method: "cross-source-agreement"
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: "§25.1309(b)(1)"
+  retrieval:
+    url: "https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309"
+    retrieved_at: "2026-05-03T09:55:00Z"
