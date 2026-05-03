@@ -1,0 +1,43 @@
+---
+# Phase 4 canonical Document instance for NASA TM-2014-218175. Mirrors
+# docs/cfd-papers/nasa-tm-2014-218175/metadata.yaml. Cited by Phase 4 CFD
+# records (CFDMethod / TurbulenceModel / SimulationCase) under plan 04-03.
+id: aviationkb://document/nasa-tm-2014-218175@1
+type: Document
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "NASA TM-2014-218175 — SA 湍流模型在 OVERFLOW 中的实现、验证与确认"
+    en: "NASA TM-2014-218175 — Implementation, verification, and validation of the SA turbulence model in OVERFLOW"
+title_text: "NASA TM-2014-218175 — Implementation, Verification, and Validation of the Spalart-Allmaras Turbulence Model in the OVERFLOW Code"
+doc_type: paper
+language: en
+source_url: "https://ntrs.nasa.gov/citations/20140017079"
+publication_date: "2014-08-01"
+effective_date: "2014-08-01"
+confidentiality: public
+domain_tags:
+  - cfd
+  - turbulence-modeling
+  - rans
+  - validation
+document_version: "Final, Aug 2014"
+ata_chapter_tags: []
+processed_by: "manual-pandoc-3.x"
+provenance:
+  method: human
+  actor: aviationkb://person/john-cfd-analyst@1
+  actor_role: cfd-analyst
+  created_at: "2026-05-03T14:02:00Z"
+confidence:
+  score: 0.97
+  rationale: "Document metadata transcribed directly from NASA NTRS landing page; report PDF retrieved without redirection or paywall — high confidence in citation accuracy."
+  calibration_method: cross-source-agreement
+source:
+  document_id: aviationkb://document/nasa-tm-2014-218175@1
+  locator:
+    section: "Title page / abstract"
+  retrieval:
+    url: "https://ntrs.nasa.gov/citations/20140017079"
+    retrieved_at: "2026-05-03T13:40:00Z"

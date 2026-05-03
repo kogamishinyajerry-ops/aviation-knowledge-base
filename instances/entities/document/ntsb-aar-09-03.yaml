@@ -1,0 +1,46 @@
+---
+# Phase 4 canonical Document instance for NTSB AAR-09/03 (Colgan 3407).
+# Mirrors docs/accident-reports/ntsb-aar-09-03/metadata.yaml. Cited by the
+# AccidentCase record (plan 04-03) and by FailureMode records linking
+# icing-induced stall to the §25.1309 catastrophic-failure tier.
+id: aviationkb://document/ntsb-aar-09-03@1
+type: Document
+schema_version: "0.1.0"
+version: 1
+i18n:
+  label:
+    zh: "NTSB AAR-09/03 — 科尔根航空 3407 号班机失事调查报告"
+    en: "NTSB AAR-09/03 — Loss of Control on Approach, Colgan Air Flight 3407"
+title_text: "NTSB Aircraft Accident Report AAR-09/03: Loss of Control on Approach, Colgan Air, Inc., Operating as Continental Connection Flight 3407, Bombardier DHC-8-400, N200WQ, Clarence Center, New York, February 12, 2009"
+doc_type: accident_report
+language: en
+source_url: "https://www.ntsb.gov/investigations/AccidentReports/Reports/AAR1001.pdf"
+publication_date: "2010-02-02"
+effective_date: "2010-02-02"
+confidentiality: public
+domain_tags:
+  - accident
+  - icing
+  - stall-recovery
+  - human-factors
+document_version: "Final"
+ata_chapter_tags:
+  - ATA-30
+  - ATA-27
+processed_by: "manual-pandoc-3.x"
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: accident-curator
+  created_at: "2026-05-03T14:04:00Z"
+confidence:
+  score: 0.98
+  rationale: "Document metadata transcribed directly from ntsb.gov accident-reports portal with cross-check against the report's own title page; no ambiguity in citation."
+  calibration_method: cross-source-agreement
+source:
+  document_id: aviationkb://document/ntsb-aar-09-03@1
+  locator:
+    section: "Title page / executive summary"
+  retrieval:
+    url: "https://www.ntsb.gov/investigations/AccidentReports/Reports/AAR1001.pdf"
+    retrieved_at: "2026-05-03T13:45:00Z"

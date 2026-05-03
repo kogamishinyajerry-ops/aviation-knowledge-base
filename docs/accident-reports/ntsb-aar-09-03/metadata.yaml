@@ -1,0 +1,23 @@
+---
+# DOC-02 metadata for NTSB AAR-09/03 — Colgan Air Flight 3407 (icing-induced stall).
+# Public; accident-report slot of the DEMO-03 doc-type spread.
+title: "NTSB AAR-09/03 — Loss of Control on Approach, Colgan Air Flight 3407"
+doc_type: accident_report
+language: en
+source_url: "https://www.ntsb.gov/investigations/AccidentReports/Reports/AAR1001.pdf"
+publication_date: "2010-02-02"
+effective_date: "2010-02-02"
+confidentiality: public
+domain_tags:
+  - accident
+  - icing
+  - stall-recovery
+  - human-factors
+version: "Final"
+file_hash: "sha256:656ea8541bf24067a8c4bd4927e67f397a43fa0061a1e8b181f2ffb9b12f2320"
+processed_by: "manual-pandoc-3.x"
+ata_chapter_tags:
+  - ATA-30
+  - ATA-27
+issuing_organization: "aviationkb://organization/ntsb@1"
+linked_document_entity: "aviationkb://document/ntsb-aar-09-03@1"

@@ -1,0 +1,22 @@
+---
+# DOC-02 metadata for FAR Part 25 §25.1309 — Equipment, systems, and installations.
+# Regulation slot of the DEMO-03 doc-type spread. Mirrors instances/entities/document/far-25-1309.yaml.
+title: "Title 14 CFR Part 25 §25.1309 — Equipment, systems, and installations"
+doc_type: regulation
+language: en
+source_url: "https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309"
+publication_date: "1965-02-01"
+effective_date: "2026-01-15"
+confidentiality: public
+domain_tags:
+  - airworthiness
+  - far-part-25
+  - systems
+version: "Amendment 25-145"
+file_hash: "sha256:f74c53b79c43cac5116949c9058944257efd19190627b84abebdb923f9153caa"
+processed_by: "manual-pandoc-3.x"
+ata_chapter_tags:
+  - ATA-21
+  - ATA-71
+issuing_organization: "aviationkb://organization/faa@1"
+linked_document_entity: "aviationkb://document/far-25-1309@1"
