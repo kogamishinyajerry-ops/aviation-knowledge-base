@@ -1,0 +1,190 @@
+# ============================================================================
+# DRAFT — NOT FOR PRODUCTION
+# ============================================================================
+# Aviation Knowledge Base v1 deployment topology — DESIGN DRAFT ONLY.
+# This file is NOT runnable as-is. It is a Phase 6 deliverable that locks the
+# stack, image versions, env vars, port layout, and volume topology so a
+# future deployment phase can promote it to a real compose file.
+#
+# Source of truth: .planning/research/STACK.md (image versions),
+# .planning/research/ARCHITECTURE.md (data flow), CLAUDE.md (constraints).
+#
+# Cross-references:
+#   - deploy/.env.example         — every ${VAR} below is declared there
+#   - deploy/topology.md          — visual diagram of data flow
+#   - deploy/wiki-git-storage.md  — DEP-04 hard rule (Wiki.js Git scope = wiki/ ONLY)
+#   - deploy/authentik-phase2.md  — DEP-05 deferred-SSO rationale (RAGFlow OIDC bug #12568)
+#   - deploy/backup-restore.md    — DEP-06 truth-vs-derivative backup matrix
+#
+# To promote this file to production:
+#   1. Copy to deploy/docker-compose.yml (drop the .draft suffix)
+#   2. Replace every <CHANGE_ME> placeholder in deploy/.env.example
+#   3. Wire deploy/caddy/Caddyfile (TLS + path routing) — currently a stub
+#   4. Validate Wiki.js Git scope is wiki/ ONLY (see deploy/wiki-git-storage.md)
+#   5. Decide on SSO posture (see deploy/authentik-phase2.md — currently DEFERRED)
+#   6. Run `docker compose config` to verify; only then `up -d`
+# ============================================================================
+
+version: "3.8"
+
+x-shared-network: &shared-network
+  networks:
+    - akb-net
+
+services:
+
+  # --------------------------------------------------------------------------
+  # Wiki.js — knowledge portal (human-authored Markdown pages)
+  # Postgres-backed; Git-sync module pushes pages to wiki/ ONLY (DEP-04).
+  # See deploy/wiki-git-storage.md for the Git scope rule.
+  # --------------------------------------------------------------------------
+  wiki:
+    image: requarks/wiki:2.5.314
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${WIKI_DB_USER}
+      DB_PASS: ${WIKI_DB_PASS}
+      DB_NAME: ${WIKI_DB_NAME}
+      # Git storage module — scope MUST be wiki/ subdirectory only (DEP-04)
+      WIKI_GIT_REMOTE_URL: ${WIKI_GIT_REMOTE_URL}
+      WIKI_GIT_BRANCH: ${WIKI_GIT_BRANCH}
+      WIKI_GIT_SUBPATH: wiki    # hard-coded — see deploy/wiki-git-storage.md
+    ports:
+      - "${WIKI_HOST_PORT}:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/healthz || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    <<: *shared-network
+
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${WIKI_DB_USER}
+      POSTGRES_PASSWORD: ${WIKI_DB_PASS}
+      POSTGRES_DB: ${WIKI_DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${WIKI_DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    <<: *shared-network
+
+  # --------------------------------------------------------------------------
+  # RAGFlow — RAG ingestion + retrieval + citation pipeline.
+  # OpenDataLoader-PDF backend (v0.25 default).
+  # See .planning/design/RAG_PIPELINE.md for the design contract.
+  # --------------------------------------------------------------------------
+  ragflow:
+    image: infiniflow/ragflow:v0.25.1
+    restart: unless-stopped
+    depends_on:
+      - elasticsearch
+      - minio
+      - redis
+    environment:
+      RAGFLOW_DB_TYPE: ${RAGFLOW_DB_TYPE}
+      RAGFLOW_SECRET_KEY: ${RAGFLOW_SECRET_KEY}
+      RAGFLOW_ES_HOST: elasticsearch
+      RAGFLOW_MINIO_HOST: minio
+      RAGFLOW_REDIS_HOST: redis
+      DEVICE: ${RAGFLOW_DEVICE}    # cpu | gpu (per STACK.md hardware sizing)
+    ports:
+      - "${RAGFLOW_HOST_PORT}:9380"
+    <<: *shared-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    <<: *shared-network
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    <<: *shared-network
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    <<: *shared-network
+
+  # --------------------------------------------------------------------------
+  # Caddy — reverse proxy + TLS termination.
+  # Caddyfile is a STUB in deploy/caddy/Caddyfile (Phase 6 leaves it empty;
+  # promotion phase fills in path routing for / -> wiki, /rag -> ragflow).
+  # --------------------------------------------------------------------------
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - wiki
+      - ragflow
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    <<: *shared-network
+
+  # --------------------------------------------------------------------------
+  # Authentik — SSO IdP (DEFERRED to a future phase).
+  # See deploy/authentik-phase2.md for rationale.
+  # ENTIRE BLOCK COMMENTED OUT until RAGFlow OIDC bug #12568 is resolved
+  # upstream and FR #3495 is closed.
+  # WAIT FOR RAGFlow OIDC bug #12568 fix before uncommenting.
+  # --------------------------------------------------------------------------
+  # authentik:
+  #   image: ghcr.io/goauthentik/server:2024.10
+  #   restart: unless-stopped
+  #   environment:
+  #     AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
+  #     AUTHENTIK_POSTGRESQL__HOST: postgres
+  #     AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_DB_USER}
+  #     AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_DB_PASS}
+  #   ports:
+  #     - "9000:9000"
+  #   networks:
+  #     - akb-net
+
+networks:
+  akb-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  es_data:
+  minio_data:
+  redis_data:
+  caddy_data:
+  caddy_config:
