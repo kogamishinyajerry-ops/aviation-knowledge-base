@@ -622,28 +622,213 @@ def answer_query(query: str) -> Answer:
 
 ## 7. Cross-lingual Retrieval
 
-TBD in Task 2/3/4
+This section defends **Pitfall 7** (embedding model does not recognize ZH↔EN aviation terms). The defense is three-layered: (1) a multilingual embedding model that already understands ZH+EN in the same space; (2) a bilingual glossary that expands queries with synonyms in both languages; (3) entity i18n metadata indexed at write time so structured records carry their bilingual labels into search.
 
 ### 7.1 BGE-M3 native multilingual coverage
 
-TBD in Task 2/3/4
+BGE-M3 is multilingual by design (100+ languages including ZH+EN — per STACK.md "Embedding & LLM Layer" row "multilingual" attribute, and the BGE-M3 model card linked in §10). Per AeroPower-RAG findings (user's prior project, MEMORY.md), recall@3 reached **100%** on Chinese aviation regulations using a closely related multilingual stack (Ollama nomic-embed-text 768d + BM25 bigram + synonym weight 0.3 + RRF fusion). BGE-M3 is the same architectural family with broader multilingual coverage and dense+sparse-in-one — same pattern applies.
+
+**Concrete eval target for Phase 7:** `cross_lingual_recall@5 ≥ 70%` on `evaluation/queries.yaml` (≥6 of the ≥30 queries are intentionally ZH↔EN — see plan 05-02). This is the threshold gate from §3.3 Decision Criteria #2 — no embedding model ships below 70% cross-lingual recall.
+
+**No translation layer required.** Crucially, BGE-M3 places "涡轮叶片" and "turbine blade" in the same vector neighborhood without an intermediate translation step. This means the v1 retrieval pipeline does NOT need a query translator (LLM call) before vector search — saves latency, eliminates a hallucination surface (translator could mis-translate "适航" as "airworthiness" vs "navigability").
 
 ### 7.2 Glossary expansion (≥50 seed terms target — bilingual)
 
-TBD in Task 2/3/4
+Even with BGE-M3's multilingual coverage, **explicit glossary expansion** adds robustness for domain-specific terms where embedding alone might miss colloquial / acronym variants. Per Pitfall 7 (PITFALLS.md): "维护 `data/glossary/aviation_terms.yaml`... 检索前做 query expansion：term → synonyms (weight 0.3，承袭 AeroPower-RAG 配置)".
+
+**Glossary file format** (Phase 6 deliverable per AIH-04, target ≥50 seed bilingual terms; matches PITFALLS.md Pitfall 7 example block):
+
+```yaml
+# docs/GLOSSARY.md (Phase 6 deliverable, AIH-04 — ≥50 seed bilingual terms)
+# Format (matches PITFALLS.md Pitfall 7 example):
+- canonical: turbine_blade
+  zh: ["涡轮叶片", "涡轮工作叶片", "动叶"]
+  en: ["turbine blade", "rotor blade"]
+  ata_code: "72-30"
+  notes: "区分 stator vane vs rotor blade"
+
+- canonical: catastrophic_failure
+  zh: ["灾难性失效", "灾难性故障"]
+  en: ["catastrophic failure", "catastrophic condition"]
+  far_clause: "25.1309(b)(1)"
+```
+
+**Query-time expansion mechanics** (verbatim from §4.2 — repeated here for §7 self-containment):
+
+- query "涡轮叶片失效" → glossary lookup returns zh+en synonyms
+- query becomes vector: `[original_query] + 0.3 × [synonym_terms]`
+- retrieval still hybrid (vector + BM25); BM25 also benefits from term expansion (bigram-tokenized synonyms OR'd into BM25 query)
+
+**Why weight 0.3 (not 0.5, not 1.0):** PITFALLS.md and AeroPower-RAG-validated. Higher weights overpower the original query intent; lower weights make synonyms invisible. Locked per AI 接力指南 Locked-vs-Directional table.
+
+**Glossary maintenance:** new terms added via PR to `docs/GLOSSARY.md` (Phase 6+). CI validates schema (canonical / zh / en non-empty). No runtime modification in v1.
 
 ### 7.3 Entity i18n field at index time
 
-TBD in Task 2/3/4
+Every canonical entity record carries `i18n.label.zh` and `i18n.label.en` fields per `instances/entities/expert-note/canonical-example.yaml`:
+
+```yaml
+i18n:
+  label:
+    zh: "FAR 25.1309 系统失效条件等级判定 — 范例笔记"
+    en: "FAR 25.1309 system failure-condition severity assessment — canonical example"
+```
+
+**Indexing rule (enforced in `scripts/exporters/to_ragflow.py`, plan 05-03 skeleton):** at index time, when processing an entity record, the exporter MUST upload **BOTH** `i18n.label.zh` and `i18n.label.en` as separate searchable metadata fields per Document/Entity. This means a query for "FAR 25.1309" or "适航条款 25.1309" both hit the same entity record's metadata, and that hit can be surfaced via citation back-link even though the entity record itself is not vector-indexed (per §1 out-of-scope: "v1 only indexes wiki/**.md + docs/**/processed.md").
+
+**Phase 7 implementation hint:** the RAGFlow document object's `meta_fields` carries:
+
+```python
+meta_fields = {
+    "label_zh": entity["i18n"]["label"]["zh"],
+    "label_en": entity["i18n"]["label"]["en"],
+    "entity_uri": entity["id"],            # e.g. aviationkb://expert-note/canonical-example@1
+    "ata_chapter": entity.get("ata_chapter"),  # if present
+    # ...other ontology metadata
+}
+```
+
+These fields are searchable via RAGFlow's native metadata-filter API at retrieval time and carry through to citations rendered in §5.2.
 
 ## 8. Pipeline Diagram (ASCII)
 
-TBD in Task 2/3/4
+End-to-end query → answer flow tying §2 (chunking, ingest-time only — shown in dashed box) to §4 (retrieval) → §5 (citation) → §6 (guardrail) → §7 (cross-lingual). Numbered stages 1-6 are query-time.
+
+```text
+                         INGEST-TIME (out of band, §2)
+                  ┌─────────────────────────────────────┐
+                  │ docs/<corpus>/<doc-id>/source.pdf   │
+                  │   ↓ (RAGFlow OpenDataLoader-PDF)    │
+                  │ docs/<corpus>/<doc-id>/processed.md │
+                  │   ↓ (chunker, atomic-rule pass)     │
+                  │ chunks → BGE-M3 embed → vector idx  │
+                  │ chunks → BM25 idx (with bigram, ZH) │
+                  └─────────────────────────────────────┘
+
+                              QUERY-TIME (§§4–7)
+
+                       ┌───────────────────────┐
+                       │ User query (ZH or EN) │
+                       └──────────┬────────────┘
+                                  ▼
+                  ┌────────────────────────────────┐
+                  │ 1. Query expansion (§7.2)      │
+                  │    - Glossary lookup           │
+                  │    - Synonym weight 0.3        │
+                  │    - Bilingual ZH↔EN           │
+                  └──────────┬─────────────────────┘
+                             ▼
+                  ┌────────────────────────────────┐
+                  │ 2. Hybrid retrieval (§4)       │
+                  │    ├─ Vector (BGE-M3) k=20     │
+                  │    ├─ BM25 (k1=1.2, b=0.75)    │
+                  │    │       k=20, bigram=true   │
+                  │    └─ RRF fusion (k=60)        │
+                  │    → final_top_k = 10          │
+                  └──────────┬─────────────────────┘
+                             ▼
+                  ┌────────────────────────────────┐
+                  │ 3. Rerank (§4.3)               │
+                  │    bge-reranker-v2-m3          │
+                  │    → top_k=5, threshold 0.5    │
+                  └──────────┬─────────────────────┘
+                             ▼
+                       ┌─────┴──────┐
+                       │ Guardrail  │ (§6.1)
+                       │ score≥0.5? │
+                       │ chunks≥2?  │
+                       └─┬───────┬──┘
+                       NO│       │YES
+                         ▼       ▼
+                ┌────────────┐ ┌──────────────────────────────┐
+                │ Canned     │ │ 4. LLM call                  │
+                │ no-ctx     │ │    prompt + chunks           │
+                │ response   │ │    + system prompt forbidding│
+                │ (§6.2)     │ │      self-authored citations │
+                │ ZH + EN    │ │    LLM emits [CITE:c_*] toks │
+                │ llm_called │ └──────────┬───────────────────┘
+                │   = False  │            ▼
+                │ (§6.3)     │ ┌──────────────────────────────┐
+                └────┬───────┘ │ 5. Citation validate (§5.3)  │
+                     │         │    validate_answer_citations │
+                     │         │    unresolved → REJECT       │
+                     │         │      → return canned (§6.2)  │
+                     │         │      llm_called=True (audit) │
+                     │         └──────────┬───────────────────┘
+                     │                    ▼
+                     │         ┌──────────────────────────────┐
+                     │         │ 6. Render (§5.2)             │
+                     │         │    render_citations()        │
+                     │         │    [CITE:c_a3f1e29b]         │
+                     │         │      → [far-25-1309@1        │
+                     │         │         §25.1309(b)](url)    │
+                     │         └──────────┬───────────────────┘
+                     │                    ▼
+                     │         ┌──────────────────────────────┐
+                     └────────▶│ User sees:                   │
+                               │  - canned response, OR       │
+                               │  - LLM answer + clickable    │
+                               │    citations resolving to    │
+                               │    Wiki.js / docs/<doc>/     │
+                               └──────────────────────────────┘
+```
+
+**Stage-to-section map:**
+
+| Stage | Section(s)        | Component                           |
+|-------|-------------------|-------------------------------------|
+| 1     | §7.2              | Glossary expansion (synonym 0.3)    |
+| 2     | §4.1              | Vector + BM25 + RRF                 |
+| 3     | §4.3              | bge-reranker-v2-m3 + threshold 0.5  |
+| Guardrail | §6.1, §6.3   | min_chunk_score / min_chunks_required + hard pipeline branch |
+| 4     | §5.1              | LLM call with token-injection prompt |
+| 5     | §5.3              | Post-generation citation validator  |
+| 6     | §5.2              | Render layer (chunk_id → URL)       |
 
 ## 9. Open Questions / Phase 7+ Follow-ups
 
-TBD in Task 2/3/4
+These are explicitly deferred to Phase 7 or later. Each item is a known gap, NOT a hidden assumption — Phase 7 readers should expect to resolve these.
+
+- **LLM choice (Ollama Qwen2.5-14B/32B vs remote Claude/GPT)** — deferred to Phase 6 deployment plan. The decision depends on hardware reality (macOS Apple Silicon RAM headroom, network policy, cost). This doc only specifies the LLM contract (must honor citation token format §5.1, must not self-author citations).
+- **Mini-benchmark numbers (recall, MRR, latency)** — not measured in Phase 5. Phase 7 runs the §3.2 protocol against `evaluation/queries.yaml` (plan 05-02) and amends §3.2 + §3.3 with measured values. THIS doc bumps to v0.2.0 at that point.
+- **RAGFlow OIDC SSO** — deferred to v2 per STACK.md "Auth / Reverse Proxy" section ("RAGFlow OIDC integration is broken/incomplete in 2026-05, issue #3495 open, #12568 OIDC redirect-loop"). v1 uses local accounts on each service per CLAUDE.md Constraints "single org, admin + reader only".
+- **DeepDoc OCR fallback** — deferred to v2 per CLAUDE.md Out-of-Scope ("OCR / 图像理解 — 第一阶段只处理文本文档"). v1 ingestion rejects scanned PDFs with `needs_ocr` flag (§2.1).
+- **Entity-record indexing (YAML → embeddable prose)** — Phase 7+. v1 only indexes `wiki/**.md` + `docs/**/processed.md` per ARCHITECTURE.md Pattern 4. YAML records surface via citation back-links + entity-i18n metadata fields (§7.3), NOT vector retrieval.
+- **Confidence-aware retrieval (filter by `confidence.score ≥ X`)** — Phase 7. Schema field exists per `instances/entities/expert-note/canonical-example.yaml`; retrieval-time filter not wired in v1.
+- **Citation-token cardinality scaling (8 hex → 12 hex)** — Phase 7+ if corpus crosses ~100k chunks. Current 8-hex format is safe up to ~10k chunks (§5.1 collision analysis). ADR required for the bump.
+- **Real-time index updates (polling cron vs Git webhook)** — Phase 6 deployment plan picks one. Affects how fast a Wiki.js page edit becomes searchable.
+- **Reranker score calibration** — bge-reranker-v2-m3 outputs are roughly calibrated 0..1, but per-corpus calibration (does 0.5 mean the same on regulations vs CFD papers?) is a Phase 7 follow-up. May require per-corpus thresholds.
 
 ## 10. References
 
-TBD in Task 2/3/4
+**Phase 5 source documents (this repo):**
+
+- [.planning/PROJECT.md](../PROJECT.md) — Core Value (citation requirement), R8 RAG-design requirement.
+- [.planning/ROADMAP.md](../ROADMAP.md) — Phase 5 success criteria.
+- [.planning/REQUIREMENTS.md](../REQUIREMENTS.md) — RAG-01 through RAG-08 IDs covered by this doc.
+- [.planning/research/STACK.md](../research/STACK.md) — RAGFlow v0.25.1, BGE-M3, OpenDataLoader-PDF version pins (verbatim cited throughout §2-§4).
+- [.planning/research/ARCHITECTURE.md](../research/ARCHITECTURE.md) — Pattern 4 Git-Bridge Sync; Integration Boundaries Git→RAGFlow; entity URI scheme.
+- [.planning/research/PITFALLS.md](../research/PITFALLS.md) — Pitfalls 6 (chunking), 7 (cross-lingual), 8 (citation hallucination), 9 (guardrail bypass).
+- [.planning/design/PRD_v0.md](./PRD_v0.md) — bilingual user archetypes (drives §6.2 ZH+EN canned response).
+- [docs/regulations/far-25-1309/processed.md](../../docs/regulations/far-25-1309/processed.md) — concrete §-clause structure example for §2.2 regex.
+- [docs/cfd-papers/nasa-tm-2014-218175/processed.md](../../docs/cfd-papers/nasa-tm-2014-218175/processed.md) — equation block + figure-caption layout for §2.2.
+- [docs/accident-reports/ntsb-aar-09-03/processed.md](../../docs/accident-reports/ntsb-aar-09-03/processed.md) — factor-table structure for §2.2.
+- [instances/entities/expert-note/canonical-example.yaml](../../instances/entities/expert-note/canonical-example.yaml) — i18n field (§7.3) + URI scheme (§5.2 `aviationkb://document/...@v`).
+- [scripts/validators/README.md](../../scripts/validators/README.md) — AI 接力开发指南 style precedent for the top-of-doc orientation block.
+
+**External references (verified in STACK.md):**
+
+- [RAGFlow HTTP API reference](https://ragflow.io/docs/http_api_reference) — ingestion + metadata API used by `scripts/exporters/to_ragflow.py` (plan 05-03).
+- [RAGFlow Select PDF parser docs](https://ragflow.io/docs/select_pdf_parser) — DeepDoc / MinerU / OpenDataLoader / Docling backend selection.
+- [BGE-M3 model card](https://huggingface.co/BAAI/bge-m3) — 568M params, 8192 ctx, dense+sparse+colbert-in-one, multilingual.
+- [BGE-M3 on Ollama](https://ollama.com/library/bge-m3) — `ollama pull bge-m3` for local self-hosted path (~2GB on disk).
+- [bge-reranker-v2-m3 model card](https://huggingface.co/BAAI/bge-reranker-v2-m3) — companion reranker, ZH/EN, RAGFlow built-in support.
+- [OpenDataLoader PDF review (Emelia 2026)](https://emelia.io/hub/opendataloader-pdf-review) — 72min vs 16.5h vs 6day comparison on 10K pages (the "~14× faster" claim source).
+- [PDF parser benchmark — Procycons 2025](https://procycons.com/en/blogs/pdf-data-extraction-benchmark/) — supplementary parser-quality data.
+
+**User's prior projects (HIGH confidence — first-hand):**
+
+- AeroPower-RAG (per CLAUDE.md MEMORY.md) — hybrid retrieval (BM25 + vector + RRF), recall@3=100% on ZH aviation regulations, synonym weight 0.3, BM25 bigram. The validated pattern this doc inherits.
+- cfd-harness-unified — Notion/Git dual-truth + audit-trail discipline. Background context for Core Value commitment.
+- cfd-ai-workbench Case 3 (H-Darrieus) — "捏造图表" failure mode. Direct motivation for §5 citation injection mechanism (Pitfall 8 defense).
+
