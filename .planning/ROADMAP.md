@@ -76,7 +76,13 @@ Six phases deliver an engineering-grade aviation knowledge base baseline: repo s
   3. `tests/fixtures/{valid,invalid}/` covers every entity type, every relation type, the `_pending/` promotion path, a supersession chain, and the `ai_extracted`-without-reviewer rejection — pytest reports ≥1 fixture per category
   4. `pytest tests/test_validators.py` runs all validator self-tests green; injecting a deliberately broken fixture causes the targeted test to fail (sanity check)
   5. GitHub Actions CI runs `validate.py` + `pytest` on every push and PR, blocks merge on failure, and the no-op PR from Phase 1 still passes after this phase lands
-**Plans**: TBD
+**Plans**: 6 plans
+  - [ ] 03-01-PLAN.md — Validator package skeleton + schema.py + valid fixture corpus (Wave 1)
+  - [ ] 03-02-PLAN.md — Invalid fixture corpus (12 fixtures, one per failure mode) (Wave 1)
+  - [ ] 03-03-PLAN.md — ids.py + provenance.py (URI format, H-Darrieus REJECT, _pending gate, schema_version) (Wave 2)
+  - [ ] 03-04-PLAN.md — relations.py + links.py (subject/object resolution, supersession integrity, broken-ref) (Wave 2)
+  - [ ] 03-05-PLAN.md — pytest test suite + parametrised fixture-to-rule assertions + sanity mutation tests (Wave 3)
+  - [ ] 03-06-PLAN.md — CI wiring (replace Phase 1 stubs) + pre-commit local hook + validators README (Wave 4)
 **Research needed**: No
 
 ### Phase 4: Demo Data + Document Import Spec
@@ -130,7 +136,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Repo Skeleton + Git Baseline + PRD v0 | 5/5 | Complete    | 2026-05-03 |
 | 2. Ontology Schema v0.1.0 | 10/10 | Complete    | 2026-05-03 |
-| 3. Validators + CI Active | 0/TBD | Not started | - |
+| 3. Validators + CI Active | 0/6 | Not started | - |
 | 4. Demo Data + Document Import Spec | 0/TBD | Not started | - |
 | 5. RAG Pipeline Design (document-only) | 0/TBD | Not started | - |
 | 6. Deployment Plan + PRD v1 + Roadmap + AI Handoff Polish | 0/TBD | Not started | - |
