@@ -1,13 +1,13 @@
 ---
 phase: 01-repo-skeleton-git-baseline-prd-v0
 verified: 2026-05-03T00:00:00Z
-status: human_needed
-score: 5/6 must-haves verified (SC4 requires live GitHub Actions run)
+re_verified: 2026-05-03T04:55:50Z
+status: passed
+score: 6/6 must-haves verified
 overrides_applied: 0
-human_verification:
-  - test: "Push a no-op PR to GitHub (e.g. whitespace change to README) and observe that CI badge shows green for all three jobs: `lint`, `schema-validation-stub`, `link-check-stub`."
-    expected: "All three GitHub Actions jobs complete with status `success`; the CI badge on the repo turns green."
-    why_human: "The workflow file (.github/workflows/ci.yml) is syntactically valid and structurally correct, but actual GitHub Actions execution requires live GitHub infrastructure and a real push/PR event. Cannot verify remotely."
+human_verification_resolved:
+  - test: "CI green on no-op PR"
+    result: "PASSED — GitHub Actions run 25270308338 (https://github.com/kogamishinyajerry-ops/aviation-knowledge-base/actions/runs/25270308338), all 3 jobs success after one fix-forward (commit 5d5b6cf removed pip cache that requires a requirements.txt)"
 ---
 
 # Phase 1: Repo Skeleton + Git Baseline + PRD v0 Verification Report
