@@ -1,0 +1,43 @@
+# migrations/0_1_0_to_template.py.example
+# Migration template — ruamel.yaml comment-preserving YAML edit
+# Pattern verified against ruamel.yaml >=0.17 (uses YAML() class, not the deprecated legacy round-trip-load loader)
+# Source: ruamel.yaml docs (yaml.dev/doc/ruamel.yaml/detail/) + 02-RESEARCH.md Gap Resolution #5
+# AI 接力开发指南: Copy this file to migrations/<from>_to_<to>.py when shipping the first real migration. Read migrations/PATTERN.md first.
+
+from pathlib import Path
+from ruamel.yaml import YAML
+
+SOURCE_VERSION = "0.1.0"
+TARGET_VERSION = "0.2.0"
+
+
+def migrate_one(path: Path) -> None:
+    yaml = YAML()
+    yaml.preserve_quotes = True
+    yaml.width = 200
+    data = yaml.load(path)
+
+    # Idempotency guard — re-running on already-migrated YAML is a no-op.
+    if data.get("schema_version") == TARGET_VERSION:
+        return
+
+    # 1) Bump schema_version
+    data["schema_version"] = TARGET_VERSION
+
+    # 2) Example: rename a field while preserving its trailing comment
+    if "old_field" in data:
+        data["new_field"] = data.pop("old_field")
+        if hasattr(data, "ca") and "old_field" in data.ca.items:
+            data.ca.items["new_field"] = data.ca.items.pop("old_field")
+
+    # 3) Example: add a new required field with a comment
+    data["new_required_field"] = "TBD"
+    data.yaml_add_eol_comment("filled by migration; review before commit", "new_required_field")
+
+    yaml.dump(data, path)
+
+
+if __name__ == "__main__":
+    import sys
+    for p in sys.argv[1:]:
+        migrate_one(Path(p))
