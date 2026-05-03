@@ -38,22 +38,33 @@
 >
 > ### Locked vs Directional
 >
-> | Section | Locked? | Notes |
-> |---------|---------|-------|
-> | §2 Chunking — RAGFlow OpenDataLoader-PDF backend | **Locked** | STACK.md pins RAGFlow 0.25.1; OpenDataLoader is the v1 default per §2.1 of STACK.md "Document Ingestion Stack" table |
-> | §2 Atomic-chunk rules (tables / equations / regulation clauses) | **Locked** | Regex `§\s*\d+\.\d+(\([a-z]\))?(\(\d+\))?` for FAR/CCAR clause boundaries; tables and `$$...$$` blocks atomic |
-> | §2.3 Chunk size 512 tokens default / 1024 max / 64 overlap | **Locked** | Concrete values; Phase 7 may tune within ±25% based on eval, not redesign |
-> | §3 Default embedding = BGE-M3 + bge-reranker-v2-m3 | **Locked** | STACK.md "Embedding & LLM Layer" + AeroPower-RAG validation |
-> | §3.2 Mini-benchmark candidates (nomic-embed-text, multilingual-e5-large) | Directional | Phase 7 may add candidates; cannot remove BGE-M3 baseline |
-> | §4 Hybrid = Vector + BM25 + RRF | **Locked** | RAGFlow 0.25.1 native; AeroPower-RAG pattern |
-> | §4.2 Synonym expansion weight 0.3 | **Locked** | AeroPower-RAG-validated; do NOT raise without re-eval |
-> | §5 Citation token format `[CITE:c_<8hex>]` | **Locked** | Pitfall 8 mitigation; LLM cannot self-author citations |
-> | §5.3 Post-validator REJECTS unresolved citations | **Locked** | NOT a warning — Core Value enforcement |
-> | §6.1 Thresholds `min_chunk_score = 0.5`, `min_chunks_required = 2` | **Locked** | Pitfall 9 mitigation; Phase 7 may surface for ops tuning but defaults stay |
-> | §6.2 Bilingual canned no-context response | **Locked** | Verbatim text, ZH + EN, both required |
-> | §7 BGE-M3 native multilingual + glossary expansion + entity i18n | **Locked** | Pitfall 7 mitigation; AeroPower-RAG ZH↔EN recall@3=100% precedent |
-> | §7.2 Glossary seed target ≥50 bilingual terms | Directional | Target for `docs/GLOSSARY.md` (Phase 6 deliverable, AIH-04) |
-> | §3.3 Decision criteria thresholds (recall@5, latency 1.2×) | Directional | Phase 7 may refine after first measured run |
+> Refreshed 2026-05-03 (Phase 5 plan 05-04) to reflect what plans 05-01..03 actually shipped.
+> Each Locked row references a section in this doc OR a sibling artifact (`evaluation/queries.yaml`,
+> `scripts/exporters/to_ragflow.py`).
+>
+> | Item | Locked? | Notes |
+> |------|---------|-------|
+> | RAGFlow 0.25.1 + OpenDataLoader-PDF | **Locked** | From STACK.md; no alternative considered in v1 |
+> | BGE-M3 default + bge-reranker-v2-m3 | **Locked (default)** | Mini-benchmark may swap if Phase 7 measures a clear winner per §3.3 |
+> | Chunk size 512 / max 1024 / overlap 64 | **Locked (defaults)** | §2.3 — atomic blocks override size cap |
+> | Atomic-chunk rules: tables, equations, regulation §-clauses, figure-captions | **Locked** | §2.2 — Pitfall 6 prevention; CANNOT relax |
+> | Hybrid retrieval (vector + BM25 + RRF, k=60) | **Locked** | §4 — AeroPower-RAG-validated |
+> | Synonym expansion weight 0.3 | **Locked** | §4.2, §7.2 — AeroPower-RAG-validated; Pitfall 7 |
+> | Citation token format `[CITE:c_<8hex>]` | **Locked** | §5.1 — Pitfall 8 prevention; CANNOT change without ADR |
+> | LLM forbidden to self-author citations | **Locked** | §5.1 — Pitfall 8; Core Value defender |
+> | Post-generation citation validator | **Locked** | §5.3 — rejects unresolved chunk_ids |
+> | min_chunk_score = 0.5 | **Locked** | §6.1 — Pitfall 9 prevention; tunable per Phase 7 measurement only |
+> | min_chunks_required = 2 | **Locked** | §6.1 — single-hit retrieval too brittle |
+> | Canned no-context response (ZH + EN) | **Locked** | §6.2 — text is contractual; localization changes are translation only |
+> | LLM-not-called on guardrail trip | **Locked** | §6.3 — pipeline branch, NOT prompt instruction |
+> | Cross-lingual eval ≥6 in queries.yaml | **Locked** | RAG-07; verified by 05-COVERAGE.md |
+> | Out-of-scope eval ≥3 in queries.yaml | **Locked** | RAG-07; verified by 05-COVERAGE.md |
+> | to_ragflow.py CLI surface (--rebuild, --dry-run, --since=, --paths) | **Locked** | RAG-08 plan 05-03; argparse implemented |
+> | to_ragflow.py compute_doc_id rule (sha256 of path+content) | **Locked** | §-of-its-docstring; idempotency contract |
+> | LLM choice (Ollama Qwen2.5 vs remote Claude/GPT) | **Directional** | Phase 6 deployment plan picks based on hardware reality |
+> | Mini-benchmark numbers | **Directional** | §3.2 specifies the protocol; Phase 7 runs and updates §3.3 |
+> | Glossary seed-terms count target ≥50 | **Directional** | AIH-04 / Phase 6 deliverable; this doc points at it |
+> | Confidence-aware retrieval filter | **Directional** | Open question §9 — schema field exists, retrieval filter not wired in v1 |
 >
 > ### 5-minute stranger test checklist
 >
