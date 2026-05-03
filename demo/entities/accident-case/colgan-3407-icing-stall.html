@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>colgan-3407-icing-stall — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>colgan-3407-icing-stall</h2>
+<p><span class="tag">accident-case</span> &nbsp; URI: <code>aviationkb://accident-case/colgan-3407-icing-stall@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.95</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/far-25-1309@1</code></div>
+
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://accident-case/colgan-3407-icing-stall@1
+type: AccidentCase
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: 科尔根航空 3407 号班机 — 进近段失速失控事故
+    en: Colgan Air Flight 3407 — loss-of-control on approach (icing-context 
+      stall)
+date: &#x27;2009-02-12&#x27;
+location: Clarence Center, NY, USA — final approach to KBUF
+aircraft_model_ref: aviationkb://aircraft-model/boeing-737-max-8@1
+phase_of_flight: approach
+causal_factors:
+- Captain&#x27;s inappropriate response to stick shaker activation — pulled aft 
+  instead of pushing nose down.
+- Crew failure to monitor airspeed during configuration change with 
+  reference-airspeed bug mis-set for icing.
+- Inadequate crew rest / fatigue contributing to delayed recognition.
+contributing_factors:
+- Active icing conditions and ice accretion on airframe.
+- Sterile-cockpit rule violations during approach phase.
+lessons_learned: Reinforced industry-wide stall-recovery training emphasizing 
+  nose-down recovery; FAA Part 117 flight-time / rest rules issued in part as 
+  response to fatigue findings; industry adoption of upset prevention and 
+  recovery training (UPRT) for transport-category crews.
+official_report_url: 
+  https://www.ntsb.gov/investigations/AccidentReports/Reports/AAR1001.pdf
+severity: accident
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: accident-curator
+  created_at: &#x27;2026-05-03T15:40:00Z&#x27;
+confidence:
+  score: 0.95
+  rationale: Causal-factor summary aligns with NTSB AAR-09/03 published 
+    findings; aircraft_model_ref is intentionally synthetic to keep the Phase-4 
+    demo airframe chain coherent (real Colgan 3407 was a Bombardier Q400, not a 
+    B737 MAX) — flagged here per ADR-005 transparency requirement.
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: Cited as analogue case for §25.1309 architectural-redundancy 
+      guidance — original NTSB report is the official authority
+  retrieval:
+    url: https://www.ntsb.gov/investigations/AccidentReports/Reports/AAR1001.pdf
+    retrieved_at: &#x27;2026-05-03T13:30:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

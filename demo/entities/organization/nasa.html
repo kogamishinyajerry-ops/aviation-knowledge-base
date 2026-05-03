@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nasa — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>nasa</h2>
+<p><span class="tag">organization</span> &nbsp; URI: <code>aviationkb://organization/nasa@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.99</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/nasa-tm-2014-218175@1</code></div>
+
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://organization/nasa@1
+type: Organization
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: 美国国家航空航天局
+    en: National Aeronautics and Space Administration
+name: National Aeronautics and Space Administration
+org_type: research_institute
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: knowledge-curator
+  created_at: &#x27;2026-05-03T14:12:00Z&#x27;
+confidence:
+  score: 0.99
+  rationale: NASA is the well-established US civilian aerospace research agency;
+    entity record is administrative metadata only. jurisdiction omitted because 
+    NASA operates across multiple regulatory boundaries.
+  calibration_method: cross-source-agreement
+source:
+  document_id: aviationkb://document/nasa-tm-2014-218175@1
+  locator:
+    section: NASA TM-2014-218175 issuing-authority colophon
+  retrieval:
+    url: https://www.nasa.gov
+    retrieved_at: &#x27;2026-05-03T13:40:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

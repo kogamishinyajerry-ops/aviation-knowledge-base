@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>b737max-fadec-failsafe-req — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>b737max-fadec-failsafe-req</h2>
+<p><span class="tag">requirement</span> &nbsp; URI: <code>aviationkb://requirement/b737max-fadec-failsafe-req@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.85</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/far-25-1309@1</code></div>
+
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://requirement/b737max-fadec-failsafe-req@1
+type: Requirement
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: B737 MAX FADEC 失效保护要求 — 通道丢失下的安全降级
+    en: B737 MAX FADEC fail-safe requirement — graceful degradation on channel 
+      loss
+requirement_text: Upon detection of any single FADEC channel total loss, the 
+  engine control system must automatically transfer to the surviving channel 
+  within 50 milliseconds, with no commanded thrust transient exceeding ±2% of 
+  the pre-failure thrust setpoint, and must annunciate the channel failure to 
+  the flight deck via the EICAS within 1 second.
+requirement_type: safety
+jurisdiction: FAA
+parent_artifact: aviationkb://aircraft-system/b737max-fadec@1
+traceability_id: REQ-B737M-FADEC-FAILSAFE-001
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: systems-engineer
+  created_at: &#x27;2026-05-03T15:20:00Z&#x27;
+confidence:
+  score: 0.85
+  rationale: Demo-grade synthesized requirement aligned with FAR §25.1309 
+    fail-passive intent and AC 25.1309-1A guidance; numbers chosen for 
+    plausibility, not vendor-specific.
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: §25.1309(b) failure-condition probability matrix
+  retrieval:
+    url: 
+      https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309
+    retrieved_at: &#x27;2026-05-03T13:30:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

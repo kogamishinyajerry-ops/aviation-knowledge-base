@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fcc-do160g-power-input-pass — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>fcc-do160g-power-input-pass</h2>
+<p><span class="tag">test-report</span> &nbsp; URI: <code>aviationkb://test-report/fcc-do160g-power-input-pass@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.85</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/far-25-1309@1</code></div>
+
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://test-report/fcc-do160g-power-input-pass@1
+type: TestReport
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: FCC 单元 DO-160G 第 21 节合格性测试 — PASS 报告 (示例)
+    en: FCC unit DO-160G Section 21 qualification — PASS report (demo)
+test_case_ref: aviationkb://test-case/fcc-do160g-power-input@1
+executed_at: &#x27;2026-04-15&#x27;
+executed_by: aviationkb://organization/nasa@1
+outcome: pass
+results_summary: &#x27;All 47 DO-160G Section 21 sub-tests passed within ±5% of nominal
+  envelope. Minor anomaly observed in voltage-spike-recovery transient at -55°C (recovery
+  time 95 ms vs 100 ms acceptance limit); root-caused to instrumentation lag, retested
+  with corrected setup, no anomaly. Final disposition: PASS with no waivers.&#x27;
+artifacts_url: https://test-archive.example.com/TR-FCC-DO160G-PWR-001/
+reviewers:
+- aviationkb://person/jane-reviewer@1
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: test-engineer
+  created_at: &#x27;2026-05-03T16:25:00Z&#x27;
+confidence:
+  score: 0.85
+  rationale: Synthetic test report content; demonstrates the FK pattern 
+    (test_case_ref) and outcome enum without claiming to represent a real 
+    qualification campaign.
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: Demo PASS report under FAR §25.1309 qualification context
+  retrieval:
+    url: 
+      https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309
+    retrieved_at: &#x27;2026-05-03T13:30:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

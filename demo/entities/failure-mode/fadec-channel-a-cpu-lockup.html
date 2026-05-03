@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fadec-channel-a-cpu-lockup — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>fadec-channel-a-cpu-lockup</h2>
+<p><span class="tag">failure-mode</span> &nbsp; URI: <code>aviationkb://failure-mode/fadec-channel-a-cpu-lockup@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.8</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/far-25-1309@1</code></div>
+<h3>关系（1）</h3><table><tr><th>关系类型</th><th>方向</th><th>另一端</th></tr><tr><td><span class="tag">mitigated-by</span></td><td>→</td><td><code>aviationkb://procedure/fadec-power-up-self-test@1</code></td></tr></table>
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://failure-mode/fadec-channel-a-cpu-lockup@1
+type: FailureMode
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: FADEC 通道 A CPU 锁死
+    en: FADEC Channel A CPU lockup
+affected_component: aviationkb://component/b737max-fadec-cpu-card@1
+failure_description: FADEC Channel A primary CPU enters a watchdog-recoverable 
+  lockup state during high-workload manoeuvre (rapid throttle excursion combined
+  with altitude transient at FL250+). Channel B detects via cross-channel 
+  heartbeat loss and assumes primary control.
+conditions:
+  altitude: above FL250
+  airspeed: transonic, rapid throttle excursion
+  configuration: cruise-clean
+  environmental: elevated cabin temp during summer ground-stop heat-soak
+severity: hazardous
+detection_method: Cross-channel heartbeat loss within 50 ms; EICAS amber FADEC 
+  CH A FAULT message.
+effects:
+- Loss of channel A authority — operating on channel B only 
+  (single-channel-remaining)
+- Throttle response degraded for ~100 ms during transition
+- No commanded-thrust transient observed in flight test
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: airworthiness-engineer
+  created_at: &#x27;2026-05-03T15:35:00Z&#x27;
+confidence:
+  score: 0.8
+  rationale: Failure mode plausibility checked against FAA AC 33.28 dual-channel
+    FADEC guidance; specific triggering conditions are demo-grade, not from 
+    incident data.
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: §25.1309(b) hazardous classification per AC 25.1309-1A
+  retrieval:
+    url: 
+      https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_25_1309-1A.pdf
+    retrieved_at: &#x27;2026-05-03T13:30:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

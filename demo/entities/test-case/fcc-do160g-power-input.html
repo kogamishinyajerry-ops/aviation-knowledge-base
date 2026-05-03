@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fcc-do160g-power-input — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>fcc-do160g-power-input</h2>
+<p><span class="tag">test-case</span> &nbsp; URI: <code>aviationkb://test-case/fcc-do160g-power-input@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.9</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/far-25-1309@1</code></div>
+
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://test-case/fcc-do160g-power-input@1
+type: TestCase
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: FCC 单元 DO-160G 第 21 节供电输入合格性测试
+    en: FCC unit — DO-160G Section 21 power-input qualification test
+test_objective: Demonstrate that the FADEC CPU card operates within 
+  specification across the full DO-160G Section 21 power-input envelope 
+  including normal voltage, abnormal voltage transients, voltage dropout, 
+  voltage spike, and load-shed reapplication, without loss of function or 
+  permanent damage.
+target: aviationkb://component/b737max-fadec-cpu-card@1
+test_type: qualification
+environmental_conditions: Operating temperature -55°C to +70°C, humidity 0-95% 
+  RH non-condensing, altitude up to 55,000 ft, vibration per DO-160G Section 8 
+  Category B.
+acceptance_criteria: No loss of function during voltage transients per DO-160G 
+  Section 21 Category B; recovery to nominal operation within 100 ms of return 
+  to nominal voltage; no permanent damage observed in post-test inspection per 
+  DO-160G Section 21.8.4.
+prerequisites:
+- BITE check passed within 24 hours of test start
+- Pre-test calibration of test power supply to ±0.5% of nominal
+- Temperature soak ≥ 1 hour at -55°C before initial test point
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: test-engineer
+  created_at: &#x27;2026-05-03T16:20:00Z&#x27;
+confidence:
+  score: 0.9
+  rationale: Test objective and acceptance criteria written to DO-160G Section 
+    21 wording; demo-grade — not vendor-specific test plan.
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: FAR §25.1309 system-qualification context — DO-160G is the 
+      canonical environmental test standard
+  retrieval:
+    url: 
+      https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309
+    retrieved_at: &#x27;2026-05-03T13:30:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

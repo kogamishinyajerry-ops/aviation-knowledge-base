@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>supersession — Aviation KB Demo</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="./index.html">🏠 首页</a>
+  <a href="./entities.html">📦 实体浏览</a>
+  <a href="./relations.html">🔗 关系图</a>
+  <a href="./citation-chain.html">📍 引用链路</a>
+  <a href="./bilingual.html">🌐 双语</a>
+  <a href="./supersession.html">🔄 supersession</a>
+  <a href="./h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="./validation.html">✅ 验证</a>
+</nav>
+<h2>🔄 supersession 演示 (DEMO-05)</h2><p>法规演进双向链接：老条款 <code>status: superseded</code> + <code>superseded_by</code> URI 字段（实体内）；<code>relation.supersedes</code> 关系实例（关系层）。两层冗余，RAG 任一查询路径都能找到链。</p>
+<div class="chain">
+  <div class="node">
+    <span class="tag tag-warn">SUPERSEDED</span><br>
+    <strong>far-25-1309-superseded</strong><br>
+    <small>version: 1<br>
+    effective: 2007-01-12</small><br>
+    <a href="entities/regulation-clause/far-25-1309-superseded.html">查看 →</a>
+  </div>
+  <span class="chain-arrow">supersedes →</span>
+  <div class="node">
+    <span class="tag tag-ok">ACTIVE</span><br>
+    <strong>far-25-1309-active</strong><br>
+    <small>version: 1<br>
+    effective: 2026-01-15</small><br>
+    <a href="entities/regulation-clause/far-25-1309-active.html">查看 →</a>
+  </div>
+</div>
+
+<h3>双向链接验证</h3>
+<table>
+<tr><th>方向</th><th>位置</th><th>值</th></tr>
+<tr><td>实体字段</td><td><code>far-25-1309-superseded.superseded_by</code></td><td><code>aviationkb://regulation-clause/far-25-1309-active@1</code></td></tr>
+<tr><td>关系实例</td><td><code>relation.supersedes</code></td><td>✓ 存在 (far-clause-chain)</td></tr>
+</table>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

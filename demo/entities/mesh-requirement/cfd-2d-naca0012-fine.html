@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>cfd-2d-naca0012-fine — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>cfd-2d-naca0012-fine</h2>
+<p><span class="tag">mesh-requirement</span> &nbsp; URI: <code>aviationkb://mesh-requirement/cfd-2d-naca0012-fine@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.93</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/nasa-tm-2014-218175@1</code></div>
+
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://mesh-requirement/cfd-2d-naca0012-fine@1
+type: MeshRequirement
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: NACA 0012 二维细网格规格 (Re=6e6)
+    en: NACA 0012 2-D fine-mesh specification (Re=6e6)
+target_simulation: aviationkb://simulation-case/naca0012-re6e6-aoa-sweep@1
+y_plus_target:
+  kind: wall_resolved
+  target_value: 1
+  max_acceptable: 5
+cell_count_min: 200000
+cell_count_max: 2000000
+refinement_zones:
+- zone_name: leading-edge
+  refinement_factor: 8
+- zone_name: trailing-edge-wake
+  refinement_factor: 4
+- zone_name: boundary-layer
+  refinement_factor: 16
+quality_metrics:
+  skewness_max: 0.85
+  aspect_ratio_max: 5000
+  orthogonality_min: 0.2
+mesh_topology: hybrid
+provenance:
+  method: human
+  actor: aviationkb://person/john-cfd-analyst@1
+  actor_role: cfd-analyst
+  created_at: &#x27;2026-05-03T16:10:00Z&#x27;
+confidence:
+  score: 0.93
+  rationale: Mesh spec follows NASA TMR NACA-0012 2-D verification grid 
+    recommendations; cell-count band sized for typical academic / industry 
+    workstation.
+source:
+  document_id: aviationkb://document/nasa-tm-2014-218175@1
+  locator:
+    section: Grid Convergence Study — 2D NACA-0012
+  retrieval:
+    url: https://tmbwg.github.io/turbmodels/naca0012_grids.html
+    retrieved_at: &#x27;2026-05-03T13:30:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

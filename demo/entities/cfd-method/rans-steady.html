@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rans-steady — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>rans-steady</h2>
+<p><span class="tag">cfd-method</span> &nbsp; URI: <code>aviationkb://cfd-method/rans-steady@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.95</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/nasa-tm-2014-218175@1</code></div>
+
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://cfd-method/rans-steady@1
+type: CFDMethod
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: 稳态雷诺平均纳维-斯托克斯方法 (Steady RANS)
+    en: Steady Reynolds-Averaged Navier-Stokes (RANS)
+method_class: RANS
+equations: Steady incompressible Reynolds-Averaged Navier-Stokes equations with 
+  Boussinesq eddy-viscosity closure for the Reynolds-stress tensor; 
+  pressure-velocity coupling via SIMPLE/SIMPLEC algorithm.
+governing_assumptions:
+- steady-state mean flow
+- incompressible (M &lt; 0.3)
+- single-phase, single-fluid
+- fully turbulent boundary layer (no transition modelling)
+- isothermal (no buoyancy)
+validation_status: validated
+typical_applications:
+- external aerodynamics, attached flow
+- low-to-moderate Reynolds-number airfoil and wing analysis
+- verification cases on NASA Turbulence Modeling Resource
+provenance:
+  method: human
+  actor: aviationkb://person/john-cfd-analyst@1
+  actor_role: cfd-analyst
+  created_at: &#x27;2026-05-03T16:00:00Z&#x27;
+confidence:
+  score: 0.95
+  rationale: Steady RANS method description aligned with NASA TMR documentation 
+    and standard textbook formulations (Versteeg &amp; Malalasekera, Wilcox).
+source:
+  document_id: aviationkb://document/nasa-tm-2014-218175@1
+  locator:
+    section: Methodology — RANS formulation in OVERFLOW
+  retrieval:
+    url: https://ntrs.nasa.gov/citations/20140017079
+    retrieved_at: &#x27;2026-05-03T13:30:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

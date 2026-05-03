@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>inconel-718 — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>inconel-718</h2>
+<p><span class="tag">material</span> &nbsp; URI: <code>aviationkb://material/inconel-718@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.95</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/far-25-1309@1</code></div>
+
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://material/inconel-718@1
+type: Material
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: Inconel 718 镍基高温合金
+    en: Inconel 718 nickel-based superalloy
+name: Inconel 718
+family: metal_alloy
+nominal_composition: &#x27;Nominal: Ni 50–55%, Cr 17–21%, Fe balance, Nb 4.75–5.5%, Mo
+  2.8–3.3%, Ti 0.65–1.15%, Al 0.2–0.8%.&#x27;
+design_allowables_reference: MMPDS-2024 Section 6.3 (Inconel 718, AMS 5662 / 
+  5663 forging product forms)
+heat_treatment_or_layup: Solution treated and aged (STA) per AMS 5662.
+typical_applications:
+- engine hot-section structural components
+- FADEC chassis enclosures (heat-resistant)
+- high-temperature fasteners
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: materials-engineer
+  created_at: &#x27;2026-05-03T15:10:00Z&#x27;
+confidence:
+  score: 0.95
+  rationale: Composition / heat-treatment values transcribed from MMPDS-2024 
+    Section 6.3; cross-checked against SAE AMS 5662 product spec.
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: §25.1309 component-material context (production records would cite 
+      MMPDS-2024 directly)
+  retrieval:
+    url: 
+      https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25/subpart-F/section-25.1309
+    retrieved_at: &#x27;2026-05-03T13:30:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

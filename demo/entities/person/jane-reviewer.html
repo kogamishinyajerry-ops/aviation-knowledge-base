@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jane-reviewer — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>jane-reviewer</h2>
+<p><span class="tag">person</span> &nbsp; URI: <code>aviationkb://person/jane-reviewer@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.99</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/far-25-1309@1</code></div>
+
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://person/jane-reviewer@1
+type: Person
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: 简·里维耶 (示例审阅者)
+    en: Jane Reviewer (demo reviewer)
+name: Jane Reviewer
+affiliation: aviationkb://organization/faa@1
+role: reviewer
+external_ids:
+  email: jane.reviewer@example.com
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: knowledge-curator
+  created_at: &#x27;2026-05-03T14:05:00Z&#x27;
+confidence:
+  score: 0.99
+  rationale: Person entity is a synthetic demo identity; high confidence in the 
+    YAML&#x27;s correctness, NOT in the person&#x27;s existence. Phase 4 demo placeholder 
+    per DEMO-01.
+  calibration_method: self-reported
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: Synthetic demo — anchored to FAR §25.1309 as the most-cited 
+      regulation
+  retrieval:
+    url: https://www.ecfr.gov/current/title-14/chapter-I/subchapter-C/part-25
+    retrieved_at: &#x27;2026-05-03T13:30:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

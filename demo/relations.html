@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关系图 — Aviation KB Demo</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="./index.html">🏠 首页</a>
+  <a href="./entities.html">📦 实体浏览</a>
+  <a href="./relations.html">🔗 关系图</a>
+  <a href="./citation-chain.html">📍 引用链路</a>
+  <a href="./bilingual.html">🌐 双语</a>
+  <a href="./supersession.html">🔄 supersession</a>
+  <a href="./h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="./validation.html">✅ 验证</a>
+</nav>
+<h2>关系图</h2><p>6 关系类型 / 8 实例。每条关系都引用真实的 subject + object URI（broken-ref 检查通过）。</p><h3>cites <span class="tag">1</span></h3><ul><li><code>aviationkb://expert-note/canonical-example@1</code> <span class="chain-arrow">→</span> <code>aviationkb://document/far-25-1309@1</code></li></ul><h3>complies-with <span class="tag">1</span></h3><ul><li><code>aviationkb://component/b737max-fadec-cpu-card@1</code> <span class="chain-arrow">→</span> <code>aviationkb://standard/do-178c@1</code></li></ul><h3>mitigated-by <span class="tag">1</span></h3><ul><li><code>aviationkb://failure-mode/fadec-channel-a-cpu-lockup@1</code> <span class="chain-arrow">→</span> <code>aviationkb://procedure/fadec-power-up-self-test@1</code></li></ul><h3>part-of <span class="tag">3</span></h3><ul><li><code>aviationkb://component/b737max-fadec-cpu-card@1</code> <span class="chain-arrow">→</span> <code>aviationkb://subsystem/b737max-fadec-channel-a@1</code></li><li><code>aviationkb://aircraft-system/b737max-fadec@1</code> <span class="chain-arrow">→</span> <code>aviationkb://aircraft-model/boeing-737-max-8@1</code></li><li><code>aviationkb://subsystem/b737max-fadec-channel-a@1</code> <span class="chain-arrow">→</span> <code>aviationkb://aircraft-system/b737max-fadec@1</code></li></ul><h3>supersedes <span class="tag">1</span></h3><ul><li><code>aviationkb://regulation-clause/far-25-1309-active@1</code> <span class="chain-arrow">→</span> <code>aviationkb://regulation-clause/far-25-1309-superseded@1</code></li></ul><h3>used-in <span class="tag">1</span></h3><ul><li><code>aviationkb://turbulence-model/k-omega-sst@1</code> <span class="chain-arrow">→</span> <code>aviationkb://simulation-case/naca0012-re6e6-aoa-sweep@1</code></li></ul>
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>双语演示 — Aviation KB Demo</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="./index.html">🏠 首页</a>
+  <a href="./entities.html">📦 实体浏览</a>
+  <a href="./relations.html">🔗 关系图</a>
+  <a href="./citation-chain.html">📍 引用链路</a>
+  <a href="./bilingual.html">🌐 双语</a>
+  <a href="./supersession.html">🔄 supersession</a>
+  <a href="./h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="./validation.html">✅ 验证</a>
+</nav>
+<h2>🌐 双语 i18n 演示 (DEMO-07)</h2><p>D-14 决策：i18n 字段使用平面结构 <code>{label: {zh, en}, full_text: {zh, en}}</code>。每条实体可同时承载中英文版本，RAG 检索时按需选择目标语言。</p>
+<div class="bilingual">
+  <div>
+    <strong>🇨🇳 中文</strong>
+    <h3>FAR 25.1309 系统失效条件等级判定 — 范例笔记</h3>
+    <p></p>
+  </div>
+  <div>
+    <strong>🇬🇧 English</strong>
+    <h3>FAR 25.1309 system failure-condition severity assessment — canonical example</h3>
+    <p></p>
+  </div>
+</div>
+<p><a href="entities/expert-note/canonical-example.html">查看完整 YAML →</a></p>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

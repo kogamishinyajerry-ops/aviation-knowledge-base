@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>canonical-example — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>canonical-example</h2>
+<p><span class="tag">expert-note</span> &nbsp; URI: <code>aviationkb://expert-note/canonical-example@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.85</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/far-25-1309@1</code></div>
+<h3>关系（1）</h3><table><tr><th>关系类型</th><th>方向</th><th>另一端</th></tr><tr><td><span class="tag">cites</span></td><td>→</td><td><code>aviationkb://document/far-25-1309@1</code></td></tr></table>
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://expert-note/canonical-example@1
+type: ExpertNote
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: FAR 25.1309 系统失效条件等级判定 — 范例笔记
+    en: FAR 25.1309 system failure-condition severity assessment — canonical 
+      example
+author: aviationkb://person/jane-reviewer@1
+topic: far-25-1309-failure-condition-severity-assessment
+content_md: &quot;When applying FAR 25.1309(b)(1), the failure condition severity is\n\
+  determined by the inverse relationship between probability of occurrence\nand consequence
+  severity. A catastrophic failure must be extremely\nimprobable (≤1e-9 per flight
+  hour); hazardous must be extremely remote\n(≤1e-7); major must be remote (≤1e-5).
+  Practitioners frequently conflate\n\&quot;extremely improbable\&quot; with \&quot;extremely remote\&quot;\
+  \ — the former is two orders\nof magnitude stricter and applies only to catastrophic
+  conditions.\n&quot;
+related_entities:
+- aviationkb://regulation-clause/far-25-1309-active@1
+- aviationkb://aircraft-system/b737max-fadec@1
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: airworthiness-engineer
+  created_at: &#x27;2026-05-03T10:20:00Z&#x27;
+confidence:
+  score: 0.85
+  rationale: Severity-band thresholds are quoted directly from AC 25.1309-1A; 
+    expert interpretation reflects 15+ years of certification practice and is 
+    offered as guidance, not as authority.
+  calibration_method: expert-elicited
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: §25.1309(b) and AC 25.1309-1A §6
+  retrieval:
+    url: 
+      https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_25_1309-1A.pdf
+    retrieved_at: &#x27;2026-05-03T09:50:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

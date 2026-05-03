@@ -1,63 +1,58 @@
-# === Python ===
+
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-.venv/
-env/
+!.env.example
+!.vscode/settings.json.example
+.cache/
+.DS_Store
 .env
 .env.*
-!.env.example
-*.egg-info/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-
-# === Node ===
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# === Secrets / credentials (NEVER commit) ===
-*.key
-*.pem
-*.p12
-*.pfx
-secrets/
-*.secret
 .env.local
 .env.production
-
-# === Build / dist ===
-dist/
-build/
-out/
-.cache/
-
-# === OS ===
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# === Editors ===
-.vscode/
-!.vscode/settings.json.example
 .idea/
-*.swp
-*.swo
-*~
-
-# === Logs ===
-*.log
-logs/
-
-# === pre-commit local cache ===
+.mypy_cache/
+.pnpm-debug.log*
 .pre-commit-trash/
-
+.pytest_cache/
+.Python
+.ruff_cache/
+.venv/
+.vscode/
+*.egg-info/
+*.key
+*.log
+*.p12
+*.pem
+*.pfx
+*.py[cod]
+*.pyc
+*.secret
+*.so
+*.swo
+*.swp
+*~
+*$py.class
+# === Build / dist ===
+# === Editors ===
+# === Logs ===
+# === Node ===
+# === OS ===
+# === pre-commit local cache ===
+# === Python ===
 # === RAGFlow / Wiki.js local data (if anyone runs local services in dev — not v1) ===
+# === Secrets / credentials (NEVER commit) ===
+build/
 deploy/data/
 deploy/volumes/
+desktop.ini
+dist/
+env/
+logs/
+node_modules/
+npm-debug.log*
+out/
+secrets/
+Thumbs.db
+uv.lock
+venv/
+yarn-debug.log*
+yarn-error.log*

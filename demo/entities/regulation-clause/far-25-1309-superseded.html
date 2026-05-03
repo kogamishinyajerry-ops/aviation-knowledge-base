@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>far-25-1309-superseded — Aviation KB Demo</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="../../index.html">🏠 首页</a>
+  <a href="../../entities.html">📦 实体浏览</a>
+  <a href="../../relations.html">🔗 关系图</a>
+  <a href="../../citation-chain.html">📍 引用链路</a>
+  <a href="../../bilingual.html">🌐 双语</a>
+  <a href="../../supersession.html">🔄 supersession</a>
+  <a href="../../h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="../../validation.html">✅ 验证</a>
+</nav>
+
+<h2>far-25-1309-superseded</h2>
+<p><span class="tag">regulation-clause</span> &nbsp; URI: <code>aviationkb://regulation-clause/far-25-1309-superseded@1</code></p>
+<h3>provenance / confidence / source</h3><div class="card"><span class="tag-ok">method: human</span> <span class="tag">score: 0.97</span> <span class="tag">reviewer: —</span><br><br><strong>source.document_id</strong>: <code>aviationkb://document/far-25-1309@1</code></div>
+<h3>关系（1）</h3><table><tr><th>关系类型</th><th>方向</th><th>另一端</th></tr><tr><td><span class="tag">supersedes</span></td><td>←</td><td><code>aviationkb://regulation-clause/far-25-1309-active@1</code></td></tr></table>
+<h3>完整 YAML</h3>
+<pre>id: aviationkb://regulation-clause/far-25-1309-superseded@1
+type: RegulationClause
+schema_version: 0.1.0
+version: 1
+i18n:
+  label:
+    zh: FAR §25.1309 (已被取代版) — 设备、系统和安装 — 修订 25-114
+    en: FAR §25.1309 (superseded) — Equipment, systems, and installations — Amdt
+      25-114
+jurisdiction: FAA
+document: aviationkb://document/far-25-1309@1
+clause_id: &#x27;25.1309&#x27;
+effective_date: &#x27;2007-01-12&#x27;
+status: superseded
+superseded_by: aviationkb://regulation-clause/far-25-1309-active@1
+full_text_en: The equipment, systems, and installations whose functioning is 
+  required by this subchapter must be designed to ensure that they perform their
+  intended functions under any foreseeable operating condition. (Amendment 
+  25-114 wording — superseded by Amendment 25-145.)
+provenance:
+  method: human
+  actor: aviationkb://person/jane-reviewer@1
+  actor_role: regulation-curator
+  created_at: &#x27;2026-05-03T10:11:00Z&#x27;
+confidence:
+  score: 0.97
+  rationale: Clause text transcribed from FAA Federal Register Amendment 25-114 
+    archive; supersession confirmed via Amendment 25-145 NPRM disposition.
+  calibration_method: cross-source-agreement
+source:
+  document_id: aviationkb://document/far-25-1309@1
+  locator:
+    section: §25.1309 (Amendment 25-114)
+    page: 1
+  retrieval:
+    url: 
+      https://www.federalregister.gov/documents/2007/01/12/E7-00072/airworthiness-standards-transport-category-airplanes-amendment-25-114
+    retrieved_at: &#x27;2026-05-03T09:45:00Z&#x27;
+</pre>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>首页 — Aviation KB Demo</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="./index.html">🏠 首页</a>
+  <a href="./entities.html">📦 实体浏览</a>
+  <a href="./relations.html">🔗 关系图</a>
+  <a href="./citation-chain.html">📍 引用链路</a>
+  <a href="./bilingual.html">🌐 双语</a>
+  <a href="./supersession.html">🔄 supersession</a>
+  <a href="./h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="./validation.html">✅ 验证</a>
+</nav>
+
+<div class="stats">
+  <div class="stat"><div class="num">22</div><div class="label">实体类型</div></div>
+  <div class="stat"><div class="num">30</div><div class="label">实体记录</div></div>
+  <div class="stat"><div class="num">8</div><div class="label">关系记录</div></div>
+  <div class="stat"><div class="num">1</div><div class="label">_pending 待审</div></div>
+  <div class="stat"><div class="num">3</div><div class="label">源文档</div></div>
+  <div class="stat"><div class="num">19</div><div class="label">pytest 测试</div></div>
+</div>
+
+<h2>这个 demo 展示什么</h2>
+<p>v0.1.0 是 schema + validators + 设计文档 + demo 数据。<strong>不是运行的 RAG 应用</strong>。
+这个浏览 UI 让你看现在语料库的真实形状：</p>
+
+<ul>
+  <li><a href="entities.html"><strong>实体浏览</strong></a> — 22 个类型 / 30 条记录的完整 YAML</li>
+  <li><a href="relations.html"><strong>关系图</strong></a> — 8 条关系如何串起实体网络</li>
+  <li><a href="citation-chain.html"><strong>引用链路</strong></a> — Core Value 演示：每条 ExpertNote → Document → 原始 URL</li>
+  <li><a href="bilingual.html"><strong>双语演示</strong></a> — DEMO-07 中英 i18n 实体</li>
+  <li><a href="supersession.html"><strong>supersession 演示</strong></a> — DEMO-05 老法规 → 新法规链</li>
+  <li><a href="h-darrieus.html"><strong>H-Darrieus 锁</strong></a> — AI 抽取记录如何被拒（DEMO-06）</li>
+  <li><a href="validation.html"><strong>验证状态</strong></a> — 实时跑 <code>validate.py</code> 看 0 errors</li>
+</ul>
+
+<h2>下一步（Phase 7+）</h2>
+<p>把 <a href="https://github.com/kogamishinyajerry-ops/aviation-knowledge-base/blob/main/.planning/design/RAG_PIPELINE.md">RAG_PIPELINE.md</a> 设计文档变成真服务：</p>
+<ul>
+  <li>实现 <code>scripts/exporters/to_ragflow.py</code>（目前是 NotImplementedError 骨架）</li>
+  <li>启动 <code>deploy/docker-compose.yml.draft</code>（目前标记 DRAFT）</li>
+  <li>把 3 个 demo 文档摄取进 RAGFlow，跑 30 个 eval 查询</li>
+</ul>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

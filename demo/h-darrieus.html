@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H-Darrieus 锁 — Aviation KB Demo</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="./index.html">🏠 首页</a>
+  <a href="./entities.html">📦 实体浏览</a>
+  <a href="./relations.html">🔗 关系图</a>
+  <a href="./citation-chain.html">📍 引用链路</a>
+  <a href="./bilingual.html">🌐 双语</a>
+  <a href="./supersession.html">🔄 supersession</a>
+  <a href="./h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="./validation.html">✅ 验证</a>
+</nav>
+
+<h2>🛡️ H-Darrieus 拒绝规则 (PROV-04)</h2>
+<p>项目 Core Value 的最关键防线：<strong>AI 抽取 + 高置信度 + 无人工审稿</strong> 一律拒绝写入 canonical。
+名字来自一个 H-Darrieus 风力机案例 — 高置信 AI 输出过去曾被未审就吸纳，错误埋了几个月才被发现。</p>
+
+<h3>规则（精确语义，per ADR-005）</h3>
+<pre>provenance.method == "ai_extracted"
+  AND confidence.score > 0.85         # 严格大于，不是 ≥
+  AND (no reviewer OR reviewer == "")
+  → REJECT (validators/provenance.py)</pre>
+
+<h3>边界用例（Phase 3 测试覆盖）</h3>
+<table>
+<tr><th>method</th><th>score</th><th>reviewer</th><th>结果</th></tr>
+<tr><td><code>ai_extracted</code></td><td>0.85</td><td>—</td><td><span class="tag tag-ok">PASS（严格 &gt;）</span></td></tr>
+<tr><td><code>ai_extracted</code></td><td>0.86</td><td>无</td><td><span class="tag tag-rej">REJECT</span></td></tr>
+<tr><td><code>ai_extracted</code></td><td>0.86</td><td>""</td><td><span class="tag tag-rej">REJECT（空字符串视为无）</span></td></tr>
+<tr><td><code>ai_extracted</code></td><td>0.86</td><td><code>actor:jane</code></td><td><span class="tag tag-ok">PASS</span></td></tr>
+<tr><td><code>hybrid_reviewed</code></td><td>0.95</td><td><code>actor:jane</code></td><td><span class="tag tag-ok">PASS</span></td></tr>
+<tr><td><code>human</code></td><td>0.99</td><td>—</td><td><span class="tag tag-ok">PASS（人工默认免审）</span></td></tr>
+</table>
+
+<h3>_pending 暂存模式 (DEMO-06)</h3>
+<p>新的 AI 抽取记录先进 <code>instances/_pending/</code> 目录。validators 还会强制：
+任何 <code>/_pending/</code> 路径下的记录必须 <code>method = hybrid_reviewed</code>，
+否则也拒绝（PROV-05 _pending gate）。审稿人添加 reviewer + reviewed_at 后，由人工 promote 到 canonical。</p>
+
+<div class="card">
+  <strong>当前 _pending 待审记录：</strong> <code>instances/_pending/entities/expert-note/pending-ai-extracted-fadec-thermal-margins.yaml</code><br>
+  <span class="tag tag-pending">PENDING</span>
+  method: <code>hybrid_reviewed</code>,
+  score: <code>0.78</code>,
+  reviewer: <code>aviationkb://person/jane-reviewer@1</code>
+</div>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>验证状态 — Aviation KB Demo</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header>
+  <h1>✈️ Aviation Knowledge Base — v0.1.0 Demo</h1>
+  <div class="tagline">每条知识可追溯 · AI 回答带 citation · 人工 vs AI 抽取标记</div>
+</header>
+<nav>
+  <a href="./index.html">🏠 首页</a>
+  <a href="./entities.html">📦 实体浏览</a>
+  <a href="./relations.html">🔗 关系图</a>
+  <a href="./citation-chain.html">📍 引用链路</a>
+  <a href="./bilingual.html">🌐 双语</a>
+  <a href="./supersession.html">🔄 supersession</a>
+  <a href="./h-darrieus.html">🛡️ H-Darrieus</a>
+  <a href="./validation.html">✅ 验证</a>
+</nav>
+
+<h2>✅ 验证状态</h2>
+<p>Phase 3 实施了 5 个 validator，pre-commit / push / CI 全程强制运行。下面是<strong>当前页面构建时</strong>真实跑出的输出：</p>
+
+<h3><code>python scripts/validate.py instances/</code></h3>
+<pre>
+Validation summary: 0 error(s), 0 warning(s) across 39 record(s).
+</pre>
+<p>退出码: <code>0</code> — <span class='tag tag-ok'>✅ 全部通过</span></p>
+
+<h3><code>python -m pytest tests/ -q</code></h3>
+<pre>...................                                                      [100%]
+</pre>
+<p>退出码: <code>0</code> — <span class='tag tag-ok'>✅ 通过</span></p>
+
+<h3>5 个 validator 模块</h3>
+<table>
+<tr><th>模块</th><th>规则 ID</th><th>检查内容</th></tr>
+<tr><td><code>schema</code></td><td>schema.draft-2020-12</td><td>JSON Schema Draft 2020-12 完整性 + composition</td></tr>
+<tr><td><code>ids</code></td><td>ids.uri-format / type-prefix-mismatch</td><td>URI = <code>aviationkb://&lt;type&gt;/&lt;slug&gt;@&lt;v&gt;</code> 格式 (D-23/24/25)</td></tr>
+<tr><td><code>provenance</code></td><td>provenance.h-darrieus / pending-gate / schema-version-mismatch</td><td>H-Darrieus REJECT (严格 &gt; 0.85) / _pending 必须 hybrid_reviewed / schema 版本一致性</td></tr>
+<tr><td><code>relations</code></td><td>relations.broken-subject / broken-object</td><td>所有 subject/object URI 必须能在语料库 by_id 索引中解析</td></tr>
+<tr><td><code>links</code></td><td>links.broken-source-ref / supersession-cycle</td><td>source.document_id 引用真实 Document / supersession 链路无环</td></tr>
+</table>
+
+<h3>测试覆盖</h3>
+<ul>
+  <li>13 个 parametrised 测试覆盖 11 valid fixtures + 12 invalid fixtures（每 invalid fixture 必须触发预期 rule）</li>
+  <li>6 个 mutation 守护测试（重命名 rule 名字会让对应测试变红 — 真在观察 validator 行为，不是空跑）</li>
+  <li>CI 在 GitHub Actions 上 push/PR 都跑一次（lint / validate / test 三个 job）</li>
+</ul>
+
+<footer>
+  Generated from <code>instances/*.yaml</code> · regenerate: <code>python scripts/build_demo_ui.py</code> · serve: <code>python -m http.server 8000 -d demo</code>
+</footer>
+</body>
+</html>
